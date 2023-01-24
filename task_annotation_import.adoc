@@ -1,0 +1,94 @@
+---
+sidebar: sidebar 
+permalink: task_annotation_import.html 
+keywords: annotations, import, api 
+summary: Puede importar molestias y aplicaciones con la API de Cloud Insights. 
+---
+= Importación de anotaciones
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights incluye una API para importar anotaciones o aplicaciones desde un archivo CSV y asignarles objetos que especifique.
+
+
+NOTE: La API de Cloud Insights está disponible en *Cloud Insights Premium Edition*.
+
+
+
+=== Importando
+
+Los enlaces *Admin > API Access* contienen link:API_Overview.html["documentación"] Para la API *Assets/Import*. Esta documentación contiene información sobre el formato de archivo .CSV.
+
+image:api_assets_import.png["Importe la API"]
+
+
+
+=== Formato de archivo .CSV
+
+El formato general del archivo CSV es el siguiente. La primera línea del archivo define los campos de importación y especifica el orden de los campos. Esto va seguido de líneas separadas para cada anotación o aplicación. No es necesario definir todos los campos. Sin embargo, las líneas de anotación posteriores deben seguir el mismo orden que la línea de definición.
+
+ [Object Type] , [Object Name or ID] , Annotation Type [, Annotation Type,  ...] [, Application] [, Tenant] [, Line_Of_Business] [, Business_Unit] [, Project]
+Consulte la documentación de la API para ver ejemplos de archivos .CSV.
+
+Puede importar y asignar anotaciones desde un archivo .CSV desde dentro de la propia traga de API. Sólo tiene que seleccionar el archivo que desea utilizar y hacer clic en el botón _Execute_:
+
+image:api_assets_import_assign.png["Importar y asignar"]
+
+
+
+=== Comportamiento de importación
+
+Durante la operación de importación, los datos se agregan, combinan o reemplazan, dependiendo de los objetos y tipos de objeto que se importan. Al importar, tenga en cuenta los siguientes comportamientos.
+
+* Agrega una anotación o aplicación si no existe ninguna con el mismo nombre en el sistema de destino.
+* Combina una anotación si el tipo de anotación es una lista y existe una anotación con el mismo nombre en el sistema de destino.
+* Reemplaza una anotación si el tipo de anotación no es una lista y existe una anotación con el mismo nombre en el sistema de destino.
++
+Nota: Si existe una anotación con el mismo nombre pero con un tipo diferente en el sistema de destino, la importación falla. Si los objetos dependen de la anotación fallida, dichos objetos pueden mostrar información incorrecta o no deseada. Debe comprobar todas las dependencias de anotación una vez completada la operación de importación.
+
+* Si un valor de anotación está vacío, esa anotación se elimina del objeto. Las anotaciones heredadas no se ven afectadas.
+* Los valores de anotación de tipo de fecha deben pasarse como tiempo unix en milisegundos.
+* Al anotar volúmenes o volúmenes internos, el nombre del objeto es una combinación de nombre de almacenamiento y nombre de volumen utilizando el separador "\->". Por ejemplo: _<Storage Name>\-><Volume Name>_
+* Si un nombre de objeto contiene una coma, el nombre completo debe estar entre comillas dobles. Por ejemplo: _"NetApp1,NetApp2"\->023F_
+* Al adjuntar anotaciones a almacenamientos, conmutadores y puertos, se omitirá la columna "aplicación".
+* Inquilino, línea_de_negocio, Unidad_Negocio y/o proyecto hace una entidad de negocio. Al igual que con todas las entidades de negocio, cualquiera de los valores puede estar vacío.
+
+
+Se pueden anotar los siguientes tipos de objeto.
+
+|===
+
+
+| TIPO DE OBJETO | NOMBRE O CLAVE 
+
+
+| Host | id\-><id>, <Name> o <IP> 
+
+
+| MÁQUINA VIRTUAL | id\-><id> o <Name> 
+
+
+| StoragePool | id\-><id> o <Storage Name>\-><Storage Pool Name> 
+
+
+| InternalVolume | id\-><id> o <Storage Name>\-><Internal Volume Name> 
+
+
+| Volumen | id\-><id> o <Storage Name>\-><Volume Name> 
+
+
+| Reducida | id\-><id>, <Name> o <IP> 
+
+
+| Conmutador | id\-><id>, <Name> o <IP> 
+
+
+| Puerto | id\-><id> o <WWN> 
+
+
+| Qtree | id\-><id> o <Storage Name>\-><Internal Volume Name>\-><Qtree Name> 
+
+
+| Share | id\-><id> o <Storage Name>\-><Internal Volume Name>\-><Share Name>\-><Protocol>[\-><Qtree Name (optional in case of default Qtree)>] 
+|===

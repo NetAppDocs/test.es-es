@@ -1,0 +1,119 @@
+---
+sidebar: sidebar 
+permalink: concept_forensic.html 
+keywords: Forensic, user, entity, community 
+summary: Descripción forense 
+---
+= Información forense
+:toc: macro
+:hardbreaks:
+:toclevels: 1
+:allow-uri-read: 
+:history: Review 1/17,
+:toc: 
+:toclevels: 1
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:toc-position: content
+
+
+[role="lead"]
+La vista forense proporciona acceso a la información de usuario, entidad, comunidad y actividad de usuario.
+
+
+
+== Examen de la información del usuario
+
+Haga clic en *Legal > Usuario* para acceder a la vista Usuario.
+
+Esta vista muestra información general del usuario:
+
+* Nombre del usuario con un vínculo para obtener información más detallada para el usuario.
+* Alertas que han generado las actividades del usuario
+* Número de comunidades a las que pertenece el usuario con un enlace a la página de comunidades
+* Ubicación del usuario
+* Última entidad a la que accede el usuario
+
+
+Haga clic en el nombre de usuario para acceder a información más detallada en la link:forensic_user_detail.html["Descripción general del usuario"]
+
+
+
+== Examen de la Información de entidad
+
+Haga clic en *Legal > entidad* para acceder a la vista entidad.
+
+Esta página muestra información general sobre las entidades a las que los usuarios tienen acceso:
+
+Describe detalles como:
+
+* Nombre de entidad
+* Tipo de entidad
+
+
+* Relación de la comunidad con la entidad
+* Ruta de la entidad
+* Hora de último acceso
+* Tamaño de entidad
+
+
+Haga clic en el Nombre de entidad para acceder a información más detallada en link:forensic_entity_detail.html["Descripción general de la entidad"]
+
+Haga clic en el número de comunidades para mostrar las comunidades que contienen la entidad.
+
+
+
+== Examen de la Información de las Comunidades
+
+Haga clic en *Legal > Comunidades* para acceder a la página Comunidades.
+
+Esta vista proporciona:
+
+* Nombres de comunidad
+* Alertas relacionadas con la comunidad
+* Los usuarios cuentan para la comunidad
+* Las entidades cuentan para la comunidad
+
+
+Haga clic o busque un nombre de comunidad para acceder a la página de detalles de la comunidad.
+
+Perfil de la comunidad:: Muestra las ubicaciones de los usuarios de la comunidad y las otras comunidades más cercanas.
+Comportamiento comunitario:: Muestra el número de entidades a las que se ha accedido y muestra operaciones de acceso a datos de lectura, escritura y metea.
+Usuario y entidades:: Identifica el total de usuarios y entidades totales en la comunidad.
+Análisis comunitario::
++
+--
+* Tendencia de usuario de la comunidad
+* Operaciones realizadas en entidades
+* Tendencia de alerta
+
+
+--
+
+
+Haga clic en el nombre de la comunidad para acceder a información más detallada en el link:forensic_community_detail.html["Detalles de la comunidad"]
+
+
+
+== Examen de la información de actividad del usuario
+
+Haga clic en *Legal > actividad del usuario* para acceder a la vista actividad del usuario.
+
+Para cada usuario que se supervisa, esta vista describe:
+
+* Tiempo de acceso de la entidad
+* Usuario que accedió a la entidad con un vínculo a la descripción general del usuario
+* Actividad realizada:
++
+** Lea
+** Escritura
+** Cree
+** Cambiar el nombre
+
+
+* Ruta de la entidad
+* Tipo de entidad
+* Ubicación de acceso haga clic en el nombre de usuario para acceder a información más detallada en el link:forensic_user_detail.html["Detalles de la entidad"]
+

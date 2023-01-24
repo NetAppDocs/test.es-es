@@ -1,0 +1,103 @@
+---
+sidebar: sidebar 
+permalink: task_dc_huawei_oceanstor.html 
+keywords: data collector, Huawei, OceanStor, Dorado 
+summary: 'Configurar Huawei OceanStor (REST/HTTPS) recopilador de datos.' 
+---
+= Recopilador de datos Huawei OceanStor
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza el recopilador de datos HUAWEI OceanStor (REST/HTTPS) para descubrir inventario y rendimiento de los sistemas de almacenamiento de OceanStor y OceanStor Dorado de Huawei.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario y rendimiento del OceanStor de Huawei. Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Pool de almacenamiento | Pool de almacenamiento 
+
+
+| Sistema de archivos | Volumen interno 
+
+
+| Controladora | Nodo de almacenamiento 
+
+
+| Puerto FC (asignado) | Asignación de volumen 
+
+
+| Iniciador de FC de host (asignado) | Máscara de volumen 
+
+
+| Recursos compartidos NFS/CIFS | Share 
+
+
+| Destino de enlace iSCSI | Nodo de destino iSCSI 
+
+
+| Iniciador de enlace iSCSI | Nodo iniciador iSCSI 
+
+
+| Disco | Disco 
+
+
+| LUN | Volumen 
+|===
+
+
+== Requisitos
+
+Para configurar este recopilador de datos se necesitan los siguientes requisitos:
+
+* Dirección IP del dispositivo
+* Credenciales para acceder al administrador de dispositivos OceanStor
+* El puerto 8088 debe estar disponible
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| OceanStor Host IP Address | Dirección IP o nombre de dominio completo del Administrador de dispositivos OceanStor 
+
+
+| Nombre de usuario | Nombre utilizado para iniciar sesión en el Administrador de dispositivos OceanStor 
+
+
+| Contraseña | Contraseña utilizada para iniciar sesión en el Administrador de dispositivos OceanStor 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Puerto TCP | Puerto TCP utilizado para conectar con el Administrador de dispositivos OceanStor. El valor predeterminado es 8088. 
+
+
+| Intervalo de sondeo de inventario (mín.) | Intervalo entre sondeos de inventario. El valor predeterminado es 60 minutos. 
+
+
+| Intervalo de sondeo de rendimiento (s). | El valor predeterminado es 300 segundos. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: task_dc_emc_ecs.html 
+keywords: data collector, ecs, EMC 
+summary: Configurar el recopilador de datos de ECS. 
+---
+= Configuración del recopilador de datos de EMC ECS
+:allow-uri-read: 
+
+
+[role="lead"]
+Este recopilador de datos adquiere datos de inventario y rendimiento de los sistemas de almacenamiento de EMC ECS. Para la configuración, el recopilador de datos requiere una dirección IP del servidor ECS y una cuenta de dominio de nivel administrativo.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario del recopilador de datos de ECS. Para cada tipo de activo adquirido, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Clúster | Reducida 
+
+
+| Inquilino | Pool de almacenamiento 
+
+
+| Cucharón | Volumen interno 
+
+
+| Disco | Disco 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+* Dirección IP de la consola de administración de ECS
+* Cuenta de dominio de nivel administrativo para el sistema ECS
+* Puerto 443 (HTTPS). Requiere conectividad saliente al puerto TCP 443 del sistema ECS.
+* Para obtener rendimiento, nombre de usuario y contraseña de solo lectura para acceso a ssh/scp.
+* Para el rendimiento, se necesita el puerto 22.
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Host ECS | Dirección IP o nombre de dominio completo del sistema ECS 
+
+
+| Puerto de host ECS | Puerto utilizado para la comunicación con el host ECS 
+
+
+| ID de proveedor de ECS | ID de proveedor de ECS 
+
+
+| Contraseña | Contraseña utilizada para ECS 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Intervalo de sondeo de inventario (mín.) | El valor predeterminado es 360 minutos. 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

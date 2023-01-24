@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: index.html 
+summary: Bienvenido al portal de documentación de Cloud Insights. 
+---
+= Documentación de Cloud Insights
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights de NetApp es una herramienta de supervisión de infraestructura de cloud que le proporciona visibilidad sobre su infraestructura completa. Con Cloud Insights, puede supervisar, solucionar problemas y optimizar todos los recursos, incluidos los clouds públicos y los centros de datos privados.
+
+Cloud Insights le ayuda a:
+
+* *Reducir el tiempo medio de resolución hasta en un 90%*
++
+Acabe con búsquedas de registros que duran días y tener que correlacionar manualmente la infraestructura: Utilice nuestro análisis dinámico de topología y correlación para identificar las áreas problemáticas de forma inmediata.
+
+* *Reducir los costes de infraestructura de la nube en un promedio del 33%*
++
+Elimine las ineficiencias identificando los recursos abandonados y que no se utilizan y las cargas de trabajo del tamaño adecuado para sus niveles optimizados de rendimiento y coste.
+
+* *Evitar que hasta un 80% de los problemas de la nube afecten a los usuarios finales*
++
+Termine la búsqueda en grandes cantidades de datos para encontrar la pieza relevante, mediante análisis avanzados y aprendizaje automático para identificar problemas antes de que se produzcan interrupciones del servicio cruciales.
+
+
+
+
+
+== Primeros pasos
+
+* Soy un nuevo cliente: link:task_cloud_insights_onboarding_1.html["Integración"]
+* Estoy inscrito: ¿Ahora qué debo hacer?link:task_getting_started_with_cloud_insights.html["Adquisición de datos"]
+link:concept_user_roles.html["Configurar usuarios"]
+* ¿Cómo puedo sacar el máximo partido a Cloud Insights?link:task_defining_annotations.html["Preparación de activos: Anotación"]
+link:concept_querying_assets.html["Buscar los activos que desea: Consultar"]
+link:concept_dashboards_overview.html["Ver los datos que desea: Paneles"]
+link:https:task_create_monitor.html["Supervisión y alertas"]
+* He probado Cloud Insights y ahora estoy listo link:concept_subscribing_to_cloud_insights.html["*suscríbase*"].
+

@@ -1,0 +1,127 @@
+---
+sidebar: sidebar 
+permalink: task_dc_na_amazon_fsx.html 
+keywords: 'data collector, stout, fsx, fsx-netapp, Amazon, AWS, cluster, volume, share, LUN"' 
+summary: Amazon FSX para el recopilador de datos ONTAP de NetApp 
+---
+= Recopilador de datos de Amazon FSX para ONTAP de NetApp
+:allow-uri-read: 
+
+
+[role="lead"]
+Este recopilador de datos adquiere datos de inventario y rendimiento de Amazon FSX para ONTAP de NetApp. Este recopilador de datos estará disponible de forma incremental en todas las regiones de servicio de Cloud Insights. Póngase en contacto con su representante de ventas si no ve el icono de este recopilador en su entorno de Cloud Insights.
+
+
+
+== Terminología
+
+Cloud Insights adquiere datos de inventario y rendimiento de la recopilación de datos FSX-NetApp. Para cada tipo de activo adquirido, se muestra la terminología más común utilizada para el activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Clúster | Reducida 
+
+
+| LUN | Volumen 
+
+
+| Volumen | Volumen interno 
+|===
+
+
+== Terminología de FSX-NetApp
+
+Los siguientes términos se aplican a objetos o referencias que puede encontrar en las páginas de destino de activos de almacenamiento FSX-NetApp. Muchos de estos términos también se aplican a otros recopiladores de datos.
+
+
+
+=== Reducida
+
+* Modelo: Una lista delimitada por comas con los nombres de modelos diferenciados únicos dentro de este clúster.
+* Proveedor: AWS
+* Número de serie: El número de serie de la cabina.
+* IP: Generalmente serán las IP o los hostname tal como están configurados en el origen de datos.
+* Capacidad bruta: Suma base 2 de todos los discos físicos del sistema, sin importar su función.
+* Latencia: Representación de lo que experimentan las cargas de trabajo a las que se enfrentan el host, tanto en lecturas como escrituras. Idealmente, Cloud Insights está abasteciéndose este valor directamente, pero este no es a menudo el caso. En lugar de que la cabina ofrezca esta configuración, Cloud Insights suele realizar un cálculo ponderado por IOPS derivado de las estadísticas de los volúmenes internos individuales.
+* Rendimiento: Agregado de volúmenes internos. Administración: Puede contener un hipervínculo para la interfaz de gestión del dispositivo. Creado mediante programación por el origen de datos de Cloud Insights como parte de los informes de inventario.
+
+
+
+
+=== Pool de almacenamiento
+
+* Almacenamiento: En qué cabina de almacenamiento vive este pool. Obligatorio.
+* Tipo: Valor descriptivo de una lista de posibilidades enumeradas. La mayoría de las veces será “agregado” o “grupo RAID”.
+* Utiliza Flash Pool – Sí/no valor – ¿este pool basado en SATA/SAS tiene SSD utilizados para la aceleración del almacenamiento en caché?
+* Redundancia: Esquema de protección o nivel de RAID. RAID_DP es de doble paridad, RAID_TP es de triple paridad.
+* Capacidad: Los valores aquí son los lógicos utilizados, la capacidad utilizable y la capacidad total lógica, así como el porcentaje utilizado en estos.
+* Capacidad sobreasignada: Si se utilizan tecnologías de eficiencia, se asignó una suma total de capacidades de volumen o volumen interno mayores que la capacidad lógica del pool de almacenamiento, el valor del porcentaje será mayor que 0 %.
+* Snapshot: Las capacidades Snapshot se utilizan y en total, si su arquitectura de pool de almacenamiento dedica parte de su capacidad a los segmentos, en exclusiva para los snapshots. Es probable que las configuraciones de ONTAP en MetroCluster lo muestren, mientras que otras configuraciones de ONTAP son menos.
+* Aprovechamiento: Un valor de porcentaje que muestra el mayor porcentaje de ocupación de disco de cualquier disco que contribuye a la capacidad de este pool de almacenamiento. El uso de discos no tiene necesariamente una fuerte correlación con el rendimiento de las cabinas. El aprovechamiento puede ser elevado debido a la recompilación de discos, a actividades de deduplicación, etc. en ausencia de cargas de trabajo dirigidas por el host. Además, las implementaciones de replicación de muchas matrices pueden impulsar el uso del disco sin mostrar como volumen interno o carga de trabajo de volumen.
+* IOPS: La suma de IOPS de todos los discos que contribuyen a la capacidad de este pool de almacenamiento. Rendimiento: La suma del rendimiento de todos los discos que contribuyen a la capacidad de este pool de almacenamiento.
+
+
+
+
+== Requisitos
+
+A continuación se enumeran los requisitos para configurar y utilizar este recopilador de datos:
+
+* Debe tener acceso a una cuenta de administrador configurada para llamadas API de sólo lectura.
+* Entre los detalles de la cuenta se incluye el nombre de usuario y la contraseña
+* Requisitos del puerto: 80 o 443
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| IP de gestión de NetApp | La dirección IP o el nombre de dominio completo del clúster de NetApp 
+
+
+| Nombre de usuario | Nombre de usuario del clúster de NetApp 
+
+
+| Contraseña | Contraseña para el clúster de NetApp 
+|===
+
+
+== Resolución de problemas
+
+Algunas cosas para intentar si tiene problemas con este recopilador de datos:
+
+
+
+==== Inventario
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Recibir respuesta HTTP 401 o código de error ZAPI 13003 y ZAPI devuelve “privilegios insuficientes” o “no autorizados para este comando” | Compruebe el nombre de usuario y la contraseña, así como los privilegios y permisos de usuario. 
+
+
+| ZAPI devuelve "el rol del clúster no es la LIF de gestión_clústeres" | AU necesita hablar con la IP de administración de clústeres. Compruebe la dirección IP y cambie a otra dirección IP si es necesario 
+
+
+| El comando ZAPI falla después del reintento | AU tiene un problema de comunicación con el clúster. Compruebe la red, el número de puerto y la dirección IP. El usuario también debe intentar ejecutar un comando desde la línea de comandos desde la máquina AU. 
+
+
+| AU no pudo conectarse a ZAPI a través de HTTP | Compruebe si EL puerto ZAPI acepta texto sin formato. Si AU intenta enviar texto sin formato a un socket SSL, la comunicación falla. 
+
+
+| La comunicación falla con SSLException | AU está intentando enviar SSL a un puerto de texto sin formato de un archivador. Compruebe si EL puerto ZAPI acepta SSL o utiliza un puerto diferente. 
+
+
+| Errores de conexión adicionales: La respuesta ZAPI tiene el código de error 13001, “la base de datos no está abierta” el código DE error ZAPI es 60 y la respuesta contiene “la API no terminó a tiempo” la respuesta ZAPI contiene “initialize_Session() devolvió un entorno NULL” el código DE error ZAPI es 14007 y la respuesta contiene “el nodo no está en buen estado” | Compruebe la red, el número de puerto y la dirección IP. El usuario también debe intentar ejecutar un comando desde la línea de comandos desde la máquina AU. 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

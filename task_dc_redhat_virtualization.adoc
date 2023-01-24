@@ -1,0 +1,85 @@
+---
+sidebar: sidebar 
+permalink: task_dc_redhat_virtualization.html 
+keywords: data collector, Red Hat Virtualization 
+summary: Configurar el recopilador de datos de Red Hat Virtualization. 
+---
+= Recopilador de datos de Red Hat Virtualization
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza el recopilador de datos de Red Hat Virtualization para recopilar datos de inventario de cargas de trabajo virtualizadas de Linux y Microsoft Windows.
+
+
+
+== Terminología
+
+Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para el activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Disco | Disco virtual 
+
+
+| Host | Host 
+
+
+| Máquina virtual | Máquina virtual 
+
+
+| Dominio de almacenamiento | Almacén de datos 
+
+
+| Unidad lógica | LUN 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+* Dirección IP del servidor RHEV a través del puerto 443 a través de la API DE REST
+* Nombre de usuario y contraseña de solo lectura
+* RHEV versión 3.0+
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP del servidor RHEV | La dirección IP del sistema de almacenamiento 
+
+
+| Nombre de usuario | Nombre de usuario con privilegios de administrador 
+
+
+| Contraseña de la cuenta con privilegios de administrador | Contraseña 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Puerto de comunicación HTTPS | Puerto utilizado para la comunicación HTTPS con RHEV 
+
+
+| Intervalo de sondeo de inventario (min) | El valor predeterminado es 20 minutos. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

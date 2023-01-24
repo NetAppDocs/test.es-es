@@ -1,0 +1,150 @@
+---
+sidebar: sidebar 
+permalink: task_dc_vmware.html 
+keywords: data collector, VMware, 
+summary: Configurar recopilador de datos de VMware. 
+---
+= Configurar el recopilador de datos de VMware vSphere
+:allow-uri-read: 
+
+
+[role="lead"]
+El recopilador de datos para VMware vSphere recopila información de ESX Host y requiere privilegios de solo lectura para todos los objetos del centro virtual.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario del recopilador de datos de VMware vSphere. Para cada tipo de activo adquirido, se muestra la terminología más común utilizada para el activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Disco virtual | Disco 
+
+
+| Host | Host 
+
+
+| Máquina virtual | Máquina virtual 
+
+
+| Almacén de datos | Almacén de datos 
+
+
+| LUN | Volumen 
+
+
+| Puerto Fibre Channel | Puerto 
+|===
+Estas son sólo asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+Para configurar este recopilador de datos se necesita la siguiente información:
+
+* Dirección IP del servidor Virtual Center
+* Nombre de usuario y contraseña de sólo lectura en Virtual Center
+* Se requieren privilegios de sólo lectura en todos los objetos de Virtual Center.
+* Acceso SDK en el servidor Virtual Center – normalmente ya configurado.
+* Requisitos del puerto: http-80 https-443
+* Validar el acceso:
++
+** Inicie sesión en Virtual Center Client con el nombre de usuario y la contraseña anteriores
+** Verificar SDK activado: telnet <vc_ip> 443
+
+
+
+
+
+
+== Configuración y conexión
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Nombre | Nombre único para el recopilador de datos 
+
+
+| Unidad de adquisición | Nombre de la unidad de adquisición 
+|===
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP del centro virtual | Dirección IP del Centro virtual 
+
+
+| Nombre de usuario | Nombre de usuario utilizado para acceder al Centro virtual 
+
+
+| Contraseña | Contraseña utilizada para acceder al Centro virtual 
+|===
+
+
+== Configuración avanzada
+
+En la pantalla de configuración avanzada, marque la casilla *VM Performance* para recopilar datos de rendimiento. La recopilación de inventario está habilitada de forma predeterminada. Se pueden configurar los siguientes campos:
+
+[cols="2*"]
+|===
+
+
+| Campo | Descripción 
+
+
+| Intervalo de sondeo de inventario (min) | El valor predeterminado es 20 
+
+
+| Filtrar las máquinas virtuales | Seleccione CLÚSTER, CENTRO de DATOS o HOST ESX 
+
+
+| Elija "excluir" o "incluir" para especificar una lista | Crear una lista de filtros (CLÚSTER, CENTRO DE DATOS y/o ESX_HOST) 
+
+
+| Cantidad de reintentos | El valor predeterminado es 3 
+
+
+| Puerto de comunicación | El valor predeterminado es 443 
+
+
+| Filtrar lista de dispositivos... | Esta lista debe estar compuesta por coincidencias de cadenas exactas. Si va a filtrar por ESX_HOST, debe crear una lista delimitada por comas con los "nombres" exactos de los hosts ESX según se informa tanto en Cloud Insights como en vSphere. Estos "nombres" pueden ser direcciones IP, nombres de host simples o nombres de dominio completos (FQDN) - esto se determina por cómo se nombraron estos hosts cuando se agregaron originalmente a vSphere. Al filtrar por CLÚSTER, Use los nombres de clústeres de estilo Cloud Insights tal y como informa CI en hipervisores - Cloud Insights predice el nombre del clúster de vSphere con el nombre del centro de datos de vSphere y una barra diagonal inversa - "DC1\clusterA" es el nombre de clúster que Cloud Insights informará sobre un hipervisor en clusterA dentro del centro de datos DC1 
+
+
+| Intervalo de sondeo de rendimiento (s) | El valor predeterminado es 300 
+|===
+
+
+== Resolución de problemas
+
+Algunas cosas para intentar si tiene problemas con este recopilador de datos:
+
+
+
+==== Inventario
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Error: La lista de inclusión para filtrar las máquinas virtuales no puede estar vacía | Si se ha seleccionado incluir lista, indique nombres válidos de centro de datos, clúster o host para filtrar las VM 
+
+
+| Error: No se ha podido crear una instancia de una conexión a VirtualCenter en IP | Posibles soluciones: * Verificar credenciales y dirección IP introducidos. * Intente comunicarse con Virtual Center mediante VMware Infrastructure Client. * Intente comunicarse con Virtual Center mediante el explorador de objetos administrados (por ejemplo, MOB). 
+
+
+| Error: VirtualCenter en IP tiene un certificado no conforme que JVM requiere | Soluciones posibles: * Recomendado: Vuelva a generar el certificado para Virtual Center utilizando una clave RSA más fuerte (por ejemplo, de 1024 bits). * No recomendado: Modifique la configuración de JVM java.security para aprovechar la restricción jdk.certpath.disabledAlgoritms para permitir la clave RSA de 512 bits. Consulte las notas de la versión de JDK 7 Update 40 en "http://www.oracle.com/technetwork/java/javase/7u40-relnotes-2004172.html"[] 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

@@ -1,0 +1,76 @@
+---
+sidebar: sidebar 
+permalink: insights_shared_resources_under_stress.html 
+keywords: insight, greedy, degraded, impacted, impacting, impactful, impact, resources, consuming, workload 
+summary: Los conocimientos le permiten ver cómo afectan los recursos a otros recursos de su entorno. 
+---
+= Perspectivas: Recursos compartidos bajo estrés
+:allow-uri-read: 
+
+
+[role="lead"]
+Las cargas de trabajo con un alto impacto pueden reducir el rendimiento de otras cargas de trabajo en un recurso compartido. Esto pone el recurso compartido bajo estrés. Cloud Insights ofrece herramientas para ayudarle a investigar la saturación de recursos y el impacto de su entorno.
+
+
+NOTE: El _Shared Resources bajo Stress_ Insight se considera una función _Preview_ y, por lo tanto, está sujeto a cambios.
+
+
+
+=== Terminología
+
+Cuando se habla del impacto de la carga de trabajo o de los recursos, las siguientes definiciones son útiles.
+
+Un recurso *exigente* o *impactante* es uno que causa un impacto negativo en otro recurso. Por ejemplo, un volumen que experimenta un IOPS muy alto puede aumentar la latencia en otros volúmenes (por ejemplo, recursos _impactados_ o _degradados_). Los recursos exigentes e afectados son “compañeros” que utilizan el mismo recurso compartido, por ejemplo, un pool de almacenamiento o volumen. Los recursos exigentes a veces se llaman recursos _codiciosos_.
+
+Una *carga de trabajo exigente* es una carga de trabajo que actualmente se identifica como que afecta a otros recursos en el pool de almacenamiento compartido. Estas cargas de trabajo mejoran las IOPS (por ejemplo), lo que reduce las IOPS en las cargas de trabajo afectadas. Las cargas de trabajo más exigentes se denominan en ocasiones cargas de trabajo _ que consumen mucho tiempo.
+
+Una *carga de trabajo afectada* es una carga de trabajo que se ve afectada por una carga de trabajo de alto consumo en el Pool de almacenamiento compartido. Estas cargas de trabajo están experimentando una reducción de IOPS o una latencia superior, debido a las cargas de trabajo más exigentes.
+
+*Saturación de recursos compartidos* es la relación de impactar IOPS en _basal_.
+
+*La línea de base* se define como el punto de datos máximo notificado para cada carga de trabajo en la hora inmediatamente anterior a la saturación detectada.
+
+Se produce una *contención* o *saturación* cuando se determina que la tasa de IOPS afecta a otros recursos o cargas de trabajo del pool de almacenamiento compartido.
+
+
+
+=== Cargas de trabajo exigentes
+
+Para empezar a buscar cargas de trabajo exigentes e afectadas en sus recursos compartidos, haga clic en *Paneles > Recursos compartidos bajo estrés* en el menú Cloud Insights.
+
+image:Shared_resources_Under_Stress_menu.png["Lista de cargas de trabajo"]
+
+Cloud Insights muestra una lista de cualquier carga de trabajo en la que se ha detectado una saturación. Tenga en cuenta que Cloud Insights sólo mostrará cargas de trabajo donde se haya detectado al menos un recurso _exigente_ *y* al menos un recurso _impactado_.
+
+Haga clic en una carga de trabajo para ver la página de detalles correspondiente. El gráfico superior muestra la actividad del recurso compartido (por ejemplo, un grupo de almacenamiento) en el que se produce la contención/saturación.
+
+image:Shared_resources_Under_Stress_SharedResource.png["Recurso compartido que muestra contención"]
+
+A continuación, se muestran dos gráficos que muestran las cargas de trabajo _exigente_ y las cargas de trabajo que _afectan_ las cargas de trabajo más exigentes.
+
+image:Insights_Demanding_Workload_Chart.png["Gráfico de cargas de trabajo exigentes"]
+image:Insights_Impacted_Workload_Chart.png["Gráfico influyen en la carga de trabajo"]
+
+Debajo de cada tabla hay una lista de cargas de trabajo y/o recursos que afectan o se ven afectados por la contención. Al hacer clic en un recurso (por ejemplo, una máquina virtual) se abre una página de detalles de ese recurso. Al hacer clic en una carga de trabajo, se abre una página de consulta en la que aparecen los pods implicados. Tenga en cuenta que si el enlace abre una consulta vacía, puede deberse a que el pod afectado ya no forma parte de la contención activa. Puede modificar el intervalo de tiempo de la consulta para ver la lista de POD en un intervalo de tiempo mayor o más específico.
+
+
+
+=== ¿Qué debo hacer para resolver la saturación?
+
+Hay una serie de pasos que puede realizar para reducir o eliminar la posibilidad de saturación de su entorno. Estos se muestran ampliando el enlace *+Mostrar recomendaciones* de la página. Estas son algunas cosas que puede probar.
+
+* Traslade a consumidores con una alta tasa de IOPS
++
+Traslade las cargas de trabajo "codiciosas" a pools de almacenamiento menos saturados. Se recomienda evaluar el nivel y la capacidad de estos pools antes de mover las cargas de trabajo para evitar costes innecesarios o contensiones adicionales.
+
+* Implemente una política de calidad de servicio (QoS)
++
+Implementar una política de calidad de servicio por carga de trabajo para garantizar que haya suficientes recursos libres disponibles reducirá la saturación del pool de almacenamiento. Esta es una solución a largo plazo.
+
+* Añada recursos adicionales
++
+Si el recurso compartido (por ejemplo, Storage Pool) ha alcanzado el punto de saturación de IOPS, añadir más discos o más rápidos al pool garantizará suficientes recursos libres disponibles para aliviar la saturación.
+
+
+
+Por último, puede hacer clic en *Copy Insight Link* para copiar la dirección URL de la página al portapapeles, para compartirla más fácilmente con sus compañeros.

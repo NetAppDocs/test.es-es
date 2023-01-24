@@ -1,0 +1,69 @@
+---
+sidebar: sidebar 
+permalink: forensic_entity_detail.html 
+keywords: Forensic, entity, entity overview, entity behavior, detail 
+summary: Detalles de la entidad forense 
+---
+= Detalle de entidad forense
+:allow-uri-read: 
+
+
+toc: macro :hardbreaks: :toclevels: 1 :nofoooter: :íconos: font :linkattrs: :imagesdir: ./media/
+
+Utilice la página Detalle de entidad para acceder a información detallada sobre una entidad.
+
+
+
+== Examen de la Información de entidad
+
+Accede a
+
+Perfil de entidad:: Describe detalles como:
++
+--
+* Nombre
++
+** Haga clic para acceder a [Descripción general de entidad]
+
+
+* Tipo
+* Comunidades
+* Ruta
+* Último acceso
++
+** Haga clic en USER para acceder a [Descripción general del usuario].
+
+
+* Tamaño
+
+
+--
+Usuario y comunidad::
++
+--
+* El número de veces que los usuarios accedían a la entidad
+* El número de veces que las Comunidades accedían a la entidad.
+
+
+--
+Entidad por su comportamiento::
++
+--
+* Actividad reciente:
++
+** Fecha de último acceso
+** Usuario que accedió por última vez a la entidad
+** Ubicación desde la que se accedió a la entidad
+
+
+* Operaciones
++
+** Cantidad de operaciones de escritura
+** Cantidad de operaciones de lectura
+** Número de accesos a los metadatos
+
+
+
+
+--
+

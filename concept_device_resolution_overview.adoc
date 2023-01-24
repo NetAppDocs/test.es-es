@@ -1,0 +1,86 @@
+---
+sidebar: sidebar 
+permalink: concept_device_resolution_overview.html 
+keywords: Automatic, AR, AHR, Host, automatic device resolution 
+summary: La resolución automática de dispositivos le ayuda a realizar un seguimiento preciso del rendimiento y del inventario en su entorno. 
+---
+= Descripción general de la resolución automática del dispositivo
+:allow-uri-read: 
+
+
+[role="lead"]
+Debe identificar todos los dispositivos que desea supervisar con Cloud Insights. La identificación es necesaria para realizar un seguimiento preciso del rendimiento y del inventario en su entorno. Normalmente, la mayoría de los dispositivos detectados en su entorno se identifican mediante _Automatic Device Resolution_.
+
+Después de configurar los recopiladores de datos, se identifican los dispositivos del entorno, incluidos los switches, las matrices de almacenamiento y la infraestructura virtual de hipervisores y máquinas virtuales. Sin embargo, normalmente esto no identifica el 100% de los dispositivos de su entorno.
+
+Una vez configurados los dispositivos de tipo recopilador de datos, la mejor práctica es aprovechar las reglas de resolución de dispositivos para ayudar a identificar los dispositivos desconocidos restantes en su entorno. La resolución del dispositivo puede ayudarle a resolver dispositivos desconocidos como los siguientes tipos de dispositivos:
+
+* Hosts físicos
+* Cabinas de almacenamiento
+* Cintas
+
+
+Los dispositivos que permanecen como desconocidos después de la resolución del dispositivo se consideran dispositivos genéricos, que también se pueden mostrar en consultas y en paneles.
+
+Las reglas creadas a su vez identificarán automáticamente nuevos dispositivos con atributos similares a los que se agregan a su entorno. En algunos casos, la resolución del dispositivo también permite la identificación manual evitando las reglas de resolución del dispositivo para dispositivos no detectados dentro de Cloud Insights.
+
+La identificación incompleta de los dispositivos puede dar lugar a problemas como:
+
+* Rutas incompletas
+* Conexiones multivía no identificadas
+* Incapacidad para agrupar aplicaciones
+* Vistas de topología inexactas
+* Datos inexactos en el almacén de datos y la generación de informes
+
+
+La función de resolución del dispositivo (Administrar > resolución del dispositivo) incluye las siguientes fichas, cada una de las cuales desempeña un papel en la planificación y visualización de la resolución del dispositivo:
+
+* *Fibre Channel Identify* contiene una lista de WWN e información de puerto de dispositivos Fibre Channel que no se resolvieron mediante la resolución automática del dispositivo. La ficha también identifica el porcentaje de dispositivos que se han identificado.
+* *IP Address Identify* contiene una lista de dispositivos que acceden a recursos compartidos CIFS y NFS que no se identificaron mediante la resolución automática del dispositivo. La ficha también identifica el porcentaje de dispositivos que se han identificado.
+* *Reglas de resolución automática* contiene la lista de reglas que se ejecutan al realizar la resolución del dispositivo de canal de fibra. Se trata de reglas que se crean para resolver dispositivos Fibre Channel no identificados.
+* *Preferencias* ofrece opciones de configuración que se utilizan para personalizar la resolución del dispositivo para su entorno.
+
+
+
+
+== Antes de empezar
+
+Debe saber cómo se configura el entorno antes de definir las reglas para identificar dispositivos. Cuanto más conozca su entorno, más fácil será identificar los dispositivos.
+
+Debe responder a preguntas similares a las siguientes para ayudarle a crear reglas precisas:
+
+* ¿Su entorno tiene estándares de nomenclatura para las zonas o hosts y qué porcentaje de estos son precisos?
+* ¿El entorno usa un alias del switch o un alias de almacenamiento y coincide con el nombre del host?
+
+
+* ¿Con qué frecuencia cambian los esquemas de nomenclatura en su entorno?
+* ¿Ha habido alguna adquisición o fusión que haya introducido diferentes esquemas de nomenclatura?
+
+
+Después de analizar su entorno, debe ser capaz de identificar qué estándares de nomenclatura existen que puede esperar encontrar fiabilidad. La información recopilada puede representarse gráficamente en una figura similar a la siguiente:
+
+image:Device_Resolution_Venn.png["Diagrama de descripción general del dispositivo"]
+
+En este ejemplo, el mayor número de dispositivos está representado de forma fiable por alias de almacenamiento. Las reglas que identifican hosts que usan alias de almacenamiento deben escribirse primero, las reglas que usan alias de switch deben escribirse Next y las últimas reglas creadas deben usar alias de zona. Debido a la superposición del uso de alias de zona y alias de switch, algunas reglas de alias de almacenamiento pueden identificar dispositivos adicionales, dejando menos reglas necesarias para los alias de zona y los alias de cambio.
+
+
+
+== Pasos para identificar dispositivos
+
+Por lo general, debería utilizar un flujo de trabajo similar al siguiente para identificar los dispositivos en su entorno. La identificación es un proceso iterativo y podría requerir múltiples pasos de reglas de planificación y refinación.
+
+* Entorno de investigación
+* Reglas del plan
+* Crear/revisar reglas
+* Revisar los resultados
+* Crear reglas adicionales o identificar dispositivos manualmente
+* Listo
+
+
+
+NOTE: Si tiene dispositivos no identificados (conocidos como dispositivos genéricos o desconocidos) en su entorno y, a continuación, configura un origen de datos que identifica esos dispositivos tras el sondeo, ya no se mostrarán ni contarán como dispositivos genéricos.
+
+Relacionado:link:task_device_resolution_rules.html["Creación de Reglas de resolución de dispositivos"]
+link:task_device_resolution_fibre_channel.html["Resolución de dispositivos Fibre Channel"]
+link:task_device_resolution_ip.html["Resolución del dispositivo IP"]
+link:task_device_resolution_preferences.html["Configuración de las preferencias de resolución del dispositivo"]

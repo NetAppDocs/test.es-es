@@ -1,0 +1,113 @@
+---
+sidebar: sidebar 
+permalink: task_dc_brocade_bna.html 
+keywords: data collector, Brocade, BNA 
+summary: Configurar el recolector Brocade BNA. 
+---
+= Recopilador de datos de Brocade Network Advisor
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza el recopilador de datos de Brocade Network Advisor para adquirir datos de inventario y rendimiento de los switches de Brocade.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario a través del recopilador de datos de Brocade Network Advisor. Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Conmutador | Conmutador 
+
+
+| Puerto | Puerto 
+
+
+| Estructura virtual, estructura física | Estructura 
+
+
+| Cambio lógico | Cambio lógico 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+Para configurar este recopilador de datos, es necesario lo siguiente:
+
+* La Unidad de adquisición de Cloud Insights realizará conexiones al puerto TCP 443 en el servidor BNA. El servidor BNA debe ejecutar la versión 14.2.1 o superior.
+* Dirección IP del servidor de Brocade Network Advisor
+* Nombre de usuario y contraseña para una cuenta de administrador
+* Requisito de puerto: HTTP/HTTPS 443
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Brocade Network Advisor IP del servidor | Dirección IP del servidor de Network Advisor 
+
+
+| Nombre de usuario | Nombre de usuario del conmutador 
+
+
+| Nombre de usuario | Nombre de usuario del administrador 
+
+
+| Contraseña | Contraseña de administrador 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Tipo de conexión | HTTPS (puerto predeterminado 443) o HTTP (puerto predeterminado 80) 
+
+
+| Anular puerto de conexión | Si está en blanco, utilice el puerto predeterminado en el campo Tipo de conexión; de lo contrario, introduzca el puerto de conexión que desea utilizar 
+
+
+| Contraseña | Contraseña para el conmutador 
+
+
+| Intervalo de sondeo de inventario (min) | El valor predeterminado es 40 
+
+
+| Puerta de enlace de acceso de informes | Active esta opción para incluir dispositivos en el modo de acceso a puerta de enlace 
+
+
+| Intervalo de sondeo de rendimiento (s) | El valor predeterminado es 1800 
+|===
+
+
+== Resolución de problemas
+
+Algunas cosas para intentar si tiene problemas con este recopilador de datos:
+
+
+
+==== Inventario
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Reciba un mensaje que indica que más de 1 nodo está conectado al puerto Access Gateway o que el recopilador de datos no puede detectar el dispositivo Access Gateway. | Compruebe que el dispositivo NPV funciona correctamente y que se esperan todos los WWN conectados. No adquiera directamente el dispositivo NPV. En lugar de ello, la adquisición del switch de estructura principal recopilará los datos del dispositivo NPV. 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

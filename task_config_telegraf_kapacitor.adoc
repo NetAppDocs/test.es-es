@@ -1,0 +1,52 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_kapacitor.html 
+keywords: telegraf, installation, install, kapacitor 
+summary: configuración de kapacitor 
+---
+= Recopilador de datos de Kapacitor
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas del afluxdata Kapacitor.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija Kapacitor.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:KapacitorDCConfigWindows.png["Configuración de Kapacitor"]
+
+
+
+== Configuración
+
+La información de configuración se puede encontrar en https://docs.influxdata.com/kapacitor/v1.5/["Documentación de Kapacitor"]
+
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto | Identificadores | Atributos | Puntos de datos: 
+
+
+| Kapacitor | Namespace Node Name IP del nodo de espacio de nombres | Arquitectura del sistema operativo Nombre del sistema operativo Versión tiempo de ejecución especificación tiempo de ejecución especificación tiempo de ejecución Proveedor Versión tiempo de ejecución Versión del servidor de tiempo de ejecución VM Nombre tiempo de ejecución VM Proveedor Versión de tiempo de ejecución VM | Bytes asignados sistema Buck Hash libera sistema GC GCC fracción de PU asignación de heap Heap inactivo uso de heap objetos Heap sistema Heap lanzado último GC (ns) Buscar Mallocs Mcache en uso Mcache System Mspan en uso sistema Mspan Next GC (ns) Num GC otros sistema Pause total (ns) pila En usar bytes de sistema de pila errores de tiempo de ejecución promedio (ns) de bytes de sistema totales asignados 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

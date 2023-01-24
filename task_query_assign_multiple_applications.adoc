@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: task_query_assign_multiple_applicationss.html 
+summary: Utilice una consulta para asignar varias aplicaciones o anotaciones a objetos o para eliminar varias aplicaciones o anotaciones de ellos. 
+keywords: query, queries, application, annotation, multiple 
+---
+= Asignar múltiples aplicaciones a o quitar varias aplicaciones de activos
+:allow-uri-read: 
+
+
+[role="lead"]
+Puede asignar múltiples aplicaciones a o quitar varias aplicaciones de activos mediante una consulta en lugar de tener que asignarlas o eliminarlas manualmente.
+
+
+NOTE: Puede utilizar estos pasos para agregar o quitar anotaciones de la misma manera.
+
+.Antes de empezar
+Debe haber creado una consulta que busque todos los activos que desea editar.
+
+.Pasos
+. Haga clic en *consultas* y seleccione *Mostrar todas las consultas*.
++
+Aparece la página consultas.
+
+. Haga clic en el nombre de la consulta que encuentra los activos.
++
+Se muestra la lista de activos asociados a la consulta.
+
+. Seleccione los activos deseados en la lista o haga clic en la casilla de verificación superior para seleccionar todo.
++
+La image:BulkActions.png["Acciones"] se muestra el botón.
+
+. Para agregar una aplicación a los activos seleccionados, haga clic en image:BulkActions.png["Acciones"] Y seleccione *Agregar aplicación*.
+. Seleccione una o más aplicaciones.
++
+Puede seleccionar varias aplicaciones para hosts, volúmenes internos, qtrees y máquinas virtuales; sin embargo, puede seleccionar solo una aplicación para un volumen o un recurso compartido.
+
+. Haga clic en *Guardar*.
+. Para eliminar una aplicación asignada a los activos, haga clic en image:BulkActions.png["Acciones"] Y seleccione *Eliminar aplicación*.
+. Seleccione la aplicación o aplicaciones que desea eliminar.
+. Haga clic en *Eliminar*.
+
+
+Las aplicaciones nuevas que asigne anulan las aplicaciones del activo que se derivaron de otro activo. Por ejemplo, los volúmenes heredan aplicaciones de hosts y cuando se asignan aplicaciones nuevas a un volumen, la nueva aplicación tiene prioridad sobre la aplicación derivada.
+
+Después de hacer clic en _Save_ en un agregado masivo o _Remove_ en una acción de eliminación masiva, Cloud Insights le informa que la acción tomará algún tiempo. Puede ignorar este mensaje; la acción continuará en segundo plano.

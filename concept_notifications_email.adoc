@@ -1,0 +1,75 @@
+---
+sidebar: sidebar 
+permalink: concept_notifications_email.html 
+summary: Adición de direcciones de correo electrónico para notificaciones. 
+keywords: email, notifications, signature, recipient, list, subscription 
+---
+= Configuración de notificaciones por correo electrónico
+:allow-uri-read: 
+
+
+[role="lead"]
+Puede configurar una lista de correo electrónico para notificaciones relacionadas con la suscripción, así como una lista global de destinatarios para la notificación de infracciones de umbral de la directiva de rendimiento.
+
+Para configurar la configuración de los destinatarios de correo electrónico de notificación, vaya a la página *Admin > Notificaciones*.
+
+
+
+== Destinatarios de notificaciones de suscripción
+
+[role="thumb"]
+image:SubscriptionNotificationSection.png["Notificaciones por correo electrónico de suscripción"]
+
+Para configurar destinatarios para notificaciones de eventos relacionadas con la suscripción, vaya a la sección "destinatarios de notificaciones de suscripción". Puede optar por enviar notificaciones por correo electrónico para eventos relacionados con la suscripción a cualquiera de los siguientes destinatarios o a todos ellos:
+
+* Todos los propietarios de cuentas
+* Todos los administradores
+* Direcciones de correo electrónico adicionales que especifique
+
+
+A continuación se muestran ejemplos de los tipos de notificaciones que se pueden enviar y las acciones de usuario que se pueden realizar.
+
+|===
+
+
+| *Notificación:* | *Acción del usuario:* 
+
+
+| Se ha actualizado la versión de prueba o la suscripción | Consulte los detalles de la suscripción en link:concept_subscribing_to_cloud_insights.html["Suscripción"] página 
+
+
+| La suscripción caducará en 90 días. La suscripción caducará en 30 días | No es necesario realizar ninguna acción si “renovación automática” está activada la opción Contacto link:https://www.netapp.com/us/forms/sales-inquiry/cloud-insights-sales-inquiries.aspx["Ventas de NetApp"] para renovar la suscripción 
+
+
+| La prueba finaliza en 2 días | Renueve la versión de prueba de link:concept_subscribing_to_cloud_insights.html["Suscripción"] página. Puede renovar una versión de prueba una vez. Contacto link:https://www.netapp.com/us/forms/sales-inquiry/cloud-insights-sales-inquiries.aspx["Ventas de NetApp"] para adquirir una suscripción 
+
+
+| La cuenta de prueba o suscripción ha caducado y dejará de recopilar datos en 48 horas. La cuenta se eliminará después de 48 horas | Contacto link:https://www.netapp.com/us/forms/sales-inquiry/cloud-insights-sales-inquiries.aspx["Ventas de NetApp"] para adquirir una suscripción 
+|===
+
+
+== Lista global de destinatarios para alertas
+
+Las notificaciones por correo electrónico de alertas se envían a la lista de destinatarios de alertas para cada acción de la alerta. Puede optar por enviar notificaciones de alerta a una lista global de destinatarios.
+
+Para configurar los destinatarios de alertas globales, haga clic en *Admin > Notificaciones* y elija los destinatarios deseados en la sección *destinatarios de notificaciones de monitor global*.
+
+.image:GlobalMonitorRecipients.png["Destinatarios de notificación de monitor global"]
+[role="thumb"]
+Siempre puede reemplazar la lista global de destinatarios de un monitor individual al crear o modificar el monitor.
+
+
+
+== Lista global de destinatarios para notificaciones de directiva de rendimiento
+
+[role="thumb"]
+image:PerformancePolicyNotificationSection.png["Notificaciones por correo electrónico de política de rendimiento"]
+
+Para agregar destinatarios a la lista de correo electrónico de notificación de política de rendimiento global, vaya a la sección "destinatarios de políticas de rendimiento global" e introduzca direcciones de correo electrónico separadas por comas. Los correos electrónicos enviados como alertas de violaciones de umbral de la política de rendimiento se enviarán a todos los destinatarios de la lista.
+
+Si comete un error, puede hacer clic en [x] para eliminar un destinatario de la lista.
+
+También puede añadir un bloque de firma opcional que se adjuntará a las notificaciones por correo electrónico enviadas.
+
+
+NOTE: Al configurar esa directiva, puede reemplazar la lista global de una directiva específica.

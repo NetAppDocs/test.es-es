@@ -1,0 +1,279 @@
+---
+sidebar: sidebar 
+permalink: reporting_schema_diagrams.html 
+keywords: Schema, DB Schema, premium, dwh, data warehouse 
+summary: Diagramas de esquema de informes 
+---
+= Diagramas de esquema de informes de Cloud Insights
+:allow-uri-read: 
+
+
+[role="lead"]
+Este documento proporciona los diagramas de esquema para la base de datos de informes. También puede descargar un archivo que contenga el link:ci_reporting_database_schema.pdf["tablas de esquema"].
+
+
+NOTE: La función Reporting se encuentra disponible en Cloud Insights link:concept_subscribing_to_cloud_insights.html["Edición Premium"].
+
+
+
+== Datos de inventario
+
+Las siguientes imágenes describen el datamart de inventario.
+
+
+
+=== Reducida
+
+image:storage.png[""]
+
+
+
+=== Nodo de almacenamiento
+
+image:storage_node.png[""]
+
+
+
+=== Estructura SAN
+
+image:fabric.png[""]
+
+
+
+=== Conectividad de puertos
+
+image:connectivity.png[""]
+
+
+
+=== MÁQUINA VIRTUAL
+
+image:vm.png[""]
+
+
+
+=== NAS
+
+image:nas.png[""]
+
+
+
+=== Rutas e infracciones
+
+image:logical.png[""]
+
+
+
+=== Anotaciones
+
+image:annotations.png[""]
+
+
+
+=== Más grandes
+
+image:apps_annot.png[""]
+
+
+
+=== Capacidad de almacenamiento y pool de almacenamiento
+
+image:Storage_and_Storage_Pool_Capacity_Fact.png[""]
+
+
+
+=== Capacidad de un volumen
+
+image:Volume_Capacity.png[""]
+
+
+
+=== Capacidad de los equipos virtuales
+
+image:VM_Capacity_Fact.png[""]
+
+
+
+=== Capacidad del volumen interno
+
+image:Internal_Volume_Capacity_Fact.png[""]
+
+
+
+=== Capacidad Qtree
+
+image:Qtree_Capacity_Fact.png[""]
+
+
+
+=== Eficiencia de la capacidad de almacenamiento
+
+image:efficiency.png[""]
+
+
+
+=== Capacidad de almacenamiento y pool de almacenamiento
+
+image:Storage_and_Storage_Pool_Capacity_Fact.png[""]
+
+
+
+=== Utilización del sistema de ficheros
+
+image:fs_util.png[""]
+
+
+
+=== Capacidad del puerto
+
+image:ports.png[""]
+
+
+
+=== Pago por uso
+
+image:Chargeback_Fact.png[""]
+
+
+
+=== Capacidad de grupos de discos
+
+image:Disk_Group_Capacity.png[""]
+
+
+
+== Datos de rendimiento
+
+Las siguientes imágenes describen el rendimiento datamart.
+
+
+
+=== Rendimiento por hora del volumen de la aplicación
+
+image:application_performance_fact.png[""]
+
+
+
+=== Rendimiento por hora del volumen interno
+
+image:host_performance_fact.png[""]
+
+
+
+=== Rendimiento por hora del volumen interno
+
+image:internal_volume_performance_fact.png[""]
+
+
+
+=== Rendimiento diario de volumen interno
+
+image:internal_volume_daily_performance_fact.png[""]
+
+
+
+=== Rendimiento por hora del volumen
+
+image:vmdk_hourly_performance_fact.png[""]
+
+
+
+=== Rendimiento diario de volumen
+
+image:volume_daily_performance_fact.png[""]
+
+
+
+=== Rendimiento diario de Qtree
+
+image:QtreeDailyPerformanceFact.png[""]
+
+
+
+=== Cambie el rendimiento por hora del host
+
+image:switch_performance_for_host_hourly_fact.png[""]
+
+
+
+=== Cambie el rendimiento por hora del puerto
+
+image:switch_performance_for_port_hourly_fact.png[""]
+
+
+
+=== Cambie el rendimiento por hora para el almacenamiento
+
+image:switch_performance_for_storage_hourly_fact.png[""]
+
+
+
+=== Cambie el rendimiento por hora para la cinta
+
+image:switch_performance_for_tape_hourly_fact.png[""]
+
+
+
+=== Rendimiento de la máquina virtual
+
+image:vm_hourly_performance_fact.png[""]
+
+
+
+=== VM rendimiento diario para host
+
+image:vm_daily_performance_fact.png[""]
+
+
+
+=== Rendimiento de VM por hora para el host
+
+image:vm_hourly_performance_fact.png[""]
+
+
+
+=== VM rendimiento diario para host
+
+image:vm_daily_performance_fact.png[""]
+
+
+
+=== Rendimiento de VM por hora para el host
+
+image:vm_hourly_performance_fact.png[""]
+
+
+
+=== Rendimiento diario de VMDK
+
+image:vmdk_daily_performance_fact.png[""]
+
+
+
+=== Rendimiento por hora de VMDK
+
+image:vmdk_hourly_performance_fact.png[""]
+
+
+
+=== Rendimiento por hora del nodo de almacenamiento
+
+image:storage_node_hourly_performance_fact.png[""]
+
+
+
+=== Rendimiento diario del disco
+
+image:disk_daily_performance_fact.png[""]
+
+
+
+=== Rendimiento por hora del disco
+
+image:disk_hourly_performance_fact.png[""]
+
+
+
+== Kubernetes
+
+image:k8s_schema.jpg["Kubernetes"]

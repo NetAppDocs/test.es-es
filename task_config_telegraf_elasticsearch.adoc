@@ -1,0 +1,51 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_elasticsearch.html 
+keywords: telegraf, installation, install, ElasticSearch 
+summary: Configuración del recopilador de datos de Elasticsearch 
+---
+= Recopilador de datos de Elasticsearch
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights usa este recopilador de datos para recopilar métricas de Elasticsearch.
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija Elasticsearch.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:ElasticsearchDCConfigLinux.png["Configuración de Elasticsearch"]
+
+
+
+== Configuración
+
+Puede encontrar información en la link:https://www.elastic.co/guide/index.html["Documentación de Elasticsearch"].
+
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| Clúster de Elasticsearch | Cluster de espacio de nombres | Nodo IP Node Name Cluster Status | Recuento de nodos maestros recuento total de nodos datos del sistema de archivos disponibles (bytes) datos del sistema de archivos libres (bytes) datos del sistema de archivos totales (bytes) subprocesos de JVM OS profesores asignados OS procesadores disponibles OS Mem libre (bytes) OS Mem libre de Mem total (bytes) OS Mem utilizado (bytes) OS Mem Indices de proceso usado CPU Tamaño de finalización (bytes) Índices índices índices índices índices índices índices índices índices índices de recuento índices Docs índices de recuento índices de datos de campo Tamaño de memoria (bytes) índices de consulta Conteo de caché índices de tamaño segmentos índices de recuento segmentos segmentos valores de documento índices de memoria (bytes) índices de índices de índices primarios índices de índice Promedio índices primarios de índices de índices de índices de índices de índices de índices de índices de índices primarios de índices de índices de índices de Índices de replicación de índices de índices índices Promedio Sombredos replicación de índice índices máximos índices de índices de índices de índices de índices de índices de índices de índices de índices de sombreado índices de replicación índices de sombreado índices de totales Tamaño de almacén (bytes) 
+
+
+| Nodo de Elasticsearch | Namespace Cluster es Node ID es Node IP es Node | ID de zona | Aprendizaje automático habilitado aprendizaje automático aprendizaje automático Max Open Jobs X-Pack Installed Breakers Accounting Estimated Size (bytes) Breakers Accounting Limit Size (bytes) Breakers Accounting Breakers Accounting Breakers Accounting Breakers datos de campo Tamaño estimado (bytes) Breakers Field Data Limit Size (bytes) Breakers Field Data Tripped Breakers ers Tamaño estimulado en vuelo (bytes) Breakers en vuelo Tamaño límite en vuelo (bytes) Breakers en vuelo encima de los disyuntores en vuelo recortados Breakers en vuelo Tamaño estimado padre (bytes) Breakers Tamaño límite padre (bytes) Breakers principales Breakers en vuelo solicitar el tamaño estimado (bytes) Breakers padre de ruptura de la solicitud de valor límite (bytes) Breakers solicitud de datos disponibles (Bytes) datos del sistema de archivos libres (bytes) datos del sistema de archivos totales (bytes) datos del sistema de archivos Estadísticas de I/o dispositivos OPS sistema de archivos Estadísticas de I/o dispositivos Leer operaciones Filesystem Estadísticas de I/o dispositivos Erite (kb) FileSystem Estadísticas de I/o Estadísticas de campo Operaciones de archivo Estadísticas totales de I/o Estadísticas totales de campo (kb) Estadísticas de archivo Estadísticas de I/o Read OPS FileSystem IO Stats total Write (kb) FileSystem IO Stats Write OPS FileSystem menos uso estimado disponible (bytes) FileSystem menos uso estimado total (bytes) Filesystem menos uso utilizado Disk Filesystem la mayoría de los cálculos de uso disponible (bytes) Filesystem la mayoría del uso cálculo total (bytes) Filesystem uso más utilizado Total Available (bytes) FilesSystem total Free (bytes) Filessystem total (bytes) Indices completado Size (bytes) Indices Docs Count Indices Docs Deleted Indices Field Data Ievtions Indices Field Data Memory Size (bytes) Indices Flush total Indices Flush total Time Indices Get Current Indices Time Indices Get Exprima exists Time Indices Get Expose Total Indices obtener total Indices Index Indexing Delete total Indices Index Index Indexing Noop Update total Indices Indexing total Indexing Time Frottle Time HTTP Current Open HTTP total Open JVM Buffer Pool Direct Count clases JVM CURS recuento actual Loaded Count JVM Colectores Old Collection Count JVM Mem Heap Committed (bytes) OS CPU Promedio de carga 15 m OS CPU OS Mem libre (bytes) OS Swap libre (bytes) proceso CPU proceso CPU proceso total CPU total proceso Max File Descriptors proceso Mem total Virtual (bytes) Thread Pool analizar Active Thread Pool Analyze Completed Thread Pool Analyse ha completado Thread Pool más grande Thread Pool Analyse ha rechazado thread Pool Threads Pool Fetch Shard started Active Thread Pool Fetch Shard started Thread Pool Fetch Shard started Thread Pool Fetch Shard started Queue Thread Pool Fetch Shard started Thread Pool Fetch Shard started Thread Pool Fetch Shard Store Active Thread Pool Fetch Shard Store Completed Transport RX (por segundo) Transport RX bytes (por segundo) Transport Server Open Transport TX (por segundo) Transport TX bytes (por segundo) 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

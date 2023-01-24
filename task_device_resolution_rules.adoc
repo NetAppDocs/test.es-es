@@ -1,0 +1,155 @@
+---
+sidebar: sidebar 
+permalink: task_device_resolution_rules.html 
+keywords: Automatic, AR, AHR, Host, automatic device resolution 
+summary: Device Resolution le ayuda a realizar un seguimiento preciso del rendimiento y del inventario en su entorno. 
+---
+= Reglas de resolución de dispositivos
+:allow-uri-read: 
+
+
+[role="lead"]
+Se crean reglas de resolución de dispositivos para identificar los hosts, el almacenamiento y las cintas que Cloud Insights no identifica automáticamente actualmente. Las reglas que crea identifican dispositivos actualmente en su entorno y también identifican dispositivos similares a medida que se agregan a su entorno.
+
+
+
+== Creación de Reglas de resolución de dispositivos
+
+Al crear reglas que se inician identificando el origen de la información con el que se ejecuta la regla, el método utilizado para extraer información y si se aplica la búsqueda DNS a los resultados de la regla.
+
+[cols="2*"]
+|===
+
+
+| Fuente que se utiliza para identificar el dispositivo | * Alias de SRM para hosts * alias de almacenamiento que contiene un nombre de host o cinta incorporado * alias de conmutador que contiene un nombre de host o cinta integrado * nombres de zona que contienen un nombre de host integrado 
+
+
+| Método que se utiliza para extraer el nombre del dispositivo del origen | * Como es (extraer un nombre de un SRM) * delimitadores * expresiones regulares 
+
+
+| Búsqueda de DNS | Especifica si utiliza DNS para verificar el nombre de host 
+|===
+Las reglas se crean en la ficha Reglas de resolución automática. Los siguientes pasos describen el proceso de creación de reglas.
+
+.Procedimiento
+. Haga clic en *Administrar > resolución del dispositivo*
+. En la ficha *Reglas de resolución automática*, haga clic en *+ Regla de host* o *+ Regla de cinta*.
++
+Aparece la pantalla *Regla de resolución*.
+
++
+
+NOTE: Haga clic en el vínculo _View Matching Criteria_ para obtener ayuda y ejemplos para crear expresiones regulares.
+
+. En la lista *Tipo*, seleccione el dispositivo que desea identificar.
++
+Puede seleccionar _Host_ o _Tape_.
+
+. En la lista *Fuente*, seleccione la fuente que desea utilizar para identificar el host.
++
+En función del origen que haya elegido, Cloud Insights muestra la siguiente respuesta:
+
++
+.. *Zonas* enumera las zonas y WWN que Cloud Insights debe identificar.
+.. *SRM* enumera los alias no identificados que Cloud Insights debe identificar
+.. *Alias de almacenamiento* enumera los alias de almacenamiento y WWN que Cloud Insights debe identificar
+.. *Cambiar alias* enumera los alias del conmutador que Cloud Insights debe identificar
+
+
+. En la lista *método*, seleccione el método que desea utilizar para identificar el host.
++
+|===
+
+
+| Origen | Método 
+
+
+| SRM | Como es, delimitadores, expresiones regulares 
+
+
+| Alias de almacenamiento | Delimitadores, expresiones regulares 
+
+
+| Cambiar alias | Delimitadores, expresiones regulares 
+
+
+| Zonas | Delimitadores, expresiones regulares 
+|===
++
+** Las reglas que utilizan delimitadores requieren los delimitadores y la longitud mínima del nombre de host. La longitud mínima del nombre de host es el número de caracteres que Cloud Insights debe utilizar para identificar un host. Cloud Insights realiza búsquedas de DNS solo para nombres de host que sean largos o prolongados.
++
+Para las reglas que utilizan delimitadores, el delimitador tokeniza la cadena de entrada y se crea una lista de candidatos de nombre de host mediante varias combinaciones del token adyacente. La lista se ordena entonces, de mayor a menor tamaño. Por ejemplo, para un anillo de entrada de _vipsnq03_hba3_emc3_12ep0_, la lista daría como resultado lo siguiente:
+
++
+*** vipsnq03_hba3_emc3_12ep0
+*** vipsnq03_hba3_emc3
+*** hba3 emc3_12ep0
+*** vipsnq03_hba3
+*** emc3_12ep0
+*** hba3_emc3
+*** vipsq03
+*** 12p0
+*** emc3
+*** hab.3
+
+
+** Las reglas que usan expresiones regulares requieren una expresión regular, el formato y la selección de sensibilidad de casos.
+
+
+. Haga clic en *Ejecutar AR* para ejecutar todas las reglas, o haga clic en la flecha hacia abajo del botón para ejecutar la regla que creó (y cualquier otra regla que se haya creado desde la última ejecución completa de AR).
++
+Los resultados de la ejecución de reglas se muestran en la ficha *FC Identify*.
+
+
+
+
+
+== Inicio de una actualización automática de resolución del dispositivo
+
+Una actualización de resolución de dispositivo confirma los cambios manuales que se han agregado desde la última ejecución automática de resolución de dispositivo completa. La ejecución de una actualización se puede utilizar para confirmar y ejecutar sólo las nuevas entradas manuales realizadas en la configuración de resolución del dispositivo. No se ejecuta ninguna resolución completa del dispositivo.
+
+.Procedimiento
+. Inicie sesión en la interfaz de usuario web de Cloud Insights.
+. Haga clic en *Administrar > resolución del dispositivo*
+. En la pantalla *resolución del dispositivo*, haga clic en la flecha hacia abajo del botón *Ejecutar AR*.
+. Haga clic en *Actualizar* para iniciar la actualización.
+
+
+
+
+== Identificación manual asistida por reglas
+
+Esta función se utiliza en casos especiales en los que desea ejecutar una regla específica o una lista de reglas (con o sin una reordenación puntual) para resolver hosts, dispositivos de almacenamiento y cintas desconocidos.
+
+.Antes de empezar
+Tiene varios dispositivos que no se han identificado y también varias reglas que han identificado correctamente otros dispositivos.
+
+
+NOTE: Si el origen sólo contiene parte del nombre de un host o dispositivo, utilice una regla de expresión regular y dé formato para agregar el texto que falta.
+
+.Procedimiento
+. Inicie sesión en la interfaz de usuario web de Cloud Insights.
+. Haga clic en *Administrar > resolución del dispositivo*
+. Haga clic en la ficha *Identificación de canal de fibra*.
++
+El sistema muestra los dispositivos junto con su estado de resolución.
+
+. Seleccione varios dispositivos no identificados.
+. Haga clic en *acciones masivas* y seleccione *establecer resolución de host* o *establecer resolución de cinta*.
++
+El sistema muestra la pantalla de identificación que contiene una lista de todas las reglas que han identificado correctamente los dispositivos.
+
+. Cambie el orden de las reglas por un orden que satisfaga sus necesidades.
++
+El orden de las reglas se cambia en la pantalla de identificación, pero no se cambian globalmente.
+
+. Seleccione el método que se ajuste a sus necesidades.
+
+
+Cloud Insights ejecuta el proceso de resolución del host en el orden en que se muestran los métodos, comenzando por los que se encuentran en la parte superior.
+
+Cuando se encuentran las reglas que se aplican, los nombres de reglas se muestran en la columna rules y se identifican como manuales.
+
+Relacionado:link:task_device_resolution_fibre_channel.html["Resolución de dispositivos Fibre Channel"]
+link:task_device_resolution_ip.html["Resolución del dispositivo IP"]
+link:task_device_resolution_preferences.html["Configuración de las preferencias de resolución del dispositivo"]

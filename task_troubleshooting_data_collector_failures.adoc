@@ -1,0 +1,26 @@
+---
+sidebar: sidebar 
+permalink: task_troubleshooting_data_collector_failures.html 
+summary: Solución de problemas de errores del recopilador de datos. 
+keywords: invite, roles, data collector, acquisition unit, AU 
+---
+= Solución de problemas de errores del recopilador de datos
+:toc: macro
+:hardbreaks:
+:toclevels: 2
+:allow-uri-read: 
+:toc: 
+:toclevels: 2
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:keywords: OnCommand, Insight, documentation, help
+:toc-position: content
+
+
+
+toc::[]
+
+
+== POR CONFIRMAR

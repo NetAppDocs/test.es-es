@@ -1,0 +1,16 @@
+---
+sidebar: sidebar 
+permalink: concept_troubleshooting_overview.html 
+summary: En esta sección encontrará consejos y trucos para ayudarle a solucionar problemas en su entorno de Cloud Insights. 
+keywords: troubleshootin 
+---
+= Resolución de problemas de Cloud Insights
+:allow-uri-read: 
+
+
+[role="lead"]
+Los temas de esta sección ofrecen consejos para solucionar problemas en caso de problemas con su entorno de Cloud Insights.
+
+Haga clic en una categoría del menú situado a la izquierda para ver la información de solución de problemas de esa categoría.
+
+Puede encontrar más solución de problemas y otros link:concept_requesting_support.html["soporte técnico"] Información en la página Cloud Insights *Ayuda > Soporte*.

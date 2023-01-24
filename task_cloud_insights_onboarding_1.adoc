@@ -1,0 +1,73 @@
+---
+sidebar: sidebar 
+permalink: task_cloud_insights_onboarding_1.html 
+summary: Registrarse en Cloud Insights y crear el entorno. 
+---
+= Incorporación de Cloud Insights
+:allow-uri-read: 
+
+
+[role="lead"]
+Antes de empezar a trabajar con Cloud Insights, debe registrarse en el portal *NetApp Cloud Central*. Si ya tiene un inicio de sesión en Cloud Central de NetApp, puede iniciar una prueba gratuita de Cloud Insights con unos pasos rápidos.
+
+
+toc::[]
+
+
+== Creación de la cuenta de Cloud Central de NetApp
+
+Para registrarse y obtener acceso a los servicios en nube de NetApp, visite https://cloud.netapp.com["*Cloud Central de NetApp*"^] Y haga clic en *Registrarse*.
+
+* Introduzca una dirección de correo electrónico profesional válida y elija una contraseña.
+* Escriba el nombre de su empresa y el nombre completo.
+* Acepte los términos y condiciones y haga clic en *Registrarse*.
+
+
+Después, irá a la página de ofertas de cloud de NetApp.
+
+Seleccione Cloud Insights.
+
+
+
+=== ¿Qué sucede si ya tengo un inicio de sesión en el cloud de NetApp?
+
+Si ya tiene una cuenta Cloud Central de NetApp, solo tiene que elegir *Iniciar sesión* en el https://cloud.netapp.com["*Cloud Central de NetApp*"^] portal de datos.
+
+Introduzca su dirección de correo electrónico y contraseña. Después, irá a la página de ofertas de cloud de NetApp.
+
+Seleccione Cloud Insights.
+
+
+
+== Comience su prueba gratuita de Cloud Insights
+
+Si es la primera vez que inicia sesión en Cloud Insights, bajo la oferta de Cloud Insights, haga clic en *Iniciar prueba gratuita*. Cloud Insights creará el entorno de su empresa.
+
+Una vez finalizada la creación de su entorno, puede usar las credenciales de Cloud Central para iniciar sesión e iniciar una prueba gratuita de 30 días de Cloud Insights. Durante esta prueba puede explorar todas las características que la edición estándar de Cloud Insights tiene para ofrecer.
+
+Durante la prueba gratuita, puede link:concept_subscribing_to_cloud_insights.html["inicie su suscripción"] A Cloud Insights en cualquier momento. Una vez que se haya suscrito, puede utilizar las funciones de Cloud Insights en función de su suscripción actual.
+
+
+
+== Inicie sesión y go
+
+Una vez que se haya creado su inquilino, en cualquier momento solo tiene que iniciar sesión en Cloud Portal de NetApp y hacer clic en *Ir a Cloud Insights*. Se le dirigirá directamente a su entorno de Cloud Insights.
+
+También puede abrir un navegador directamente a la URL de su entorno Cloud Insights, por ejemplo:
+
+ https://<environment-name>.c01.cloudinsights.netapp.com/
+La URL también se incluirá en el correo electrónico de invitación de cada usuario para un acceso sencillo y marcadores. Si el usuario aún no ha iniciado sesión en Cloud Central, se le pedirá que inicie sesión.
+
+
+NOTE: Los nuevos usuarios aún deben registrarse para acceder a Cloud Central antes de poder acceder a la URL de su entorno.
+
+La primera vez que inicie sesión en un entorno nuevo, se le guiará a través de la configuración de link:task_getting_started_with_cloud_insights.html["*comenzar a recopilar datos*"].
+
+
+
+== Cierre la sesión
+
+Para cerrar sesión en Cloud Insights, haga clic en su *Nombre de usuario* y seleccione *Cerrar sesión*. Volverá a la pantalla de inicio de sesión de Cloud Central.
+
+
+NOTE: Al cerrar la sesión en Cloud Insights, se cierra la sesión en Cloud Central. También se cerrará sesión en otros servicios cloud de NetApp que utilizan el inicio de sesión de Cloud Central.

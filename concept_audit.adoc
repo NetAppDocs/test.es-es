@@ -1,0 +1,159 @@
+---
+sidebar: sidebar 
+permalink: concept_audit.html 
+keywords: audit, users, activities 
+summary: La auditoría ofrece una vista de las actividades del sistema y del usuario en el sistema Cloud Insights. 
+---
+= Auditoría
+:allow-uri-read: 
+
+
+[role="lead"]
+Para identificar los cambios esperados (para seguimiento) o inesperados (para solución de problemas), puede ver un registro de auditoría de los eventos del sistema Cloud Insights y de las actividades del usuario.
+
+
+
+== Visualización de eventos auditados
+
+Para ver la página Auditoría, haga clic en *Administración > Auditoría* en el menú. Se muestra la página Auditoría, proporcionando los siguientes detalles para cada entrada de auditoría:
+
+* *Hora*: Fecha y hora del evento o actividad
+* *Usuario*: El usuario que inició la actividad
+* *Rol*: Función del usuario en Cloud Insights (invitado, usuario, administrador)
+* *IP*: La dirección IP asociada al evento
+* *Acción*: Tipo de actividad, por ejemplo Inicio de sesión, Crear, Actualizar
+* *Categoría* - la categoría de actividad
+* *Detalles* - Detalles de la actividad
+
+
+
+
+== Mostrar entradas de auditoría
+
+Existen varias formas de ver las entradas de auditoría:
+
+* Puede mostrar las entradas de auditoría eligiendo un período de tiempo determinado (1 hora, 24 horas, 3 días, etc.).
+* Puede cambiar el orden de clasificación de las entradas a ascendente (flecha arriba) o descendente (flecha abajo) haciendo clic en la flecha del encabezado de la columna.
++
+De forma predeterminada, la tabla muestra las entradas en orden descendente.
+
+* Puede utilizar los campos de filtro para mostrar sólo las entradas que desee en la tabla. Haga clic en el botón [+] para agregar filtros adicionales.
++
+image:Audit_Filters.png["Filtros de auditoría"]
+
+
+
+
+
+=== Más información sobre el filtrado
+
+Puede utilizar cualquiera de las siguientes opciones para refinar el filtro:
+
+|===
+
+
+| Filtro | Qué hace | Ejemplo | Resultado 
+
+
+| * (Asterisk) | le permite buscar todo | vol*rhel | devuelve todos los recursos que comienzan con "vol" y terminan con "rhel" 
+
+
+| ? (signo de interrogación) | le permite buscar un número específico de caracteres | BOS-PRD??-S12 | Devuelve BOS-PRD**__12__**-S12, BOS-PRD**__23_**-S12, etc. 
+
+
+| O. | permite especificar varias entidades | FAS2240, CX600 O FAS3270 | Devuelve cualquiera de los modelos FAS2440, CX600 o FAS3270 
+
+
+| NO | permite excluir el texto de los resultados de la búsqueda | NO EMC* | Devuelve todo lo que no empieza con "EMC". 
+
+
+| _Ninguno_ | Busca blank/NULL/None en cualquier campo en el que se haya seleccionado | _Ninguno_ | devuelve los resultados en los que el campo de destino no está vacío 
+
+
+| No * | Al igual que con _None_ anteriores, pero también puede utilizar este formulario para buscar valores NULL en los campos _text-only_ | No * | devuelve los resultados en los que el campo de destino no está vacío. 
+
+
+| "" | busca una coincidencia exacta | "NetApp*" | Devuelve los resultados que contienen la cadena literal exacta _NetApp*_ 
+|===
+Si una cadena de filtro se debe escribir entre comillas dobles, Insight trata todo entre el primer y el último presupuesto como una coincidencia exacta. Todos los caracteres especiales o operadores incluidos en las comillas se tratarán como literales. Por ejemplo, el filtrado para "*" devolverá resultados que sean un asterisco literal; en este caso, el asterisco no será tratado como comodín. Los operadores O Y NO también se tratarán como cadenas literales cuando se incluyen entre comillas dobles.
+
+
+
+== Eventos y acciones auditados
+
+Los eventos y acciones auditados por Cloud Insights se pueden clasificar en las siguientes áreas generales:
+
+* *Cuenta de usuario*: Inicio de sesión, cierre de sesión, cambio de rol, etc.
++
+Ejemplo: _User *Tony Lavoie* ha iniciado sesión desde *10.1.120.15*, agente de usuario *Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36*, método(s) de inicio de sesión *Inicio de sesión en Cloud Central Portal_*
+
+* *Unidad de adquisición*: Crear, borrar, etc.
++
+Ejemplo: _Unidad de adquisición *AU-Boston-1* removida_.
+
+* * Colector de datos*: Añadir, eliminar, modificar, posponer/reanudar, cambiar unidad de adquisición, inicio/parada, etc.
++
+Ejemplo: _Datasource *FlexPod Lab* eliminado, proveedor *NetApp*, modelo *ONTAP Software de gestión de datos*, ip *192.168.106.5_*.
+
+* *Aplicación*: Agregar, asignar al objeto, eliminar, etc.
++
+Ejemplo: _Internal Volume *ocisedev:t1appSVM01:t1appFlexVol 01* añadido a la aplicación *Test App_*.
+
+* *Anotación*: Agregar, asignar, eliminar, acciones de regla de anotación, cambios de valor de anotación, etc.
++
+Ejemplo: _Valor de anotación *Boston* añadido al tipo de anotación *SalesOffice_*.
+
+* *Consulta*: Agregar, quitar, etc.
++
+Ejemplo: _Query *TL Sales Query* is added_.
+
+* *Monitor*: Agregar, quitar, etc.
++
+Ejemplo: Monitor _Aggr Size - CI Alerts Notifications Dev_ updated
+
+* *Notificación*: Cambiar el correo electrónico, etc.
++
+Ejemplo: Creado por el destinatario _ci-alerts-mations-dl_
+
+
+
+
+
+== Exportando eventos de auditoría
+
+Puede exportar los resultados de la presentación de auditoría a un archivo .CSV, lo que le permitirá analizar los datos o importarlos a otra aplicación.
+
+.Pasos
+. En la página Auditoría, establezca el intervalo de tiempo deseado y los filtros que desee. Cloud Insights solo exportará las entradas de auditoría que coincidan con el filtrado y el intervalo de tiempo que haya establecido.
+. Haga clic en el botón _Export_ image:ExportButton.png["Botón Exportar"] en la esquina superior derecha de la tabla.
+
+
+Los eventos de auditoría mostrados se exportarán a un archivo .CSV, hasta un máximo de 10,000 filas.
+
+
+
+== Retención de datos de auditoría
+
+La cantidad de tiempo que Cloud Insights retiene los datos de auditoría se basa en su edición:
+
+* Edición básica: Los datos de auditoría se conservan durante 30 días
+* Ediciones Standard y Premium: Los datos de auditoría se conservan durante 1 año más 1 día
+
+
+Las entradas de auditoría anteriores al tiempo de retención se purgan automáticamente. No es necesaria la interacción del usuario.
+
+
+
+== Resolución de problemas
+
+[role="lead"]
+Aquí encontrará sugerencias para solucionar problemas con Audit.
+
+|===
+
+
+| *Problema:* | *Pruebe esto:* 
+
+
+| Veo mensajes de auditoría que me indican que se ha exportado un monitor. | Los ingenieros de NetApp suelen usar la exportación de una configuración de monitor personalizada durante las fases de desarrollo y pruebas de nuevas funciones. Si no esperaba ver este mensaje, considere explorar las acciones del usuario mencionadas en la acción auditada o la asistencia de contacto. 
+|===

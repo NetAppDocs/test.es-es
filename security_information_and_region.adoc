@@ -1,0 +1,93 @@
+---
+sidebar: sidebar 
+permalink: security_information_and_region.html 
+summary: Cloud Insights sigue las prácticas recomendadas de seguridad a lo largo del ciclo de vida de la versión. 
+keywords: security, risk, protection 
+---
+= Información y Región
+:allow-uri-read: 
+
+
+[role="lead"]
+NetApp se toma muy en serio la seguridad de la información del cliente. Aquí está cómo y dónde Cloud Insights almacena su información.
+
+
+
+== ¿Qué información almacena Cloud Insights?
+
+Cloud Insights almacena la siguiente información:
+
+* Datos de rendimiento
++
+Los datos de rendimiento son datos de series temporales que proporcionan información sobre el rendimiento del dispositivo/origen monitorizado. Esto incluye, por ejemplo, el número de iOS proporcionados por un sistema de almacenamiento, el rendimiento de un puerto FibreChannel, el número de páginas entregadas por un servidor web, el tiempo de respuesta de una base de datos y mucho más.
+
+* Datos de inventario
++
+Los datos de inventario se componen de metadatos que describen el dispositivo/origen supervisado y cómo se configuran. Esto incluye, por ejemplo, versiones de hardware y software instaladas, discos y LUN en un sistema de almacenamiento, núcleos de CPU, RAM y discos de una máquina virtual, los espacios de tablas de una base de datos, el número y tipo de puertos en un switch SAN, nombres de directorios/archivos (si Cloud Secure está activado), etc.
+
+* Datos de configuración
++
+Esto resume los datos de configuración proporcionados por el cliente que se utilizan para gestionar el inventario y las operaciones del cliente, por ejemplo, nombres de host o direcciones IP de los dispositivos supervisados, intervalos de sondeo, valores de tiempo de espera, etc.
+
+* Secretos
++
+Los secretos consisten en las credenciales utilizadas por la Unidad de adquisición de Cloud Insights para acceder a los servicios y dispositivos del cliente. Estas credenciales se cifran utilizando AES-256 y las claves privadas sólo se almacenan en las unidades de adquisición y nunca salen del entorno del cliente. Incluso los SRES privilegiados de Cloud Insights no pueden acceder a los secretos del cliente en texto simple debido a este diseño.
+
+* Datos funcionales
++
+Estos son los datos generados como resultado de la prestación del Servicio de datos en el cloud de NetApp, que informa a NetApp sobre el desarrollo, la puesta en marcha, las operaciones, el mantenimiento y la protección del Servicio de datos en el cloud. Los datos funcionales no incluyen información del cliente ni información personal.
+
+* Acceso de usuarios a datos
++
+Autenticación e información de acceso que permite a Cloud Central de NetApp comunicarse con sitios de Cloud Insights regionales, incluidos los datos relacionados con la autorización de usuarios.
+
+* Datos del directorio de usuarios de Cloud Secure
++
+En los casos en que la funcionalidad de Cloud Secure esté activada Y el cliente decida habilitar el recopilador de directorios de usuarios, el sistema almacenará los nombres para mostrar de los usuarios, las direcciones de correo electrónico de la empresa y otra información recopilada de Active Directory.
+
+
+
+
+NOTE: Los datos del directorio de usuarios hacen referencia a la información del directorio de usuarios recopilada por el recopilador de datos del directorio de usuarios de Cloud Secure, no a los datos acerca de los usuarios de Cloud Insights/Cloud Secure ellos mismos.
+
+*No se recopilan datos personales explícitos* de los recursos de infraestructura y servicios. La información recopilada consiste en métricas de rendimiento, información de configuración y solo metadatos en la infraestructura, del mismo modo que muchos hogares de proveedores, como el soporte automático de NetApp y ActiveIQ. No obstante, según las convenciones de nomenclatura de un cliente, los datos para recursos compartidos, los volúmenes, las máquinas virtuales, los qtrees, las aplicaciones, etc. pueden contener información de identificación personal.
+
+Si Cloud Secure está habilitado, el sistema también examina los nombres de archivos y directorios en SMB u otros recursos compartidos, los cuales pueden contener información de identificación personal. Cuando los clientes habilitan el recopilador de directorios de usuarios de Cloud Secure (que esencialmente asigna SID de Windows a nombres de usuario a través de Active Directory), Cloud Insights recopilará y almacenará el nombre para mostrar, la dirección de correo electrónico de la empresa y cualquier atributo adicional seleccionado.
+
+Además, se mantienen los registros de acceso a Cloud Insights y contienen las direcciones IP y de correo electrónico de los usuarios que se utilizan para iniciar sesión en el servicio.
+
+
+
+== ¿Dónde se almacena mi información?
+
+Cloud Insights almacena información según la región en la que se crea el entorno.
+
+La siguiente información se almacena en la región de host:
+
+* Información sobre telemetría y activos/objetos, incluidos contadores y métricas de rendimiento
+* Información de la unidad de adquisición
+* Datos funcionales
+* Información de auditoría sobre las actividades de los usuarios dentro de Cloud Insights
+* Información de Active Directory de Cloud Secure
+* Información de auditoría de Cloud Secure
+
+
+La siguiente información reside en los Estados Unidos, independientemente de la región donde se aloje su entorno de Cloud Insights:
+
+* Información del sitio de entorno (a veces denominado "inquilino"), como el propietario del sitio/cuenta.
+* Información que permite a Cloud Central de NetApp comunicarse con sitios de Cloud Insights regionales, incluido cualquier cosa que hacer con la autorización de usuarios.
+* Información relacionada con la relación entre el usuario de Cloud Insights y el inquilino.
+
+
+
+
+== Más información
+
+Puede obtener más información sobre la privacidad y la seguridad de NetApp en los siguientes enlaces:
+
+* link:https://www.netapp.com/us/company/trust-center/index.aspx["Centro de confianza"]
+* link:https://www.netapp.com/us/company/trust-center/privacy/data-location-cross-border-transfers.aspx["Transferencias de datos internacionales"]
+* link:https://www.netapp.com/us/company/trust-center/privacy/bcr-binding-corporate-rules.aspx["Normas Corporativas vinculantes"]
+* link:https://www.netapp.com/us/company/trust-center/transparency/third-party-data-requests.aspx["Respuesta a solicitudes de datos de terceros"]
+* link:https://www.netapp.com/us/company/trust-center/privacy/privacy-principles-security-safeguards.aspx["Principios de privacidad de NetApp"]
+

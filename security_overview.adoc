@@ -1,0 +1,100 @@
+---
+sidebar: sidebar 
+permalink: security_overview.html 
+summary: Cloud Insights sigue las prácticas recomendadas de seguridad a lo largo del ciclo de vida de la versión. 
+keywords: security, risk, protection 
+---
+= Seguridad Cloud Insights
+:allow-uri-read: 
+
+
+[role="lead"]
+La seguridad de los datos de los productos y de los clientes es de vital importancia en NetApp. Cloud Insights sigue las prácticas recomendadas de seguridad a lo largo del ciclo de vida de su versión para garantizar que la información y los datos del cliente están protegidos de la mejor forma posible.
+
+
+
+== Descripción de la seguridad
+
+
+
+=== Seguridad física
+
+La infraestructura de producción de Cloud Insights se encuentra alojada en Amazon Web Services (AWS). AWS gestiona controles físicos y ambientales relacionados con la seguridad de los servidores de producción de Cloud Insights, que incluyen edificios, así como bloqueos o claves usados en las puertas. Según AWS: “El acceso físico es controlado tanto en el perímetro como en los puntos de entrada del edificio por el personal de seguridad profesional que utiliza videovigilancia, sistemas de detección de intrusiones y otros medios electrónicos. El personal autorizado utiliza mecanismos de autenticación de múltiples factores para acceder a las plantas de los centros de datos”.
+
+Cloud Insights sigue las prácticas recomendadas de link:https://aws.amazon.com/compliance/shared-responsibility-model/["Modelo de responsabilidad compartida"] Descrito por AWS.
+
+
+
+=== Seguridad del producto
+
+Cloud Insights sigue un ciclo de vida de desarrollo acorde con los principios ágiles, lo que nos permite abordar cualquier defecto de software orientado a la seguridad de forma más rápida, en comparación con las metodologías de desarrollo del ciclo de lanzamiento más largo. Con metodologías de integración continua, podemos responder rápidamente a los cambios funcionales y de seguridad. Los procedimientos y políticas de gestión de cambios definen cuándo y cómo se producen los cambios y ayudan a mantener la estabilidad del entorno de producción. Cualquier cambio impactante se comunica formalmente, coordina, revisa correctamente y aprueba antes de su lanzamiento al entorno de producción.
+
+
+
+=== Seguridad de la red
+
+El acceso de red a los recursos del entorno Cloud Insights se controla mediante firewalls basados en host. Cada recurso (como un equilibrador de carga o una instancia de máquina virtual) tiene un firewall basado en host que restringe el tráfico entrante sólo a los puertos necesarios para que ese recurso realice su función.
+
+Cloud Insights utiliza diversos mecanismos, incluidos los servicios de detección de intrusiones, para supervisar el entorno de producción en busca de anomalías de seguridad.
+
+
+
+=== Evaluación de riesgos
+
+El equipo de Cloud Insights sigue un proceso formalizado de evaluación de riesgos para proporcionar una forma sistemática y repetible de identificar y evaluar los riesgos para poder gestionarlos adecuadamente a través de un plan de tratamiento de riesgos.
+
+
+
+=== Protección de datos
+
+El entorno de producción de Cloud Insights está configurado en una infraestructura altamente redundante que utiliza varias zonas de disponibilidad para todos los servicios y componentes. Además del uso de una infraestructura informática redundante y de alta disponibilidad, se realiza el backup de datos cruciales a intervalos regulares y se realizan restauraciones periódicas. Las políticas y procedimientos formales de backup minimizan el impacto de las interrupciones de las actividades empresariales y protegen los procesos empresariales contra los efectos de los fallos de los sistemas de información o los desastres y garantizan una reanudación oportuna y adecuada.
+
+
+
+=== Autenticación y gestión del acceso
+
+Todos los accesos de los clientes a Cloud Insights se realizan mediante las interacciones de la interfaz de usuario del navegador por https. La autenticación se realiza a través del servicio de terceros, Auth0. NetApp ha centralizado en esto como capa de autenticación para todos los servicios de datos en el cloud.
+
+Cloud Insights sigue las prácticas recomendadas del sector, incluidos “privilegio mínimo” y “control de acceso basado en funciones” en relación con el acceso lógico al entorno de producción de Cloud Insights. El acceso se controla con una estricta necesidad y sólo se concede al personal autorizado seleccionado mediante mecanismos de autenticación de múltiples factores.
+
+
+
+=== Recopilación y protección de los datos del cliente
+
+Todos los datos del cliente se cifran en tránsito por redes públicas y están cifrados en reposo. Cloud Insights utiliza el cifrado en varios puntos del sistema para proteger los datos del cliente mediante tecnologías que incluyen Seguridad de la capa de transporte (TLS) y el algoritmo AES-256 estándar del sector.
+
+
+
+=== Desaprovisionamiento del cliente
+
+Las notificaciones por correo electrónico se envían en varios intervalos para informar al cliente de que su suscripción está a punto de caducar. Una vez caducada la suscripción, la interfaz de usuario está restringida y comienza un período de gracia para la recopilación de datos. A continuación, se notifica al cliente por correo electrónico. Las suscripciones de prueba tienen un período de gracia de 14 días y las cuentas de suscripción pagadas tienen un período de gracia de 28 días. Una vez caducado el período de gracia, se notifica al cliente por correo electrónico que la cuenta se eliminará en 2 días. Un cliente pagado también puede solicitar directamente estar fuera del servicio.
+
+El equipo de operaciones de Cloud Insights (SRE) elimina los inquilinos caducados y todos los datos de clientes asociados al final del período de gracia o tras la confirmación de la solicitud de un cliente para cancelar su cuenta. En cualquier caso, el equipo de SRE ejecuta una llamada API para eliminar la cuenta. La llamada API elimina la instancia de inquilino y todos los datos de cliente. La eliminación del cliente se verifica llamando a la misma API y verificando que el estado del inquilino del cliente es "ELIMINADO".
+
+
+
+=== Gestión de incidentes de seguridad
+
+Cloud Insights se integra con el proceso del equipo de respuesta a incidentes de seguridad de productos (PSIRT) de NetApp para encontrar, evaluar y resolver vulnerabilidades conocidas. PSIRT recoge información de vulnerabilidad de varios canales, incluidos informes de clientes, ingeniería interna y fuentes ampliamente reconocidas como la base de datos CVE.
+
+Si el equipo de ingeniería de Cloud Insights detecta un problema, el equipo iniciará el proceso, evaluará y posiblemente solucionará el problema.
+
+También es posible que un cliente o investigador de Cloud Insights pueda identificar un problema de seguridad con el producto de Cloud Insights e informar el problema al soporte técnico o directamente al equipo de respuesta a incidentes de NetApp. En estos casos, el equipo de Cloud Insights iniciará el proceso de PSIRT, evaluará y potencialmente solucionará el problema.
+
+
+
+=== Pruebas de vulnerabilidad y penetración
+
+Cloud Insights sigue las prácticas recomendadas del sector y realiza pruebas periódicas de vulnerabilidad y penetración con profesionales y empresas de seguridad internos y externos.
+
+
+
+=== Formación sobre seguridad
+
+Todo el personal de Cloud Insights se somete a una formación en seguridad, desarrollada para desempeñar funciones individuales, para asegurarse de que cada empleado está equipado para ocuparse de los retos específicos relacionados con la seguridad que plantea sus funciones.
+
+
+
+=== Cumplimiento de normativas
+
+Cloud Insights realiza auditorías y validaciones independientes de terceros de la empresa de APEM externa con licencia de su seguridad, procesos y servicios, incluida la finalización de la auditoría SOC 2.

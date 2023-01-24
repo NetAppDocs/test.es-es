@@ -1,0 +1,55 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_postgresql.html 
+keywords: telegraf, installation, install, postgresql 
+summary: Configuración del recopilador de datos PostgreSQL 
+---
+= Recopilador de datos PostgreSQL
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas de PostgreSQL.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija PostgreSQL.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:PostgreSQLDCConfigLinux.png["Configuración de PostgreSQL"]
+
+
+
+== Configuración
+
+Puede encontrar información en la link:https://www.postgresql.org/docs/["Documentación de PostgreSQL"].
+
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| Servidor PostgreSQL | Servidor de bases de datos Namespace | Dirección IP del nodo de nombre | Búferes asignados búferes búferes búferes de backend búferes de sincronización de archivos de fondo búferes de punto de comprobación puntos de comprobación puntos de control de tiempo de sincronización puntos de control de tiempo de escritura solicitudes puntos de control Timed Max writed Clean 
+
+
+| Base de datos PostgreSQL | Servidor de bases de datos Namespace | ID de nodo de nombre de nodo de base de datos IP | Bloques de tiempo de lectura bloques de tiempo de escritura bloques de aciertos bloques de lectura conflictos deinterlocks número de cliente Archivos temporales bytes Archivos temporales número de filas eliminadas filas devueltas filas insertadas filas devueltas transacciones confirmadas transacciones actualizadas Rollted 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

@@ -1,0 +1,104 @@
+---
+sidebar: sidebar 
+permalink: task_dc_ms_hyperv.html 
+keywords: data collector, Microsoft, Hyper-V 
+summary: Configurar el recopilador de datos de Microsoft Hyper-V. 
+---
+= Recopilación de datos de Microsoft Hyper-V.
+:allow-uri-read: 
+
+
+[role="lead"]
+La recopilación de datos de Microsoft Hyper-V adquiere datos de inventario y rendimiento de los entornos de informática de servidor virtualizados.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario de Microsoft Hyper-V (WMI). Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Disco duro virtual | Disco virtual 
+
+
+| Host | Host 
+
+
+| Máquina virtual | Máquina virtual 
+
+
+| Volúmenes compartidos de clúster (CSV), volumen de partición | Almacén de datos 
+
+
+| Dispositivo SCSI de Internet, LUN SCSI de ruta múltiple | LUN 
+
+
+| Puerto Fibre Channel | Puerto 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+Para configurar este recopilador de datos, es necesario lo siguiente:
+
+* El Hyper-V requiere que se abra el puerto 5985 para la recopilación de datos y el acceso y la gestión remotos.
+* Dirección IP del nodo del grupo de clústeres
+* Usuario y contraseña del administrador local en el hipervisor
+* Cuenta de usuario de nivel administrativo
+* Instrumental de administración de Windows (WMI), que es el comando predeterminado que instala Windows.
+* Requisitos de puerto: Puerto 135 a través de puertos WMI y TCP dinámico asignados a 1024-65535 para Windows 2003 y versiones anteriores y a 49152-65535 para Windows 2008.
+* La resolución DNS debe tener éxito, incluso si el recopilador de datos sólo está apuntando a una dirección IP
+* Cada hipervisor de Hyper-V debe tener "Resource Metering" activado para cada VM, en cada host. Esto permite que cada hipervisor tenga más datos disponibles para Cloud Insights en cada invitado. Si no se define esto, se adquieren menos métricas de rendimiento para cada invitado. Encontrará más información sobre la medición de recursos en la documentación de microsoft:
++
+link:https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/hh831661(v=ws.11)["Descripción general de la medición de recursos de Hyper-V."]
+
++
+link:https://docs.microsoft.com/en-us/powershell/module/hyper-v/enable-vmresourcemetering?view=win10-ps["Enable-VMResourceMetering"]
+
+
+
+
+NOTE: El recopilador de datos de Hyper-V requiere una unidad de adquisición de Windows.
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP del host físico | La dirección IP o el nombre de dominio completo para el host físico (hipervisor) 
+
+
+| Nombre de usuario | Nombre de usuario del administrador para el hipervisor 
+
+
+| Contraseña | Contraseña del hipervisor 
+
+
+| Dominio NT | El nombre DNS que utilizan los nodos del clúster 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Intervalo de sondeo de inventario (mín.) | El valor predeterminado es 20 minutos. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

@@ -1,0 +1,88 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_kafka.html 
+keywords: telegraf, installation, install, kafka 
+summary: Configuración de recopilador de datos Kafka 
+---
+= Recopilador de datos Kafka
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas de Kafka.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija Kafka.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:KafkaDCConfigWindows.png["Configuración de Kafka"]
+
+
+
+== Configuración
+
+El complemento Kafka se basa en el complemento Jolokia de telegraf. Como un requisito para recopilar información de todos los corredores Kafka, JMX debe configurarse y exponerse a través de Jolokia en todos los componentes.
+
+
+
+==== Compatibilidad
+
+La configuración se desarrolló contra Kafka versión 0.11.0.2.
+
+
+
+==== Configuración
+
+Todas las instrucciones a continuación suponen que su ubicación de instalación para kafka es '/opt/kafka'. Puede adaptar las instrucciones siguientes para reflejar la ubicación de la instalación.
+
+
+
+==== Agente Jolokia Jar
+
+Una versión el archivo JAR del agente JAR de Jolokia debe ser link:https://jolokia.org/download.html["descargado"]. La versión probada en contra fue el agente Jolokia 1.6.0.
+
+Las instrucciones siguientes asumen que el archivo JAR descargado (jolokia-jvm-1.6.0-agent.jar) se coloca bajo la ubicación '/opt/kafka/libs/'.
+
+
+
+==== Kafka Brokers
+
+Para configurar Kafka Brokers para exponer la API de Jolokia, puede agregar lo siguiente en <KAFKA_HOME>/bin/kafka-Server-start.sh, justo antes de la llamada 'kafka-run-class.sh':
+
+[listing]
+----
+export JMX_PORT=9999
+export RMI_HOSTNAME=`hostname -I`
+export KAFKA_JMX_OPTS="-javaagent:/opt/kafka/libs/jolokia-jvm-1.6.0-agent.jar=port=8778,host=0.0.0.0  -Dcom.sun.management.jmxremote.password.file=/opt/kafka/config/jmxremote.password -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=$RMI_HOSTNAME -Dcom.sun.management.jmxremote.rmi.port=$JMX_PORT"
+----
+Tenga en cuenta que el ejemplo anterior utiliza 'hostname -i' para configurar la variable de entorno 'RMI_HOSTNAME'. En múltiples equipos IP, esto tendrá que ser ajustado para reunir la IP que usted cuida para las conexiones RMI.
+
+Puede elegir un puerto diferente para JMX (9999 arriba) y Jolokia (8778). Si usted tiene un IP interno para bloquear Jolokia en usted puede reemplazar el "Catch all" 0.0.0.0 por su propio IP. Tenga en cuenta que este IP debe ser accesible desde el plugin de telegraf. Puede utilizar la opción '-Dcom.sun.management.jmxremote.authenticate=false' si no desea autenticar. Uso bajo su propio riesgo.
+
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| Kafka Broker | Agente de espacio de nombres del clúster | Dirección IP del nodo de nombre | Replica Manager fetcher Max Lag Zookeeper conexiones de cliente Zookeeper conexiones de cliente Zookeeper (velocidad de 15 m) Zookeeper conexiones de cliente Zookeeper (frecuencia media) Zookeeper conexiones de cliente (velocidad de 1 m) Recuento de particiones del Administrador de réplicas recuento de subprocesos Demonio recuento de subprocesos pico recuento de subprocesos actual total iniciado particiones sin conexión solicitudes de producto tiempo total (percentil 50) solicitudes de productos tiempo total (percentil 75) solicitudes de productos tiempo total (percentil 95) solicitudes de productos tiempo total (percentil 98) solicitudes de producción tiempo total (percentil 99) Solicitudes de producción tiempo total (99º percentil) solicitudes de producción tiempo total solicitudes de producción tiempo total solicitudes de producción promedio tiempo total solicitudes de producción tiempo total mín. Solicitudes tiempo total StdDev Replica Manager ISR reduce el tamaño de ISR de Replica Manager (15m de tasa) ISR de Replica Manager disminuye (5m de tasa) ISR de Replica Manager se reduce (Tasa media) ISR de Replica Manager se reduce (tasa de 1 m) el promedio de inactividad del controlador de solicitudes media del controlador de solicitudes (tasa media) el promedio de inactividad del controlador de solicitudes (tasa de 5 m) el promedio de inactividad del controlador de solicitudes (tasa de 1 m) Recolección de elementos no utilizados G1 Old Generation Count Garbage Collection G1 Old Generation Time Garbage Collection G1 Young Generation Count Garbage Collection G1 Young Generation Time Zookeeper Read Only Connects (tasa de 15 m) Zookeeper Read Only Connects (tasa de 5 m) Zookeeper Read Only Connects (tasa media) Zookeeper Read Only (Tasa de 1 m) solicitudes de procesador de red solicitudes promedio de inactividad de Fetch Follhower tiempo total (percentil 50) solicitudes de Fetch Follhower tiempo total (percentil 75) solicitudes de Fetch Follhower tiempo total (percentil 98) solicitudes de tiempo total de Fetch Follwer (percentil 99) solicitudes de tiempo total de Fetch Follhower (percentil 99) Solicitudes de Fetch Follerwer tiempo total solicitudes de Fetch Follhower tiempo total solicitudes máx. De Fetch Follhower tiempo total solicitudes de Fetch Follhower tiempo total solicitudes mín. De Fetch Follhower tiempo total solicitudes StdDev esperando en producir solicitudes de red purgatorias solicitudes de Fetch Consumer Network solicitudes de Fetch (5m rate) solicitudes de red Fetch Consumer (15m rate) Solicitudes de red Fetch Consumer (tarifa media) Network solicita Fetch Consumer (tarifa de 1 m) elecciones de líder impuro elecciones de líder (tarifa de 15 m) elecciones de líder impuro (tarifa de 5 m) elecciones de líder impuro (tarifa media) elecciones de líder sucio (tarifa de 1 m) Controladores activos Heap memoria confirmada Hap memoria Init Heap memoria memoria memoria memoria memoria Máx. Hap memoria utilizada Zookeeper sesión caduca Zookeeper sesión caduca (15 m tasa) Zookeeper Session caduca (5 m tasa) Zookeeper Session caduca (1 m tasa) fallos de autenticación Zookeeper fallos de autenticación Zookeeper caduca (tasa 15 m) Zookeeper fallos de autenticación Zookeeper (tasa de Zookeeper caduca) Errores de autenticación de zookeeper (tasa media) fallas de autenticación de zookeeper (tasa de 1 m) tiempo de elección líder (percentil 50) tiempo de elección líder (percentil 75) tiempo de elección líder (percentil 95) tiempo de elección líder (percentil 99) tiempo de elección líder (percentil 99) tiempo de elección líder (tasa de percentil 99) Tiempo de elección del líder (tasa de 5m) tiempo de elección máximo líder tiempo de elección promedio líder tiempo de elección (tasa media) líder tiempo de elección mínimo líder tiempo de elección (tasa de 1m) líder tiempo de elección (stddev) solicitudes de red Fetch Folhower solicitudes de red Fetch Follhower (tasa de 15m) solicitudes de red Fetch Follhower (tasa de 5m) Solicitudes de red Fetch Follerwer (tasa media) solicitudes de red Fetch Follhower (tasa de 1 m) Broker mensajes de tema Broker mensajes de tema (tasa de 15 m) mensajes de tema de agente (tasa media) mensajes de tema de agente (tasa de 1 m) bytes de tema de agente en bytes de tema de agente en (tasa de 15 m) bytes de tema de agente en broker (Tasa de 5 m) Broker Topic bytes in (tasa media) Broker Topic bytes in (tasa de 1 m) Zookeeper desconecta Count Zookeeper desconecta (tasa de 15 m) Zookeeper desconecta (tasa media) Zookeeper desconecta (tasa media) solicitudes de red Fetch Consumer total Time (porcentaje 50) solicitudes de red Fetch Consumer total Time (porcentaje 75) Solicitudes de red recuperar tiempo total del consumidor (95o percentil) solicitudes de red obtener tiempo total del consumidor (percentil 98) solicitudes de red recuperar tiempo total del consumidor (999 percentil) solicitudes de red recuperar tiempo total del consumidor (99 percentil) Solicitudes de red solicitudes de Fetch Consumer total Time Network solicitudes de red Fetch Consumer total Time solicitudes de red Fetch Consumer total Time solicitudes de red Fetch Consumer total Time StdDev LeaderCount solicitudes de espera en Fetch Purgatory Broker tema bytes Out Broker bytes de tema de intermediario (tasa de 15 m) Bytes de tema del agente fuera (tasa de 5 m) bytes de tema del agente fuera (tasa media) bytes de tema del agente fuera (tasa de 1 m) autenticaciones del Zookeeper autenticaciones del Zookeeper (tasa de 15 m) Autentaciones del Zookeeper (tasa media) autenticaciones del Zookeeper (tasa de 1 m) producen solicitudes de recuento (tasa de 15 m) (Tasa media) solicitudes de producción (tasa de 1 m) Replica Manager ISR amplía Replica Manager ISR (tasa de 15 m) Replica Manager ISR expande (tasa de 5 m) Replica Manager ISR expande (tasa media) Replica Manager ISR expande (tasa de 1 m) Replica Manager en particiones replicadas 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

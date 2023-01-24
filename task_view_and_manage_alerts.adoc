@@ -1,0 +1,66 @@
+---
+sidebar: sidebar 
+permalink: task_view_and_manage_alerts.html 
+summary: Ver alertas que han activado los monitores 
+keywords: monitor, alert, viewing 
+---
+= Visualización y administración de alertas desde monitores
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights muestra las alertas cuando link:task_create_monitor.html["umbrales supervisados"] se han superado.
+
+
+TIP: Los monitores y alertas están disponibles en la edición estándar de Cloud Insights y superior.
+
+
+
+=== Ver y gestionar alertas
+
+Para ver y gestionar alertas, haga lo siguiente.
+
+. Vaya a la página *Alertas > todas las alertas*.
+. Se muestra una lista de hasta las 1,000 alertas más recientes. Puede ordenar esta lista en cualquier campo haciendo clic en el encabezado de columna del campo. La lista muestra la siguiente información. Tenga en cuenta que no todas estas columnas se muestran de forma predeterminada. Puede seleccionar las columnas que desea mostrar haciendo clic en el icono "Gear" image:gear.png["icono de marcha"]:
++
+** *ID de alerta*: ID de alerta único generado por el sistema
+** *Tiempo activado*: El momento en que el monitor correspondiente activó la alerta
+** *Gravedad actual* (ficha Alertas activas): La gravedad actual de la alerta activa
+** *Gravedad superior* (ficha Alertas resueltas); la gravedad máxima de la alerta antes de resolverla
+** *Monitor*: Monitor configurado para activar la alerta
+** *Activado en*: El objeto en el que se violó el umbral monitorizado
+** *Estado*: Estado actual de alerta, _New_ o _in Process_
+** *Estado activo*: _Active_ o _Resolved_
+** *Condición*: La condición de umbral que activó la alerta
+** * Metric*: La métrica del objeto en la que se violó el umbral monitorizado
+** *Estado del monitor*: Estado actual del monitor que activó la alerta
+** *Tiene Acción Correctiva*: La alerta ha sugerido acciones correctivas. Abra la página de alertas para verlos.
+
+
+
+
+Puede gestionar una alerta haciendo clic en el menú que se encuentra a la derecha de la alerta y eligiendo una de las siguientes opciones:
+
+* *En proceso* para indicar que la alerta está bajo investigación o de otro modo necesita mantenerse abierta
+* *Descartar* para eliminar la alerta de la lista de alertas activas.
+
+
+Puede gestionar varias alertas seleccionando la casilla de verificación situada a la izquierda de cada alerta y haciendo clic en _Cambiar estado de alertas seleccionadas_.
+
+Al hacer clic en un ID de alerta se abre la página Detalle de alerta.
+
+
+
+=== Página de detalles de alertas
+
+La página de detalles de alertas proporciona detalles adicionales sobre la alerta, incluyendo un _Summary_, un _Expert View_ que muestra gráficos relacionados con los datos del objeto, cualquier _Related Assets_ y _Comments_ introducidos por los investigadores de alertas.
+
+image:alert_detail_page.png["Página de detalles de alertas"]
+
+
+
+=== Alertas "permanentemente activas"
+
+Es posible configurar un monitor de tal manera que la condición para *siempre* exista en el objeto supervisado, por ejemplo, IOPS > 1 o latencia > 0. A menudo se crean como monitores de "prueba" y luego se olvidan. Estos monitores crean alertas que permanecen abiertas permanentemente en los objetos constituyentes, lo que puede causar problemas de estrés y estabilidad del sistema con el tiempo.
+
+Para evitarlo, Cloud Insights cerrará automáticamente cualquier alerta "permanentemente activa" después de 7 días. Tenga en cuenta que las condiciones subyacentes del monitor pueden (probablemente) continuar existiendo, lo que provoca que se emita una nueva alerta casi de inmediato, pero este cierre de las alertas "siempre activas" alivia parte del esfuerzo del sistema que se puede producir de otro modo.

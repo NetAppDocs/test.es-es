@@ -1,0 +1,62 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_kubernetes.html 
+keywords: telegraf, installation, install, kubernetes 
+summary: Configuración del recopilador de datos de Kubernetes 
+---
+= Recopilador de datos de Kubernetes
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas de Kubernetes Pod, nodo y contenedor.
+
+
+
+== Instalación
+
+Para obtener instrucciones de instalación de Kubernetes, consulte link:task_config_telegraf_agent.html#kubernetes["Instalación del agente"] página.
+
+
+NOTE: La información sobre * kube-state-Metricm* se ha trasladado al link:task_config_telegraf_agent.html#kubernetes["Instalación del agente"] página.
+
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| Contenedor de Kubernetes | Cluster del contenedor Namespace Pod | Nodo de Kubernetes Nombre nodo de nodo de sistema operativo nodo UUID IP del nodo | CPU nanosegundos uso CPU Nanocores memoria principales fallos de página memoria Resident Set Size (RSS) memoria conjunto de trabajo memoria fallos de página memoria uso memoria sistema de archivos raíz disponible capacidad del sistema de archivos raíz utilizado 
+
+
+| Nodo de Kubernetes | Clúster de nodos de Kubernetes | Nombre de nodo nodo nodo OS nodo UUID IP de nodo | Uso de CPU Nanocores uso de CPU nanossegundos sistema de archivos disponible sistema de archivos total del sistema de archivos utilizado memoria disponible uso de memoria memoria fallos de página memoria fallos de página memoria conjunto residente Tamaño (RSS) memoria conjunto de trabajo errores RX de red (por segundo) bytes RX de red (por segundo) errores TX de red (por segundo) bytes TX de red (Por segundo) sistema de archivos de imágenes en tiempo de ejecución sistema de archivos de imágenes en tiempo de ejecución uso capacidad del sistema de archivos de imágenes en tiempo de ejecución 
+
+
+| Pod de Kubernetes | Cluster Namespace Pod | UUID de nodo de nodo de Kubernetes IP nodo de nodo de sistema operativo | Errores de transmisión de red (por segundo) bytes de red (por segundo) bytes de recepción de red (por segundo) errores de recepción de red (por segundo) 
+
+
+| Volumen de Kubernetes Pod | Espacio de nombres de cluster Volume Pod | So nodo IP nodo IP nodo de UUID nodo de nodo de Kubernetes | Capacidad disponible utilizada 
+
+
+| Contenedor del sistema Kubernetes | Cluster de nodos de Kubernetes del contenedor del sistema | Nombre de nodo IP nodo UUID de nodo operativo | Uso de CPU Nanocores uso de CPU núcleo nanosegundos memoria Principal fallos de página memoria fallos de página memoria memoria Configuración residente Tamaño (RSS) memoria uso memoria conjunto de trabajo sistema de archivos raíz disponibles registros de capacidad del sistema de archivos raíz sistema de archivos capacidad disponible capacidad del sistema de archivos registros disponibles capacidad del sistema de archivos 
+|===
+
+
+== Resolución de problemas
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Ejecuto el comando de instalador del agente Kubernetes, pero no veo un pod del agente Telegraf a través de: Sudo kubectl --Namespace ci-Monitoring Get pods | Compruebe si se ha producido algún error al implementar DemonSet: Sudo kubectl --namespace i-Monitoring describe DS telegraf-ds Si hay errores relacionados con SecurityContextConstraints, haga lo siguiente: 1. Genere el monitor Telegraf DemonSet YLMA sudo kubectl --Namespace i-Monitoring Get ds telegraf-ds -o ylma > /tmp/telegraf-ds.ylma 2. Detenga el servicio de Telegraf sudo kubectl --namespace i-Monitoring delete ds telegraf-DS 3. Cree la SecurityContextConstraint necesaria (consulte la sección "Configuración del agente para recopilar datos") 4. Vuelva a crear el dispositivo Telegraf DemonSet 
+
+
+| Configuré Telegraf para obtener información sobre mi clúster de Kubernetes, pero no veo ninguna información en Cloud Insights. Veo errores de "valor de campo de encabezado no válido" en el archivo de registro de Telegraf que pertenece al plugin de entrada de kubernetes configurado. | Asegúrese de que el archivo de referencia bearer_token no tenga una nueva línea final. Para verificar, ejecute el siguiente comando y confirme que devuelve 0: Tail -c1 <bearer_token_file> 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

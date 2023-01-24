@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: task_view_queries.html 
+summary: Ver consultas creadas 
+keywords: query, queries, viewing 
+---
+= Ver consultas
+:allow-uri-read: 
+
+
+[role="lead"]
+Puede ver sus consultas para supervisar sus activos y cambiar el modo en que sus consultas muestran los datos relacionados con sus activos.
+
+.Pasos
+. Inicie sesión en su inquilino de Cloud Insights.
+. Haga clic en *consultas* y seleccione *Mostrar todas las consultas*. Puede cambiar el modo en que se muestran las consultas realizando cualquiera de las siguientes acciones:
+. Puede introducir texto en el cuadro de filtro para buscar para mostrar consultas específicas.
+. Puede cambiar el orden de las columnas de la tabla de consultas a ascendente (flecha arriba) o descendente (flecha abajo) haciendo clic en la flecha del encabezado de la columna.
+. Para cambiar el tamaño de una columna, coloque el ratón sobre el encabezado de la columna hasta que aparezca una barra azul. Coloque el ratón sobre la barra y arrástrelo hacia la derecha o la izquierda.
+. Para mover una columna, haga clic en el encabezado de la columna y arrástrela hacia la derecha o hacia la izquierda.
+
+
+Al desplazarse por los resultados de la consulta, tenga en cuenta que los resultados pueden cambiar a medida que Cloud Insights sondea automáticamente sus recopiladores de datos. Esto puede resultar en que faltan algunos elementos o que algunos elementos aparezcan fuera de servicio en función de cómo se ordenen.

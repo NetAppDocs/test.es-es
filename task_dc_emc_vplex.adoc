@@ -1,0 +1,159 @@
+---
+sidebar: sidebar 
+permalink: task_dc_emc_vplex.html 
+keywords: data collector, VPLEX, EMC 
+summary: Configurar el recopilador de datos de VPLEX. 
+---
+= Configurar el recopilador de datos de EMC VPLEX
+:allow-uri-read: 
+
+
+[role="lead"]
+Este recopilador de datos adquiere datos de inventario y rendimiento de los sistemas de almacenamiento de EMC VPLEX. Para la configuración, el recopilador de datos requiere la dirección IP del servidor VPLEX y una cuenta de dominio de nivel administrativo.
+
+
+NOTE: La recopilación de rendimiento de Cloud Insights de los clústeres de Vplex requiere que el servicio de archivado de rendimiento esté operativo, para llenar los archivos .CSV y registros que Cloud Insights recupera a través de copias de archivos basadas en SCP. NetApp ha observado que muchas actualizaciones de la estación de gestión/actualización del firmware Vplex dejarán esta funcionalidad en estado no operativo. Los clientes que planean dichas actualizaciones podrían preguntar de manera proactiva a Dell/EMC si su actualización planificada dejará esta funcionalidad inoperable y, si es así, ¿cómo pueden volver a habilitarla para minimizar las deficiencias en la visibilidad del rendimiento? El código de rendimiento del complejo de Cloud Insight evaluará en cada sondeo si existen todos los archivos esperados y si se están actualizando correctamente; si faltan o están obsoletos, Cloud Insights registrará los errores de recopilación del rendimiento.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario del recopilador de datos de VPLEX. Para cada tipo de activo adquirido, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Clúster | Reducida 
+
+
+| Motor | Nodo de almacenamiento 
+
+
+| Dispositivo, extensión del sistema | Pool de almacenamiento back-end 
+
+
+| Volumen virtual | Volumen 
+
+
+| Puerto de extremo frontal, puerto de extremo posterior | Puerto 
+
+
+| Dispositivo distribuido | Sincronización de almacenamiento 
+
+
+| Vista del almacenamiento | Mapa de volumen, Máscara de volumen 
+
+
+| Volumen de almacenamiento | LUN back-end 
+
+
+| ITLS | Ruta de back-end 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+* Dirección IP de la Consola de gestión de VPLEX
+* Cuenta de dominio de nivel administrativo para el servidor VPLEX
+* Puerto 443 (HTTPS). Requiere conectividad de salida al puerto TCP 443 en la estación de administración de VPLEX.
+* Para obtener rendimiento, nombre de usuario y contraseña de solo lectura para acceso a ssh/scp.
+* Para el rendimiento, se necesita el puerto 22.
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP de la consola de gestión de VPLEX | Dirección IP o nombre de dominio completo de VPLEX Management Console 
+
+
+| Nombre de usuario | Nombre de usuario de la CLI de VPLEX 
+
+
+| Contraseña | Contraseña utilizada para la CLI de VPLEX 
+
+
+| Dirección IP remota de rendimiento | Dirección IP remota de rendimiento de la consola de gestión de VPLEX 
+
+
+| Nombre de usuario remoto de rendimiento | Nombre de usuario remoto de rendimiento de la consola de gestión de VPLEX 
+
+
+| Contraseña remota de rendimiento | Contraseña remota de rendimiento de la consola de gestión de VPLEX 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Puerto de comunicación | Puerto que se utiliza para la CLI de VPLEX. El valor predeterminado es 443. 
+
+
+| Intervalo de sondeo de inventario (mín.) | El valor predeterminado es 20 minutos. 
+
+
+| Cantidad de reintentos de conexión | El valor predeterminado es 3. 
+
+
+| Intervalo de sondeo de rendimiento (s) | Intervalo entre sondeos de rendimiento. El valor predeterminado es 600 segundos. 
+
+
+| Número de reintentos | El valor predeterminado es 2. 
+|===
+
+
+== Resolución de problemas
+
+Algunas cosas para intentar si tiene problemas con este recopilador de datos:
+
+
+
+==== Inventario
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Error: Error en la autenticación del usuario. | Asegúrese de que sus credenciales para este dispositivo son correctas. 
+|===
+
+
+==== Rendimiento
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Error: No se admite el rendimiento de VPLEX para la versión inferior a 5.3. | Actualice VPLEX a 5.3 o superior 
+
+
+| Error: No se han recogido suficientes datos. | • Compruebe la Marca de hora de la colección en el archivo de registro y modifique el intervalo de sondeo en consecuencia • espere más tiempo 
+
+
+| Error: Los archivos de registro perpetuo no se están actualizando. | Póngase en contacto con el servicio de soporte de EMC para activar la actualización de los archivos de registro perpetuo 
+
+
+| Error: El intervalo de sondeo de rendimiento es demasiado grande. | Compruebe la Marca de hora de la colección en el archivo de registro ${logfile} y modifique el intervalo de sondeo en consecuencia 
+
+
+| Error: No se configuró la dirección IP remota de rendimiento de la consola de gestión de VPLEX. | Edite el origen de datos para establecer la dirección IP remota de rendimiento de VPLEX Management Console. 
+
+
+| Error: No se han informado datos de rendimiento de director | • Compruebe que los monitores de rendimiento del sistema se ejecutan correctamente • Póngase en contacto con el servicio de soporte de EMC para activar la actualización de los archivos de registro del monitor de rendimiento del sistema 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

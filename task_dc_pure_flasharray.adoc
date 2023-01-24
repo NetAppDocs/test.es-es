@@ -1,0 +1,107 @@
+---
+sidebar: sidebar 
+permalink: task_dc_pure_flasharray.html 
+keywords: data collector, Pure Storage, pure 
+summary: Configurar el recopilador de datos de Pure Storage. 
+---
+= Recopilador de datos de FlashArray de Pure Storage
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza el recopilador de datos de FlashArray de Pure Storage para recopilar datos de inventario y rendimiento.
+
+
+
+== Terminología
+
+Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para el activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Unidad (SSD) | Disco 
+
+
+| Cabina | Reducida 
+
+
+| Controladora | Nodo de almacenamiento 
+
+
+| Volumen | Volumen 
+
+
+| Mapa de LUN | Asignación de volumen 
+
+
+| Iniciador, destino | Máscara de volumen 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+* Dirección IP del sistema de almacenamiento
+* El nombre de usuario y la contraseña de la cuenta de administrador del sistema de almacenamiento de Pure.
+* Requisito de puerto: HTTP/HTTPS 80/443
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP del host FlashArray | La dirección IP del sistema de almacenamiento 
+
+
+| Nombre de usuario | Nombre de usuario con privilegios de administrador 
+
+
+| Contraseña de la cuenta con privilegios de administrador | Contraseña 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Tipo de conexión | Elija HTTP o HTTPS. También muestra el puerto predeterminado. 
+
+
+| Anular puerto TCP | Si está en blanco, utilice el puerto predeterminado en el campo Tipo de conexión; de lo contrario, introduzca el puerto de conexión que desea utilizar 
+
+
+| Intervalo de sondeo de inventario (min) | El valor predeterminado es 60 minutos 
+
+
+| Intervalo de sondeo de rendimiento (s) | El valor predeterminado es 300 
+|===
+
+
+== Resolución de problemas
+
+Algunas cosas para intentar si tiene problemas con este recopilador de datos:
+
+
+
+==== Inventario
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| "Credenciales de inicio de sesión no válidas" con mensajes de error "la directiva no permite" o "no está autorizado" | Valide la cuenta de usuario y la contraseña de Pure a través de la interfaz http de Pure 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

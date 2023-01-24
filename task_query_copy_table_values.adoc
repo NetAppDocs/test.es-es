@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: task_query_copy_table_values.html 
+summary: Puede copiar valores de una tabla al portapapeles para utilizarlos en otras aplicaciones. 
+keywords: query, queries, copy, values, clipboard 
+---
+= Copiando valores de tabla
+:allow-uri-read: 
+
+
+[role="lead"]
+Puede copiar valores en tablas al portapapeles para utilizarlos en cuadros de búsqueda u otras aplicaciones.
+
+.Acerca de esta tarea
+Existen dos métodos que se pueden utilizar para copiar valores de tablas o resultados de consultas al portapapeles.
+
+.Pasos
+. Método 1: Resalte el texto deseado con el ratón, cópielo y péguelo en campos de búsqueda u otras aplicaciones.
+. Método 2: Para campos de un solo valor, pase el cursor sobre el campo y haga clic en el icono del portapapeles image:ClipboardIcon.png["Portapapeles"] eso aparece. El valor se copia en el portapapeles para utilizarlo en campos de búsqueda u otras aplicaciones.
++
+Tenga en cuenta que sólo los valores que son vínculos a activos se pueden copiar mediante este método. Sólo los campos que incluyen valores únicos (es decir, no listas) tienen el icono de copia.
+
+

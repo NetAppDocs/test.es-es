@@ -1,0 +1,928 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_agent.html 
+keywords: telegraf, installation, install, agent, telegraf agent 
+summary: Cloud Insights es compatible con Telegraf como su agente de recopilación de datos de integración y se puede configurar en Windows, Linux, MacOS y Kubernetes. 
+---
+= Configuración de un agente para recopilar datos
+:allow-uri-read: 
+
+
+[role="lead"]
+Usos de Cloud Insights link:https://docs.influxdata.com/telegraf/v1.19/["Telegraf"] como agente para la recopilación de datos de integración. Telegraf es un agente de servidor basado en complementos que se puede utilizar para recopilar e informar estadísticas, eventos y registros. Los complementos de entrada se utilizan para recopilar la información deseada en el agente mediante el acceso al sistema/SO directamente, llamando a API de terceros o escuchando flujos configurados (por ejemplo, Kafka, statsD, etc.). Los complementos de salida se utilizan para enviar las métricas, eventos y registros recopilados desde el agente a Cloud Insights.
+
+La versión actual de Telegraf para Cloud Insights es *1.19.3*.
+
+
+NOTE: Para una auditoría y un informe de datos precisos, se recomienda encarecidamente sincronizar el tiempo en el equipo del agente mediante *Protocolo de tiempo de red (NTP)* o *Protocolo simple de tiempo de red (SNTP)*.
+
+
+NOTE: Si desea comprobar los archivos de instalación antes de instalar el agente, consulte la sección siguiente en <<Verificando sumas de comprobación>>.
+
+
+
+== Instalación de un agente
+
+Si está instalando un recopilador de datos de servicio y aún no ha configurado un agente, se le pedirá que instale primero un agente para el sistema operativo adecuado. En este tema se proporcionan instrucciones para instalar el agente Telegraf en los siguientes sistemas operativos:
+
+* <<Windows>>
+* <<RHEL y CentOS>>
+* <<Ubuntu y Debian>>
+* <<MacOS>>
+* <<Kubernetes>>
+
+
+Para instalar un agente, independientemente de la plataforma que esté utilizando, primero debe hacer lo siguiente:
+
+. Inicie sesión en el host que utilizará para su agente.
+. Inicie sesión en su sitio de Cloud Insights y vaya a *Administración > colectores de datos*.
+. Haga clic en *+Data Collector* y elija un recopilador de datos para instalar.
+
+
+. Elija la plataforma adecuada para su host (Windows, Linux, MacOS, etc.)
+. Siga los pasos restantes para cada plataforma.
+
+
+
+NOTE: Una vez que haya instalado un agente en un host, no necesitará instalar de nuevo un agente en ese host.
+
+
+TIP: Una vez que haya instalado un agente en un servidor/equipo virtual, Cloud Insights recopila métricas de ese sistema además de recopilar de cualquier recopilador de datos que configure. Estas métricas se recogen como link:task_config_telegraf_node.html["Métricas de "nodo""].
+
+
+NOTE: Si está utilizando un proxy, lea las instrucciones del proxy de su plataforma antes de instalar el agente Telegraf.
+
+
+
+=== Windows
+
+image:AgentInstallWindows.png["Instalación del agente de Windows"]
+
+.Requisitos previos:
+* Se debe instalar PowerShell
+* Si está detrás de un proxy, siga las instrucciones de la sección *Configuración del soporte de proxy para Windows*.
+
+
+.Pasos para instalar el agente en Windows:
+. Elija una clave de acceso del agente.
+. Copie el bloque de comandos del cuadro de diálogo de instalación del agente. Puede hacer clic en el icono del portapapeles para copiar rápidamente el comando en el portapapeles.
+. Abra una ventana de PowerShell
+. Pegue el comando en la ventana de PowerShell y pulse Entrar.
+. El comando descargará el instalador del agente adecuado, lo instalará y establecerá una configuración predeterminada. Cuando termine, se reiniciará el servicio de agente. El comando tiene una clave única y es válido durante 24 horas.
+. Haga clic en *Finalizar* o *continuar*
+
+
+Después de instalar el agente, puede utilizar los siguientes comandos para iniciar o detener el servicio:
+
+....
+Start-Service telegraf
+Stop-Service telegraf
+....
+
+
+==== Configurar el soporte de proxy para Windows
+
+
+NOTE: En los pasos siguientes se describen las acciones necesarias para establecer las variables de entorno _http_proxy/https_proxy_. En algunos entornos proxy, es posible que los usuarios también tengan que establecer la variable de entorno _no_proxy_.
+
+En el caso de los sistemas que residen detrás de un proxy, realice lo siguiente para establecer las variables de entorno _https_proxy_ y/o _http_proxy_ *ANTERIORES* para instalar el agente Telegraf:
+
+ [System.Environment]::SetEnvironmentVariable(“https_proxy”, “<proxy_server>:<proxy_port>”, [System.EnvironmentVariableTarget]::Machine)
+
+
+==== Desinstalación del agente
+
+Para desinstalar el agente en Windows, haga lo siguiente en una ventana de PowerShell:
+
+. Detenga y elimine el servicio Telegraf:
++
+....
+Stop-Service telegraf
+sc.exe delete telegraf
+....
+. Quite el certificado del almacén de trusiones:
++
+....
+cd Cert:\CurrentUser\Root
+rm E5FB7B68C08B1CA902708584C274F8EFC7BE8ABC
+....
+. Elimine la carpeta _C:\Archivos de programa\telegraf_ para eliminar los archivos binarios, de registros y de configuración
+. Elimine la clave _SYSTEM\CurrentControlSet\Services\EventLog\Application\telegraf_ del Registro
+
+
+
+
+==== Actualización del agente
+
+Para actualizar el agente telegraf, realizar lo siguiente:
+
+. Detenga y elimine el servicio telegraf:
++
+....
+Stop-Service telegraf
+sc.exe delete telegraf
+....
+. Elimine la clave _SYSTEM\CurrentControlSet\Services\EventLog\Application\telegraf_ del Registro
+. Borre _C:\Archivos de programa\telegraf\telegraf.conf_
+. Borre _C:\Archivos de programa\telegraf\telegraf.exe_
+. link:#windows["Instale el nuevo agente"].
+
+
+
+
+=== RHEL y CentOS
+
+image:Agent_Requirements_Rhel.png["Instalación del agente RHEL/CentOS"]
+
+.Requisitos previos:
+* Deben estar disponibles los siguientes comandos: Curl, sudo, ping, sha256sum, openssl, y el código intermedio
+* Si está detrás de un proxy, siga las instrucciones de la sección *Configuración del soporte de proxy para RHEL/CentOS*.
+
+
+.Pasos para instalar el agente en RHEL/CentOS:
+. Elija una clave de acceso del agente.
+. Copie el bloque de comandos del cuadro de diálogo de instalación del agente. Puede hacer clic en el icono del portapapeles para copiar rápidamente el comando en el portapapeles.
+. Abra una ventana Bash
+. Pegue el comando en la ventana Bash y pulse Intro.
+. El comando descargará el instalador del agente adecuado, lo instalará y establecerá una configuración predeterminada. Cuando termine, se reiniciará el servicio de agente. El comando tiene una clave única y es válido durante 24 horas.
+. Haga clic en *Finalizar* o *continuar*
+
+
+Después de instalar el agente, puede utilizar los siguientes comandos para iniciar o detener el servicio:
+
+Si el sistema operativo utiliza systemd (CentOS 7+ y RHEL 7+):
+
+....
+sudo systemctl start telegraf
+sudo systemctl stop telegraf
+....
+Si el sistema operativo no utiliza systemd (CentOS 7+ y RHEL 7+):
+
+....
+sudo service telegraf start
+sudo service telegraf stop
+....
+
+
+==== Configurar el soporte de proxy para RHEL/CentOS
+
+
+NOTE: En los pasos siguientes se describen las acciones necesarias para establecer las variables de entorno _http_proxy/https_proxy_. En algunos entornos proxy, es posible que los usuarios también tengan que establecer la variable de entorno _no_proxy_.
+
+En el caso de los sistemas que residen detrás de un proxy, realice los siguientes pasos * ANTERIORES a la instalación del agente Telegraf:
+
+. Establezca las variables de entorno _https_proxy_ y/o _http_proxy_ para el usuario actual:
++
+ export https_proxy=<proxy_server>:<proxy_port>
+. Cree _/etc/default/telegraf_ e inserte definiciones para las variables _https_proxy_ y/o _http_proxy_:
++
+ https_proxy=<proxy_server>:<proxy_port>
+
+
+
+
+==== Desinstalación del agente
+
+Para desinstalar el agente en RHEL/CentOS, en un terminal Bash, realice lo siguiente:
+
+. Detenga el servicio Telegraf:
++
+....
+systemctl stop telegraf (If your operating system is using systemd (CentOS 7+ and RHEL 7+)
+/etc/init.d/telegraf stop (for systems without systemd support)
+....
+. Retire el agente Telegraf:
++
+ yum remove telegraf
+. Elimine los archivos de configuración o de registro que se puedan dejar atrás:
++
+....
+rm -rf /etc/telegraf*
+rm -rf /var/log/telegraf*
+....
+
+
+
+
+==== Actualización del agente
+
+Para actualizar el agente telegraf, realizar lo siguiente:
+
+. Detenga el servicio telegraf:
++
+....
+systemctl stop telegraf (If your operating system is using systemd (CentOS 7+ and RHEL 7+)
+/etc/init.d/telegraf stop (for systems without systemd support)
+....
+. Elimine el agente anterior de telegraf:
++
+ yum remove telegraf
+. link:#rhel-and-centos["Instale el nuevo agente"].
+
+
+
+
+=== Ubuntu y Debian
+
+image:Agent_Requirements_Ubuntu.png["Instalación del agente Ubuntu/Debian"]
+
+.Requisitos previos:
+* Deben estar disponibles los siguientes comandos: Curl, sudo, ping, sha256sum, openssl, y el código intermedio
+* Si está detrás de un proxy, siga las instrucciones de la sección *Configuración del soporte de proxy para Ubuntu/Debian*.
+
+
+.Pasos para instalar el agente en Debian o Ubuntu:
+. Elija una clave de acceso del agente.
+. Copie el bloque de comandos del cuadro de diálogo de instalación del agente. Puede hacer clic en el icono del portapapeles para copiar rápidamente el comando en el portapapeles.
+. Abra una ventana Bash
+. Pegue el comando en la ventana Bash y pulse Intro.
+. El comando descargará el instalador del agente adecuado, lo instalará y establecerá una configuración predeterminada. Cuando termine, se reiniciará el servicio de agente. El comando tiene una clave única y es válido durante 24 horas.
+. Haga clic en *Finalizar* o *continuar*
+
+
+Después de instalar el agente, puede utilizar los siguientes comandos para iniciar o detener el servicio:
+
+Si el sistema operativo utiliza systemd:
+
+....
+sudo systemctl start telegraf
+sudo systemctl stop telegraf
+....
+Si el sistema operativo no utiliza systemd:
+
+....
+sudo service telegraf start
+sudo service telegraf stop
+....
+
+
+==== Configuración de compatibilidad de proxy para Ubuntu/Debian
+
+
+NOTE: En los pasos siguientes se describen las acciones necesarias para establecer las variables de entorno _http_proxy/https_proxy_. En algunos entornos proxy, es posible que los usuarios también tengan que establecer la variable de entorno _no_proxy_.
+
+En el caso de los sistemas que residen detrás de un proxy, realice los siguientes pasos * ANTERIORES a la instalación del agente Telegraf:
+
+. Establezca las variables de entorno _https_proxy_ y/o _http_proxy_ para el usuario actual:
++
+ export https_proxy=<proxy_server>:<proxy_port>
+. Cree /etc/default/telegraf e inserte definiciones para las variables _https_proxy_ y/o _http_proxy_:
++
+ https_proxy=<proxy_server>:<proxy_port>
+
+
+
+
+==== Desinstalación del agente
+
+Para desinstalar el agente en Ubuntu/Debian, en un terminal Bash, ejecute lo siguiente:
+
+. Detenga el servicio Telegraf:
++
+....
+systemctl stop telegraf (If your operating system is using systemd)
+/etc/init.d/telegraf stop (for systems without systemd support)
+....
+. Retire el agente Telegraf:
++
+ dpkg -r telegraf
+. Elimine los archivos de configuración o de registro que se puedan dejar atrás:
++
+....
+rm -rf /etc/telegraf*
+rm -rf /var/log/telegraf*
+....
+
+
+
+
+==== Actualización del agente
+
+Para actualizar el agente telegraf, realizar lo siguiente:
+
+. Detenga el servicio telegraf:
++
+....
+systemctl stop telegraf (If your operating system is using systemd)
+/etc/init.d/telegraf stop (for systems without systemd support)
+....
+. Elimine el agente anterior de telegraf:
++
+ dpkg -r telegraf
+. link:#ubuntu-and-debian["Instale el nuevo agente"].
+
+
+
+
+=== MacOS
+
+image:Agent_Requirements_Macos.png["Instalación del agente MacOS"]
+
+.Requisitos previos:
+* Los siguientes comandos deben estar disponibles: Curl, sudo, openssl y shasum
+* Si está detrás de un proxy, siga las instrucciones de la sección *Configuración del soporte proxy para MacOS*.
+
+
+.Pasos para instalar el agente en MacOS:
+. Elija una clave de acceso del agente.
+. Copie el bloque de comandos del cuadro de diálogo de instalación del agente. Puede hacer clic en el icono del portapapeles para copiar rápidamente el comando en el portapapeles.
+. Abra una ventana Bash
+. Pegue el comando en la ventana Bash y pulse Intro.
+. El comando descargará el instalador del agente adecuado, lo instalará y establecerá una configuración predeterminada. Cuando termine, se reiniciará el servicio de agente. El comando tiene una clave única y es válido durante 24 horas.
+. Si anteriormente instaló un agente Telegraf mediante Homebrew, se le pedirá que lo desinstale. Una vez desinstalado el agente Telegraf anteriormente, vuelva a ejecutar el comando en el paso 5 anterior.
+. Haga clic en *Finalizar* o *continuar*
+
+
+Después de instalar el agente, puede utilizar los siguientes comandos para iniciar o detener el servicio:
+
+....
+sudo launchctl start telegraf
+sudo launchctl stop telegraf
+....
+
+
+==== Configurar el soporte de proxy para MacOS
+
+
+NOTE: En los pasos siguientes se describen las acciones necesarias para establecer las variables de entorno _http_proxy/https_proxy_. En algunos entornos proxy, es posible que los usuarios también tengan que establecer la variable de entorno _no_proxy_.
+
+En el caso de los sistemas que residen detrás de un proxy, realice lo siguiente para establecer las variables de entorno _https_proxy_ y/o _http_proxy_ para el usuario actual *ANTES de* para instalar el agente Telegraf:
+
+ export https_proxy=<proxy_server>:<proxy_port>
+*DESPUÉS de* instalar el agente Telegraf, añada y establezca las variables _https_proxy_ y/o _http_proxy_ correspondientes en _/Applications/telegraf.app/Contents/telegraf.plist_:
+
+....
+…
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+   <key>EnvironmentVariables</key>
+   <dict>
+          <key>https_proxy</key>
+          <string><proxy_server>:<proxy_port></string>
+   </dict>
+   <key>Program</key>
+   <string>/Applications/telegraf.app/Contents/MacOS/telegraf</string>
+   <key>Label</key>
+   <string>telegraf</string>
+   <key>ProgramArguments</key>
+   <array>
+     <string>/Applications/telegraf.app/Contents/MacOS/telegraf</string>
+     <string>--config</string>
+     <string>/usr/local/etc/telegraf.conf</string>
+     <string>--config-directory</string>
+     <string>/usr/local/etc/telegraf.d</string>
+   </array>
+   <key>RunAtLoad</key>
+   <true/>
+</dict>
+</plist>
+…
+....
+A continuación, reinicie Telegraf después de cargar los cambios anteriores:
+
+....
+sudo launchctl stop telegraf
+sudo launchctl unload -w /Library/LaunchDaemons/telegraf.plist
+sudo launchctl load -w /Library/LaunchDaemons/telegraf.plist
+sudo launchctl start telegraf
+....
+
+
+==== Desinstalación del agente
+
+Para desinstalar el agente de MacOS, en un terminal Bash, ejecute lo siguiente:
+
+. Detenga el servicio Telegraf:
++
+ sudo launchctl stop telegraf
+. Desinstale el agente telegraf:
++
+....
+cp /Applications/telegraf.app/scripts/uninstall /tmp
+sudo /tmp/uninstall
+....
+. Elimine los archivos de configuración o de registro que se puedan dejar atrás:
++
+....
+rm -rf /usr/local/etc/telegraf*
+rm -rf /usr/local/var/log/telegraf.*
+....
+
+
+
+
+==== Actualización del agente
+
+Para actualizar el agente telegraf, realizar lo siguiente:
+
+. Detenga el servicio telegraf:
++
+ sudo launchctl stop telegraf
+. Desinstale el agente anterior de telegraf:
++
+....
+cp /Applications/telegraf.app/scripts/uninstall /tmp
+sudo /tmp/uninstall
+....
+. link:#macos["Instale el nuevo agente"].
+
+
+
+
+=== Kubernetes
+
+Kubernetes ofrece dos formas de recopilar datos:
+
+* Configuración del operador de supervisión Kubernetes de NetApp. Este es el método de instalación recomendado para Kubernetes.
+* Instalación tradicional del agente basado en scripts
+
+
+Las instrucciones de instalación varían en función de lo que elija.
+
+image:Kubernetes_Operator_Tile_Choices.png["Opciones de instalación de Kubernetes"]
+
+
+NOTE: La instalación del operador de supervisión Kubernetes de NetApp se considera una función _Preview_ y, por lo tanto, está sujeta a cambios.
+
+.Requisitos previos:
+* Los siguientes comandos deben estar disponibles: Curl, sudo, openssl, sha256sum y kubectl
++
+Para obtener los mejores resultados, añada estos comandos a la RUTA DE ACCESO.
+
+* se deben instalar métricas de estado de kube. Consulte a continuación para obtener más información. las métricas de estado de kube se instalan automáticamente con la instalación basada en el operador.
+* Si está detrás de un proxy, siga las instrucciones de la sección *Configuración del soporte de proxy para Kubernetes*.
+* Si está ejecutando una variante de Kubernetes que requiere restricciones de contexto de seguridad, siga las instrucciones de la sección *Configuración del agente para recopilar datos de Kubernetes*. La instalación basada en el operador lo instala para usted.
+* Debe tener permisos para crear roles en el clúster de Kubernetes y vinculaciones de roles.
+* La instalación del operador de supervisión Kubernetes de NetApp se ha probado y se espera que funcione con AWS EKS 1.18, OpenShift 3.11 y Rancher 2.6.
+
+
+
+
+==== La supervisión solo se instala en nodos Linux
+
+Cloud Insights admite la supervisión de nodos Kubernetes que ejecutan Linux, especificando un selector de nodos de Kubernetes que busca las siguientes etiquetas de Kubernetes en estas plataformas:
+
+|===
+| Plataforma | Etiqueta 
+
+
+| Kubernetes v1.17 y superior | Kubernetes.io/os = linux 
+
+
+| Rancher + ganadero.io como plataforma de orquestación/Kubernetes | ganado.io/os = linux 
+|===
+
+
+==== Instalación del operador de NetApp Kubernetes Monitoring
+
+image:Kubernetes_Operator_Agent_Instructions.png["Instalación basada en el operador"]
+
+.Pasos para instalar el agente del operador de NetApp Kubernetes Monitoring en Kubernetes:
+. Introduzca el nombre del clúster y el espacio de nombres.
+. Una vez introducidos, puede copiar el fragmento de instalador de agentes
+. Haga clic en el botón para copiar este fragmento en el portapapeles.
+. Pegue el fragmento en una ventana _bash_ y ejecútelo.
+. La instalación se realiza automáticamente. Cuando finalice, haga clic en el botón _Complete Setup_.
+
+
+
+
+==== Configurar el soporte del proxy para el operador de supervisión Kubernetes de NetApp
+
+Para configurar un proxy para el operador de supervisión, realice los pasos siguientes.
+
+En primer lugar, abra el archivo _Agent-Monitoring-netapp_ para editar:
+
+ kubectl -n netapp-monitoring edit agent agent-monitoring-netapp
+En la sección _SPEC:_ de este archivo, agregue el siguiente bloque de código:
+
+....
+spec:
+  proxy:
+    isAuProxyEnabled: <true or false>
+    isTelegrafProxyEnabled: <true or false>
+    isFluentbitProxyEnabled: <true or false>
+    password: <password for proxy, optional>
+    port: <port for proxy>
+    server: <server for proxy>
+    username: <username for proxy, optional>
+    noProxy: <comma separated list of IPs or resolvable hostnames that should bypass a proxy>
+....
+
+
+===== Uso de un repositorio de Docker personalizado/privado
+
+Si utiliza un repositorio de Docker personalizado, haga lo siguiente:
+
+Obtenga el secreto del docker:
+
+ kubectl -n netapp-monitoring get secret docker -o yaml
+Copie y pegue el valor de _.dockerconfigjson:_ del resultado del comando anterior.
+
+Descodificar el secreto del docker:
+
+ echo <paste from _.dockerconfigjson:_  output above> | base64 -d
+El resultado de este proceso tendrá el siguiente formato json:
+
+....
+{ "auths":
+  {"docker.<cluster>.cloudinsights.netapp.com" :
+    {"username":"<tenant id>",
+     "password":"<password which is the CI API key>",
+     "auth"    :"<encoded username:password basic auth key. This is internal to docker>"}
+  }
+}
+....
+Inicie sesión en el repositorio docker:
+
+....
+docker login docker.<cluster>.cloudinsights.netapp.com (from step #2) -u <username from step #2>
+password: <password from docker secret step above>
+....
+Tire de la imagen del operador docker desde Cloud Insights:
+
+ docker pull docker.<cluster>.cloudinsights.netapp.com/netapp-monitoring:<version>
+Busque el campo <version> con el comando siguiente:
+
+ kubectl -n netapp-monitoring get deployment monitoring-operator | grep "image:"
+Introduzca la imagen del operador docker en el repositorio de su proveedor de servicios de empresa/local/privado de acuerdo con las políticas de su empresa.
+
+Descargue todas las dependencias de código abierto en su registro de docker privado. Es necesario descargar las siguientes imágenes de código abierto:
+
+....
+docker.io/telegraf:1.19.3
+gcr.io/kubebuilder/kube-rbac-proxy:v0.5.0
+k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.1.0
+....
+Si el bit fluido está activado, también descargue:
+
+....
+docker.io/fluent-bit:1.7.8
+docker.io/kubernetes-event-exporter:0.10
+....
+Edite el agente CR para que refleje la nueva ubicación de repo de docker, desactive la actualización automática (si está activada).
+
+ kubectl -n netapp-monitoring edit agent agent-monitoring-netapp
+ enableAutoUpgrade: false
+....
+docker-repo: <docker repo of the enterprise/corp docker repo>
+dockerRepoSecret: <optional: name of the docker secret of enterprise/corp docker repo, this secret should be already created on the k8s cluster in the same namespace>
+....
+En la sección _SPEC:_, realice los siguientes cambios:
+
+....
+spec:
+  telegraf:
+    - name: ksm
+      substitutions:
+        - key: k8s.gcr.io
+          value: <same as "docker-repo" field above>
+....
+
+
+==== Instalación basada en secuencias de comandos
+
+image:Kubernetes_Install_Agent_screen.png["Instalación basada en scripts"]
+
+.Pasos para instalar un agente basado en scripts en Kubernetes:
+. Elija una clave de acceso del agente.
+. Haga clic en el botón *Copiar agente Installer Snippet* del cuadro de diálogo de instalación. Si desea ver el bloque de comandos, puede hacer clic en el botón _+Mostrar fragmento de instalador de agentes_.
+. Pegue el comando en una ventana _bash_.
+. De manera opcional, puede anular el espacio de nombres o proporcionar el nombre del clúster como parte del comando install modificando el bloque de comandos para añadir uno o ambos de los siguientes elementos antes de la final _./$installerName_
++
+** CLUSTER_NAME=<Cluster Name>
+** NAMESPACE=<Namespace>
++
+Aquí está en el bloque de comandos:
+
++
+ installerName=cloudinsights-kubernetes.sh ... && CLUSTER_NAME=<cluster_name> NAMESPACE=<new_namespace> sudo -E -H ./$installerName --download --install
++
+
+TIP: _CLUSTER_NAME_ es el nombre del clúster de Kubernetes de Cloud Insights recopila métricas, mientras que _NAMESPACE_ es el espacio de nombres al que se desplegará el agente Telegraf. El espacio de nombres especificado se creará si no existe todavía.
+
+
+
+. Cuando esté listo, ejecute el bloque de comandos.
+. El comando descargará el instalador del agente adecuado, lo instalará y establecerá una configuración predeterminada. Si no ha establecido explícitamente el _Namespace_, se le pedirá que lo introduzca. Cuando termine, la secuencia de comandos reiniciará el servicio de agente. El comando tiene una clave única y es válido durante 24 horas.
+. Cuando haya terminado, haga clic en *completar configuración*.
+
+
+
+
+==== Configurar el soporte del proxy para Kubernetes: Basado en scripts
+
+
+NOTE: En los pasos siguientes se describen las acciones necesarias para establecer las variables de entorno _http_proxy/https_proxy_. En algunos entornos proxy, es posible que los usuarios también tengan que establecer la variable de entorno _no_proxy_.
+
+En el caso de los sistemas que residen detrás de un proxy, realice lo siguiente para establecer las variables de entorno _https_proxy_ y/o _http_proxy_ para el usuario actual *ANTES de* para instalar el agente Telegraf:
+
+ export https_proxy=<proxy_server>:<proxy_port>
+*DESPUÉS de* instalar el agente Telegraf, agregue y establezca las variables de entorno _https_proxy_ y/o _http_proxy_ apropiadas en el conjunto de servidores _telegraf-DS_ y _telegraf-rs_ replicaset.
+
+ kubectl edit ds telegraf-ds
+....
+…
+       env:
+       - name: https_proxy
+         value: <proxy_server>:<proxy_port>
+       - name: HOSTIP
+         valueFrom:
+           fieldRef:
+             apiVersion: v1
+             fieldPath: status.hostIP
+…
+....
+ kubectl edit rs telegraf-rs
+....
+…
+       env:
+       - name: https_proxy
+         value: <proxy_server>:<proxy_port>
+       - name: HOSTIP
+         valueFrom:
+           fieldRef:
+             apiVersion: v1
+             fieldPath: status.hostIP
+…
+....
+A continuación, reinicie Telegraf:
+
+....
+kubectl delete pod telegraf-ds-*
+kubectl delete pod telegraf-rs-*
+....
+
+
+==== DemonSet, ReplicaSet y deteniendo/iniciando el agente
+
+Se creará un DemonSet y ReplicaSet en el clúster de Kubernetes para ejecutar los agentes/pods de Telegraf necesarios. De forma predeterminada, estos agentes/pods de Telegraf se programarán en los nodos maestro y no maestro.
+
+Para facilitar la parada y el reinicio del agente, genere Telegraf DemonSet YLMA y ReplicaSet YAML con los siguientes comandos. Tenga en cuenta que estos comandos utilizan el espacio de nombres predeterminado "ci-Monitoring". Si ha definido su propio espacio de nombres, sustituya este espacio de nombres en estos y todos los comandos y archivos siguientes:
+
+Si ha definido su propio espacio de nombres, sustituya este espacio de nombres en estos y todos los comandos y archivos siguientes:
+
+....
+kubectl --namespace ci-monitoring get ds telegraf-ds -o yaml > /tmp/telegraf-ds.yaml
+kubectl --namespace ci-monitoring get rs telegraf-rs -o yaml > /tmp/telegraf-rs.yaml
+....
+A continuación, puede utilizar los siguientes comandos para detener e iniciar el servicio Telegraf:
+
+....
+kubectl --namespace ci-monitoring delete ds telegraf-ds
+kubectl --namespace ci-monitoring delete rs telegraf-rs
+....
+....
+kubectl --namespace ci-monitoring apply -f /tmp/telegraf-ds.yaml
+kubectl --namespace ci-monitoring apply -f /tmp/telegraf-rs.yaml
+....
+
+
+==== Configurar el agente para recoger datos de Kubernetes
+
+Nota: El espacio de nombres predeterminado para la instalación basada en secuencias de comandos es _ci-Monitoring_. Para la instalación basada en el operador, el espacio de nombres predeterminado es _netapp-Monitoring_. En comandos que implican espacio de nombres, asegúrese de especificar el espacio de nombres correcto para la instalación.
+
+Los pods en los que se ejecutan los agentes deben tener acceso a lo siguiente:
+
+* HostPath
+* Config Map
+* secretos
+
+
+Estos objetos de Kubernetes se crean automáticamente como parte del comando de instalación de agente de Kubernetes proporcionado en la interfaz de usuario de Cloud Insights. Algunas variantes de Kubernetes, como OpenShift, implementan un nivel de seguridad añadido que puede bloquear el acceso a estos componentes. El _SecurityContextConstraint_ no se crea como parte del comando de instalación del agente de Kubernetes que se proporciona en la interfaz de usuario de Cloud Insights y se debe crear manualmente. Una vez creada, reinicie la(s) cápsula(s) de Telegraf.
+
+[listing]
+----
+    apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+      name: telegraf-hostaccess
+      creationTimestamp:
+      annotations:
+        kubernetes.io/description: telegraf-hostaccess allows hostpath volume mounts for restricted SAs.
+      labels:
+        app: ci-telegraf
+    priority: 10
+    allowPrivilegedContainer: true
+    defaultAddCapabilities: []
+    requiredDropCapabilities: []
+    allowedCapabilities: []
+    allowedFlexVolumes: []
+    allowHostDirVolumePlugin: true
+    volumes:
+    - hostPath
+    - configMap
+    - secret
+    allowHostNetwork: false
+    allowHostPorts: false
+    allowHostPID: false
+    allowHostIPC: false
+    seLinuxContext:
+      type: MustRunAs
+    runAsUser:
+      type: RunAsAny
+    supplementalGroups:
+      type: RunAsAny
+    fsGroup:
+      type: RunAsAny
+    readOnlyRootFilesystem: false
+    users:
+    - system:serviceaccount:ci-monitoring:monitoring-operator
+    groups: []
+----
+
+
+==== Instalación del servidor de métricas de estado de kube
+
+
+NOTE: La instalación basada en el operador se encarga de la instalación de las métricas de estado de kube. Omita esta sección si está realizando una instalación basada en el operador.
+
+
+NOTE: Se recomienda usar métricas de estado kube versión 2.0 o posteriores para aprovechar todo el conjunto de funciones, como la capacidad de vincular volúmenes persistentes de Kubernetes (VP) a dispositivos de almacenamiento de back-end. Tenga en cuenta también que, con la versión 2.0 de métricas de estado incluido en kube y posteriores, las etiquetas de los objetos de Kubernetes no se exportan de forma predeterminada. Para configurar kube-state-Metrics para exportar etiquetas de objetos de Kubernetes, debe especificar una lista de etiquetas de métrica "allow". Consulte la opción _--métrico-etiquetas-allowlist_ de la link:https://github.com/kubernetes/kube-state-metrics/blob/master/docs/cli-arguments.md["documentación sobre métricas del estado de kube"].
+
+Siga estos pasos para instalar el servidor de métricas de estado kube (obligatorio si está realizando una instalación basada en scripts):
+
+.Pasos
+. Cree una carpeta temporal (por ejemplo, _/tmp/kube-state-ylma-files/_) y copie los archivos .ylma de https://github.com/kubernetes/kube-state-metrics/tree/master/examples/standard[] a esta carpeta.
+. Ejecute el siguiente comando para aplicar los archivos .yaml necesarios para instalar las métricas de estado de kube:
++
+ kubectl apply -f /tmp/kube-state-yaml-files/
+
+
+
+
+==== Contadores de mediciones de estado kube
+
+Utilice los siguientes vínculos para acceder a la información de los contadores de métricas de estado de kube:
+
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/configmap-metrics.md["Métricas de ConfigMap"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/daemonset-metrics.md["DemonSet Metrics"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/deployment-metrics.md["Métricas de puesta en marcha"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/ingress-metrics.md["Métricas de entrada"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/namespace-metrics.md["Métricas de espacio de nombres"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/node-metrics.md["Métricas de nodo"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/persistentvolume-metrics.md["Métricas de volúmenes persistentes"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/persistentvolumeclaim-metrics.md["Métricas de reclamaciones de volumen persistente"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/pod-metrics.md["Métricas de POD"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/replicaset-metrics.md["Métricas replicaset"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/secret-metrics.md["Métricas secretas"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/service-metrics.md["Métricas de servicio"]
+. https://github.com/kubernetes/kube-state-metrics/blob/master/docs/statefulset-metrics.md["Métricas de Statilusionados Set"]
+
+
+
+
+==== Desinstalación del agente
+
+Tenga en cuenta que estos comandos utilizan el espacio de nombres predeterminado "ci-Monitoring". Si ha definido su propio espacio de nombres, sustituya este espacio de nombres en estos y todos los comandos y archivos subsiguientes.
+
+Para desinstalar el agente basado en scripts de Kubernetes, haga lo siguiente:
+
+Si el espacio de nombres de monitorización se utiliza únicamente para Telegraf:
+
+ kubectl --namespace ci-monitoring delete ds,rs,cm,sa,clusterrole,clusterrolebinding -l app=ci-telegraf
+ kubectl delete ns ci-monitoring
+Si el espacio de nombres de monitorización se utiliza con otros fines además de Telegraf:
+
+ kubectl --namespace ci-monitoring delete ds,rs,cm,sa,clusterrole,clusterrolebinding -l app=ci-telegraf
+Para la instalación basada en el operador, ejecute los siguientes comandos:
+
+....
+kubectl delete ns netapp-monitoring
+kubectl delete agent agent-monitoring-netapp
+kubectl delete crd agents.monitoring.netapp.com
+kubectl delete role agent-leader-election-role
+kubectl delete clusterrole agent-manager-role agent-proxy-role agent-metrics-reader
+kubectl delete clusterrolebinding agent-manager-rolebinding agent-proxy-rolebinding agent-cluster-admin-rolebinding
+....
+Si una restricción de contexto de seguridad se creó manualmente para una instalación de Telegraf basada en secuencias de comandos:
+
+ kubectl delete scc telegraf-hostaccess
+
+
+==== Actualización del agente
+
+Tenga en cuenta que estos comandos utilizan el espacio de nombres predeterminado "ci-Monitoring". Si ha definido su propio espacio de nombres, sustituya este espacio de nombres en estos y todos los comandos y archivos subsiguientes.
+
+Para actualizar el agente telegraf, realizar lo siguiente:
+
+. Realice una copia de seguridad de las configuraciones existentes:
++
+ kubectl --namespace ci-monitoring get cm -o yaml > /tmp/telegraf-configs.yaml
+
+
+. Desinstale el agente (consulte más arriba para obtener instrucciones)
+. link:#kubernetes["Instale el nuevo agente"].
+
+
+
+
+== Verificando sumas de comprobación
+
+El instalador del agente de Cloud Insights realiza comprobaciones de integridad, pero algunos usuarios pueden querer realizar sus propias verificaciones antes de instalar o aplicar artefactos descargados. Para realizar una operación de sólo descarga (a diferencia de la descarga e instalación predeterminadas), estos usuarios pueden editar el comando de instalación del agente obtenido de la interfaz de usuario y eliminar la opción de instalación final.
+
+Siga estos pasos:
+
+. Copie el fragmento de instalador del agente como se indica.
+. En lugar de pegar el fragmento en una ventana de comandos, péguelo en un editor de texto.
+. Retire la salida “--install” (Linux/Mac) o “-install” (Windows) del comando.
+. Copie el comando entero desde el editor de texto.
+. Ahora péguela en la ventana de comandos (en un directorio de trabajo) y ejecútela.
+
+
+Sin Windows (estos ejemplos son para Kubernetes; los nombres reales de los scripts pueden variar):
+
+* Descargar e instalar (predeterminado):
++
+ installerName=cloudinsights-kubernetes.sh … && sudo -E -H ./$installerName --download –-install
+* Solo descarga:
++
+ installerName=cloudinsights-kubernetes.sh … && sudo -E -H ./$installerName --download
+
+
+Windows.
+
+* Descargar e instalar (predeterminado):
++
+ !$($installerName=".\cloudinsights-windows.ps1") … -and $(&$installerName -download -install)
+* Solo descarga:
++
+ !$($installerName=".\cloudinsights-windows.ps1") … -and $(&$installerName -download)
+
+
+El comando download-only descargará todos los artefactos necesarios de Cloud Insights al directorio de trabajo. Los artefactos incluyen, pero no se pueden limitar a:
+
+* una secuencia de comandos de instalación
+* un archivo de entorno
+* Archivos YAML
+* un archivo de suma de comprobación firmado (sha256.firmadas)
+* Un archivo PEM (netapp_cert.pem) para la verificación de firmas
+
+
+La secuencia de comandos de instalación, el archivo de entorno y los archivos YAML se pueden verificar mediante inspección visual.
+
+El archivo PEM puede verificarse confirmando que su huella digital es la siguiente:
+
+ E5:FB:7B:68:C0:8B:1C:A9:02:70:85:84:C2:74:F8:EF:C7:BE:8A:BC
+Más específicamente,
+
+* No Windows:
++
+ openssl x509 -fingerprint -sha1 -noout -inform pem -in netapp_cert.pem
+* Windows.
++
+ Import-Certificate -Filepath .\netapp_cert.pem -CertStoreLocation Cert:\CurrentUser\Root
+
+
+El archivo de suma de comprobación firmado se puede verificar mediante el archivo PEM:
+
+* No Windows:
++
+ openssl smime -verify -in sha256.signed -CAfile netapp_cert.pem -purpose any
+* Windows (después de instalar el certificado a través del certificado de importación anterior):
++
+ Get-AuthenticodeSignature -FilePath .\sha256.ps1 $result = Get-AuthenticodeSignature -FilePath .\sha256.ps1 $signer = $result.SignerCertificate Add-Type -Assembly System.Security [Security.Cryptography.x509Certificates.X509Certificate2UI]::DisplayCertificate($signer)
+
+
+Una vez que todos los artefactos han sido verificados satisfactoriamente, la instalación del agente se puede iniciar ejecutando:
+
+No Windows:
+
+ sudo -E -H ./<installation_script_name> --install
+Windows.
+
+ .\cloudinsights-windows.ps1 -install
+
+
+== Solución de problemas instalación del agente
+
+Algunas cosas que debe intentar si tiene problemas para configurar un agente:
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Ya he instalado un agente utilizando Cloud Insights | Si ya ha instalado un agente en su host/equipo virtual, no necesita volver a instalar el agente. En este caso, sólo tiene que elegir la plataforma y clave adecuadas en la pantalla de instalación del agente y hacer clic en *continuar* o *Finalizar*. 
+
+
+| Ya tengo un agente instalado pero no utilizando el instalador de Cloud Insights | Elimine el agente anterior y ejecute la instalación del agente de Cloud Insights para asegurarse de que los valores predeterminados del archivo de configuración son correctos. Cuando termine, haga clic en *continuar* o *Finalizar*. 
+
+
+| No veo un hipervínculo/conexión entre mi volumen persistente Kubernetes y el dispositivo de almacenamiento back-end correspondiente. Mi volumen persistente de Kubernetes se configura usando el nombre de host del servidor de almacenamiento. | Siga los pasos para desinstalar el agente de Telegraf existente y, a continuación, vuelva a instalar el último agente de Telegraf. Debe utilizar Telegraf versión 2.0 o posterior. 
+
+
+| Estoy viendo mensajes en los registros similares a los siguientes: E0901 15:21:39.962145 1 reflectores.go:178] k8s.io/kube-state-Metrics/internal/store/builder.go:352 43.168161: No se ha podido encontrar el recurso solicitado * v1.MutaingWebConfigurator: El servidor no pudo encontrar el recurso 15 178:21 352.kio/estado/waters.kio/go-watering.kio/go_list | Estos mensajes pueden aparecer si ejecuta métricas de estado kube versión 2.0.0 o posteriores con la versión 1.17 de Kubernetes o posterior. Para obtener la versión de Kubernetes: _Kubectl version_ para obtener la versión de kube-state-Metrics: _Kubectl get deployment/kube-state-Metrics -o jsonpath='{..image}'_ para evitar que estos mensajes ocurran, los usuarios pueden modificar su implementación de kube-state-Metrics para desactivar los siguientes arrendamientos: _Mulatingweblookingdeads puede usar específicamente las configuraciones de webs_. Recursos=certififeligingRequests,configmaps,cronjobs,demonsets,despliegues,Endpoints,horizontal,podautocalers,ingesses,trabajos,limitrangos, espacios de nombres,networkpolds,nodos,persistenteclaims,persistentvolumes,podritionmars,poss,poss,netmasposs,poss,poss,possitaposs,poss,poss,posavapposs,poss,poss,poss,poss,poss,poss,netmasposs,poss,possitaposs,possita,poss,poss,poss,possitaposs,poss,poss,possita,poss,poss,poss,possitaposs,poss,possita,poss,poss,possita,poss,possita,poss,poss,possita,poss,poss,possita,possi validarconexiones web, volumeadjuntos" 
+
+
+| He instalado o actualizado Telegraf en Kubernetes, pero los pods de Telegraf no se están iniciando. Telegraf ReplicaSet o DemonSet informa de un fallo similar al siguiente: Error al crear: Pods "telegraf-rs-" está prohibido": No se puede validar contra ninguna restricción de contexto de seguridad: [Spec.Volumes[2]: Valor no válido: "HostPath": No se permite el uso de volúmenes hostPath] | Cree una restricción de contexto de seguridad (consulte la sección anterior Configuración del agente para recopilar datos de Kubernetes) si aún no existe. Asegúrese de que el espacio de nombres y la cuenta de servicio especificados para la seguridad Context Constraint coinciden con el espacio de nombres y la cuenta de servicio de Telegraf ReplicaSet y DemonSet. KUbectl describir scc telegraf-hostaccess |grep service account kubectl -n ci-monitoring --describir rs telegraf-rs | grep -i "namespace:" kubectl -n ci-Monitoring describir rs telegraf-rs | grep-tl "cuenta de servicio:" kubecctl -n ci-monitoring --describe: "t i-relep-t 
+
+
+| Veo mensajes de error de Telegraf que se parecen a lo siguiente, pero Telegraf se inicia y ejecuta: Oct 11 14:23:41 ip-172-31-39-47 systemd[1]: Se ha iniciado el agente de servidor basado en plugin para informar las métricas en InfluxDB. Oct 11 14:23:41 ip-172-31-39-47 telegraf[1827]: Time="2021-10-11T14:23:41Z" level=error msg="no se pudo crear el directorio de caché. /etc/telegraf/.cache/snowflake, err: mkdir /etc/telegraf/.ca che: permiso denegado. Ignorado\n" func="gosnowflake.(*defaultLogger).Errorf" file="log.go:120" Oct 11 14:23:41 ip-172-31-39-47 telegraf[1827]: Time="2021-10-11T14:23:41Z" level=error msg="no se ha podido abrir. Ignorada. Open /etc/telegraf/.cache/snowflake/ocsp_response_cache.json: Ningún archivo o directorio\n" func="gosnowflake.(*defaultLogger).Errorf" file="log.go:120" Oct 11 14:23:41 ip-172-31-39-47 telegraf[1827 23]: 2021-11Z:10 Arranque de Telegraf 1.19.3 | Este es un problema conocido. Consulte link:https://github.com/influxdata/telegraf/issues/9407["Este artículo de GitHub"] para obtener más detalles. Mientras Telegraf esté activo y en funcionamiento, los usuarios pueden ignorar estos mensajes de error. 
+
+
+| En Kubernetes, My Telegraf pod/s notifican el siguiente error: "Error al procesar mountstats info: Error al abrir el archivo mountstats: /Hostfs/proc/1/mountstats, error: Open /hostfs/proc/1/mountstats: Permission denegado" | Si SELinux está activado y se está aplicando, es probable que impida que los POD(s) de Telegraf accedan al archivo /proc/1/mountstats en los nodos de Kubernetes. Para relajar esta restricción, realice UNA de las siguientes acciones: • Para instalaciones basadas en scripts, edite el telegraf DS (`kubectl edit ds telegraf-ds`), y cambie "Privileged: False" a "Privileged: True" • para la instalación basada en el operador, edite el agente (`kubectl edit agent agent-monitoring-netapp`), y cambie "privileged-mode: false" a "privileged-mode: true" 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

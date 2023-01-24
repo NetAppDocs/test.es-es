@@ -1,0 +1,49 @@
+---
+sidebar: sidebar 
+permalink: reporting_create_example.html 
+summary: Utilice este procedimiento para crear un informe utilizando los informes predefinidos de Cloud Insights. 
+keywords: reporting, cognos, data warehouse, dwh, create, report 
+---
+= Creación de un informe (ejemplo)
+:allow-uri-read: 
+
+
+[role="lead"]
+Utilice los pasos de este ejemplo para generar un informe sencillo sobre la capacidad física del almacenamiento y los pools de almacenamiento en varios centros de datos.
+
+.Pasos
+. En la barra de herramientas, haga clic en *[+]*
+. Haga clic en *Informe*
+. Haga clic en *Plantillas > en blanco*
+. Haga clic en *Temas > Azul fresco > Aceptar*
++
+Se muestran las fichas origen y datos
+
+. Haga clic en *Fuente > [+]*
+. En el cuadro de diálogo *Abrir archivo*, haga clic en *Contenido del equipo > Paquetes*
++
+Se muestra una lista de paquetes disponibles.
+
+. Haga clic en *capacidad de almacenamiento y agrupación de almacenamiento > Abrir*
+. Haga clic en *[+]*
++
+Se muestran los estilos disponibles para el informe.
+
+. Haga clic en *Lista*
++
+Agregue los nombres adecuados para Lista y Consulta
+
+. Haga clic en *Aceptar*
+. Expanda _capacidad física_
+. Expanda al nivel más bajo de _Data Center_
+. Arrastre _Data Center_ al paladar del informe.
+. Expanda _Capacity (MB)_
+. Arrastre _Capacity (MB)_ al paladar de informes.
+. Arrastre _capacidad usada (MB)_ al paladar de informes.
+. Ejecute el informe haciendo clic en image:Reporting-RunButton.png["Ejecución"] y seleccionando un tipo de salida.
+
+
+.Resultado
+Se crea un informe similar al siguiente:
+
+image:Reporting-Example1.png["Ejemplo de informe"]

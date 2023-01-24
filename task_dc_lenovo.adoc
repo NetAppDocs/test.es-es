@@ -1,0 +1,63 @@
+---
+sidebar: sidebar 
+permalink: task_dc_lenovo.html 
+keywords: data collector,Lenovo, HX Series 
+summary: Configurar el recopilador de datos de Lenovo. 
+---
+= Recopilador de datos de Lenovo
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza el recopilador de datos de Lenovo para descubrir datos de inventario y rendimiento de los sistemas de almacenamiento HX de Lenovo.
+
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+* Dirección IP externa del prisma
+* Nombre de usuario y contraseña del administrador
+* Requisito de puerto TCP: 9440
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP externa del prisma | La dirección IP de servicios de datos externos para el clúster 
+
+
+| Nombre de usuario | Nombre de usuario de la cuenta de administrador 
+
+
+| Contraseña | Contraseña para la cuenta de administrador 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Puerto TCP | Puerto TCP utilizado para conectarse a la matriz. El valor predeterminado es 9440. 
+
+
+| Intervalo de sondeo de inventario (min) | Intervalo entre sondeos de inventario. El valor predeterminado es 60 minutos. 
+
+
+| Intervalo de sondeo de rendimiento (s) | Intervalo entre sondeos de rendimiento. El valor predeterminado es 300 segundos. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

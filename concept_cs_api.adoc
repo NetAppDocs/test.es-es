@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: concept_cs_api.html 
+keywords: api, access, token, swagger 
+summary: Cloud Secure incluye una potente API que permite la integración con otras aplicaciones, como CMDB. 
+---
+= API de Cloud Secure
+:allow-uri-read: 
+
+
+[role="lead"]
+La API de Cloud Secure permite a los clientes y proveedores independientes de software (ISV) de NetApp integrar Cloud Secure con otras aplicaciones, como CMDB u otros sistemas de emisión de boletos.
+
+Requisitos para el acceso a API:
+
+* Se utiliza un modelo de token de acceso de API para conceder acceso.
+* La gestión de token de API la realizan los usuarios de Cloud Secure con la función de administrador.
+
+
+
+
+== Documentación de API (Swagger)
+
+Para obtener la información más reciente sobre la API, inicie sesión en Cloud Secure y vaya a *Administración > acceso a la API*. Haga clic en el enlace *Documentación de API*. La documentación de API es basada en Swagger, que proporciona una descripción breve e información de uso de la API, y permite probarlo en su entorno.
+
+
+
+== Tokens de acceso API
+
+Antes de utilizar la API de Cloud Secure, debe crear uno o más *tokens de acceso de API*. Los tokens de acceso conceden permisos de lectura. También puede establecer la caducidad de cada token de acceso.
+
+Para crear un token de acceso:
+
+* Haga clic en *Admin > API Access*
+* Haga clic en *+símbolo de acceso de API*
+* Introduzca *Nombre de símbolo*
+* Especifique *caducidad de token*
+
+
+
+NOTE: El token sólo estará disponible para copiar en el portapapeles y guardar durante el proceso de creación. Los tokens no se pueden recuperar una vez creados, por lo que se recomienda encarecidamente copiar el token y guardarlo en una ubicación segura. Se le pedirá que haga clic en el botón Copiar clave de acceso de API antes de cerrar la pantalla de creación de token.
+
+Puede desactivar, activar y revocar tokens. Se pueden activar los tokens desactivados.
+
+Los tokens conceden acceso de propósito general a las API desde la perspectiva del cliente, al gestionar el acceso a las API en el ámbito de su propio entorno.
+
+La aplicación recibe un token de acceso después de que un usuario autentica correctamente y autoriza el acceso, a continuación, pasa el token de acceso como credencial cuando llama a la API de destino. El token pasado informa a la API de que el portador del token ha sido autorizado para acceder a la API y realizar acciones específicas en función del ámbito que se haya concedido durante la autorización.
+
+El encabezado HTTP donde se pasa el token de acceso es *X-CloudInsights-ApiKey:*
+
+Por ejemplo, utilice lo siguiente para recuperar activos de almacenamientos:
+
+ curl https://<tenant_host_name>/rest/v1/cloudsecure/activities -H 'X-CloudInsights-ApiKey: <API_Access_Token>'
+Donde _<API_Access_Token>_ es el token que ha guardado durante la creación de la clave de acceso de API.
+
+Puede encontrar información detallada en el enlace _API Documentation_ en *Admin > API Access*.

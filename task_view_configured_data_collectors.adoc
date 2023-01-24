@@ -1,0 +1,114 @@
+---
+sidebar: sidebar 
+permalink: task_view_configured_data_collectors.html 
+keywords: acquisition, AU, data collector, collector, bulk edit, postpone polling, resume polling 
+summary: Un resumen. 
+---
+= Administración de recopiladores de datos configurados
+:allow-uri-read: 
+
+
+[role="lead"]
+La página colectores de datos instalados proporciona acceso a los recopiladores de datos que se han configurado para Cloud Insights. Puede utilizar esta página para modificar los recopiladores de datos existentes.
+
+.Pasos
+. En el menú Cloud Insights, haga clic en *Admin > colectores de datos*
++
+Se muestra la pantalla colectores de datos disponibles.
+
+. Haga clic en *colectores de datos instalados*
++
+Se muestra una lista de todos los colectores de datos instalados. La lista proporciona el nombre del recopilador, el estado, la dirección IP a la que accede el recopilador y la última vez que se adquirieron datos del dispositivo A. La acción que se puede realizar en esta pantalla incluye:
+
++
+** Controlar sondeo
+** Cambie las credenciales del recopilador de datos
+** Clonar recopiladores de datos
+
+
+
+
+
+
+== Control del sondeo del recopilador de datos
+
+Después de hacer un cambio en un recopilador de datos, es posible que desee sondear inmediatamente para comprobar sus cambios, o puede que desee posponer la recopilación de datos en un recopilador de datos durante uno, tres o cinco días mientras trabaja en un problema.
+
+.Pasos
+. En el menú Cloud Insights, haga clic en *Admin > colectores de datos*
+. Haga clic en *colectores de datos instalados*
+. Seleccione la casilla de verificación situada a la izquierda del recopilador de datos que desea cambiar
+. Haga clic en *acciones masivas* y seleccione la acción de sondeo que desee realizar.
++
+Se pueden realizar acciones masivas simultáneamente en múltiples colectores de datos. Seleccione los recopiladores de datos y elija la acción que desea realizar en el menú *Acción masiva*.
+
+
+
+
+
+== Edición de la información del recopilador de datos
+
+Puede editar la información de configuración del recopilador de datos existente.
+
+.Para editar un único recopilador de datos:
+. En el menú Cloud Insights, haga clic en *Admin > colectores de datos* para abrir la lista de colectores de datos instalados.
+. En el menú de opciones situado a la derecha del recopilador de datos que desea modificar, haga clic en *Editar*.
++
+Se abre el cuadro de diálogo Editar recopilador.
+
+. Introduzca los cambios y haga clic en *Configuración de prueba* para probar la nueva configuración o haga clic en *Guardar* para guardar la configuración.
+
+
+También puede editar varios recopiladores de datos:
+
+. Seleccione la casilla de verificación situada a la izquierda de cada recopilador de datos que desee cambiar.
+. Haga clic en el botón *acciones masivas* y elija *Editar* para abrir el cuadro de diálogo Editar recopilador de datos.
+. Modifique los campos como se ha indicado anteriormente.
++
+
+NOTE: Los recopiladores de datos seleccionados deben ser del mismo proveedor y modelo, y residir en la misma unidad de adquisición.
+
++
+Al editar varios recopiladores de datos, el campo Nombre del recopilador de datos muestra “Mixed” (Mixto) y no se puede editar. Otros campos, como el nombre de usuario y la contraseña, muestran “Mixed” y se pueden editar. Los campos que comparten el mismo valor en los recopiladores de datos seleccionados muestran los valores actuales y se pueden editar.
+
++
+Al editar varios recopiladores de datos, el botón *Configuración de prueba* no está disponible.
+
+
+
+
+
+== Clonar recopiladores de datos
+
+Con la instalación de clonado, puede agregar rápidamente un origen de datos con las mismas credenciales y atributos que otro origen de datos. La clonación le permite configurar fácilmente varias instancias del mismo tipo de dispositivo.
+
+.Pasos
+. En el menú Cloud Insights, haga clic en *Admin > colectores de datos*.
+. Haga clic en *colectores de datos instalados*.
+. Haga clic en la casilla de verificación situada a la izquierda del recopilador de datos que desea copiar.
+. En el menú de opciones situado a la derecha del recopilador de datos seleccionado, haga clic en *Clonar*.
++
+Se mostrará el cuadro de diálogo Clone Data Collector.
+
+. Introduzca la nueva información en los campos obligatorios.
+. Haga clic en *Guardar*.
+
+
+.Después de terminar
+La operación de clonado copia todos los otros atributos y configuración para crear el nuevo recopilador de datos.
+
+
+
+== Realizar acciones masivas en recopiladores de datos
+
+Puede editar simultáneamente alguna información para varios recopiladores de datos. Esta función le permite iniciar un sondeo, posponer el sondeo y reanudar el sondeo en varios recopiladores de datos. Además, puede eliminar varios recopiladores de datos.
+
+.Pasos
+. En el menú Cloud Insights, haga clic en *Admin > colectores de datos*
+. Haga clic en *colectores de datos instalados*
+. Haga clic en la casilla de verificación situada a la izquierda de los recopiladores de datos que desea modificar.
+. En el menú de opciones situado a la derecha, haga clic en la opción que desee realizar.
+
+
+.Después de terminar
+La operación seleccionada se realiza en los recopiladores de datos. Cuando decide eliminar recopiladores de datos, aparece un cuadro de diálogo que requiere que se ajuste a la acción.

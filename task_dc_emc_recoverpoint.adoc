@@ -1,0 +1,65 @@
+---
+sidebar: sidebar 
+permalink: task_dc_emc_recoverpoint.html 
+keywords: data collector, RecoverPoint, EMC, DELL 
+summary: Configuración de Dell EMC RecoverPoint data Collector. 
+---
+= Recopilador de datos de Dell EMC RecoverPoint
+:allow-uri-read: 
+
+
+[role="lead"]
+El recopilador de datos de EMC RecoverPoint recopila información de inventario del almacenamiento de EMC RecoverPoint. Para la configuración, el recopilador de datos requiere la dirección IP de los procesadores de almacenamiento y un nombre de usuario y contraseña de sólo lectura.
+
+El recopilador de datos de EMC RecoverPoint recopila las relaciones de replicación de volumen a volumen que RecoverPoint coordina en otras cabinas de almacenamiento. Cloud Insights muestra una cabina de almacenamiento para cada clúster RecoverPoint, y recopila datos de inventario de los nodos y los puertos de almacenamiento de ese clúster. No se recopilan datos de volúmenes o pool de almacenamiento.
+
+
+
+== Requisitos
+
+Para configurar este recopilador de datos se necesita la siguiente información:
+
+* Dirección IP o nombre de dominio completo del procesador de almacenamiento
+* Nombre de usuario y contraseña de solo lectura
+* Acceso a API DE REST a través del puerto 443
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección de RecoverPoint | Dirección IP o nombre de dominio completo del clúster RecoverPoint 
+
+
+| Nombre de usuario | Nombre de usuario del clúster RecoverPoint 
+
+
+| Contraseña | Contraseña utilizada para el clúster RecoverPoint 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Puerto TCP | Puerto TCP utilizado para conectarse al clúster RecoverPoint 
+
+
+| Intervalo de sondeo de inventario (minutos) | Intervalo entre sondeos de inventario. El valor predeterminado es 20 minutos. 
+
+
+| Clústeres excluidos | Lista de nombres o ID de clúster separados por comas para excluirlos al realizar el sondeo. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

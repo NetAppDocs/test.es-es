@@ -1,0 +1,91 @@
+---
+sidebar: sidebar 
+permalink: io_density_nonroot.html 
+keywords: notifications, annotations, queries, applications, 
+summary: Densidad de I/O. 
+---
+= Garantizar que los datos de densidad de I/o describen únicamente los volúmenes de datos internos
+:allow-uri-read: 
+
+
+[role="lead"]
+En los sistemas de almacenamiento NetApp el agregado raíz contiene el volumen raíz, que contiene directorios y archivos de configuración especiales para gestionar y controlar el sistema de almacenamiento. Estas operaciones pueden dar como resultado una gran cantidad de actividad en el agregado raíz. Cuando consulta a Cloud Insights para los 10 volúmenes internos principales con la densidad de I/o más alta, los resultados pueden incluir agregados raíz de NetApp como miembros de los 10 principales.
+
+Al supervisar su entorno, es más importante determinar qué volúmenes de datos internos producen números de densidad de I/o elevados. Para identificar exclusivamente los volúmenes de datos de forma precisa, debe aislar los volúmenes internos de NetApp de las consultas que utilice para supervisar la densidad de I/O.
+
+En esta guía se describe cómo identificar fácilmente los agregados raíz de NetApp, aislarlos de los resultados de las consultas de volúmenes internos y crear reglas que excluyen los agregados raíz de NetApp nuevos a medida que se agregan al sistema. Las siguientes funciones de Cloud Insights se utilizan para garantizar que sus informes de densidad de I/o se obtienen de los volúmenes de datos internos.
+
+* Se crea una consulta para identificar todos los agregados raíz de NetApp supervisados por Cloud Insights.
+* Se asigna una anotación a cada uno de los agregados raíz de NetApp.
+* Se crea una regla de anotación para excluir los agregados raíz de NetApp.
+
+
+
+
+== Crear una consulta para identificar los agregados raíz de NetApp en su entorno
+
+Las consultas proporcionan una búsqueda a nivel granular basada en criterios seleccionados por el usuario. El uso de una consulta permite buscar volúmenes internos en el entorno que contienen el agregado raíz de NetApp.
+
+.Pasos
+. En Cloud Insights cree una consulta para identificar los agregados raíz de NetApp en su entorno: *Consultas > +Nueva consulta > Grupo de almacenamiento*
+. Escriba el nombre del agregado raíz
++
+En este ejemplo se utiliza "aggr0" para el nombre. Al crear un agregado, solo deben seguirse los siguientes requisitos para el nombre:
+
++
+** Debe comenzar con una letra o un guión bajo (_).
+** Puede contener solo letras, dígitos y guiones bajos.
+** Puede tener 250 caracteres o menos.
+
+
+
+
+En la mayoría de los casos, el agregado es el nombre aggr0, aggr_0 o algo similar. Puede que requiera un proceso iterativo para identificar todos los agregados raíz de NetApp de su entorno.
+
+. Haga clic en *Guardar* e introduzca un nombre para la nueva consulta.
++
+Tal como se ha mencionado anteriormente, puede ser un proceso iterativo y requiere múltiples consultas para identificar todos los agregados raíz de NetApp.
+
+
+
+
+
+== Cree una anotación para los volúmenes raíz devueltos por sus consultas
+
+Las anotaciones son notas especializadas que asigna a sus activos, lo que le permite filtrar los activos por sus anotaciones. La anotación que cree se utilizará para identificar los agregados raíz de NetApp en su entorno y garantizar que no se incluyan en una lista de volúmenes internos con la mayor densidad de I/O.
+
+.Antes de empezar
+Debe haber identificado todos los agregados raíz que desea excluir del informe "Alta densidad de E/S".
+
+.Pasos
+. Cree una anotación para asociar todos los agregados raíz de NetApp identificados con las consultas: *Gestionar > Anotaciones*
++
+.. Introduzca el nombre de la anotación: *RootAggr*
+.. Introduzca una descripción de la anotación: *Eliminar agregado raíz de la lista de "Alta densidad de E/S"*
+.. Introduzca el tipo de anotación: *Boolean*
+
+
+. Haga clic en *Guardar*
+
+
+
+
+== Cree una regla de anotación para automatizar la exclusión de agregados específicos del informe de densidad de E/S.
+
+Como alternativa a la aplicación manual de anotaciones a activos individuales, puede aplicar anotaciones automáticamente a varios activos mediante reglas de anotación. Las reglas de anotación se basan en las consultas que se crean y cuando se ejecutan en el sistema agregan activos nuevos a los conjuntos de activos existentes. Cuando estos conjuntos de activos se excluyen de la inclusión, los nuevos activos también se excluyen automáticamente.
+
+.Antes de empezar
+Debe haber creado y guardado una consulta que identifique los agregados raíz de NetApp identificados en el entorno.
+
+.Pasos
+. En el menú Cloud Insights, haga clic en *Administrar > Anotaciones*
+. Haga clic en *Agregar*
+. Haga lo siguiente:
++
+.. En el cuadro Nombre, escriba un nombre único que describa la regla: *RootAggrExclude*
+.. Haga clic en Consulta y seleccione la consulta que Cloud Insights debe utilizar para aplicar la regla de anotación a: *Agregar0*
+.. Haga clic en anotación y seleccione: *Raíz de exclusión de agg*
+.. Haga clic en *valor* e introduzca *Verdadero*
+
+
+

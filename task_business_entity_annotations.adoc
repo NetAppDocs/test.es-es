@@ -1,0 +1,59 @@
+---
+sidebar: sidebar 
+permalink: task_business_entity_annotations.html 
+keywords: annotations, business entity 
+summary: Las anotaciones de entidad de negocio se pueden utilizar para supervisar y notificar los activos en la jerarquía de negocio 
+---
+= Anotaciones de entidad de negocio
+:allow-uri-read: 
+
+
+[role="lead"]
+Cree y administre entidades de negocio para el entorno corporativo mediante el tipo de anotación *entidad de negocio*.
+
+
+
+== Creación de una entidad de negocio
+
+Para crear una entidad de negocio, haga lo siguiente:
+
+. Haga clic en *Administrar > Anotaciones* y haga clic en el enlace _Business Entity_.
++
+Se muestra la lista de entidades de negocio definidas actualmente.
+
+. Haga clic en *+ Business Entity*.
+. Introduzca los valores para los campos *arrendatario*, *línea de negocio*, *Unidad de negocio* y *proyecto*.
++
+Puede dejar cualquier campo vacío si no se aplica a la entidad de negocio.
+
+. Si ha introducido previamente un valor para un campo, puede seleccionarlo en el menú desplegable. No es necesario volver a escribirlo.
+
+
+
+NOTE: Los valores seleccionados deben componer una entidad de negocio total única. Por ejemplo, si ya tiene una entidad de negocio con los valores _A / B / C / D_ en ese orden, no podrá crear otra entidad de negocio con esos valores en ese orden. Sin embargo, puede crear una entidad de negocio con esos valores en un orden diferente.
+
+
+
+== Aplicar una entidad de negocio a un objeto
+
+La forma más sencilla de aplicar una entidad de negocio a un objeto o objetos es mediante una consulta.
+
+. Haga clic en *consultas > +Nueva consulta* y seleccione el tipo de objeto deseado. Puede aplicar filtros para delimitar aún más los resultados.
+. Haga clic en la casilla de verificación para seleccionar los objetos para los que desea aplicar la entidad de negocio.
+. Haga clic en *acciones masivas* y seleccione *Agregar anotación*.
+. Elija la anotación _Business Entity_ y seleccione el valor de entidad de negocio deseado de la lista.
+. Haga clic en *Guardar* para aplicar la entidad comercial a los objetos.
+
+
+También puede aplicar una entidad de negocio a un objeto individual navegando a la página de destino del activo del objeto y haciendo clic en *+anotación) en la sección datos de usuario.
+
+También puede configurar una link:task_create_annotation_rules.html["Regla de anotación"] para aplicar entidades de negocio a objetos.
+
+
+NOTE: Un objeto sólo puede tener asociada una entidad de negocio.
+
+
+
+== Quitar una entidad de negocio de un objeto
+
+Para quitar una entidad de negocio de un objeto o objetos, consulte y seleccione los objetos, haga clic en *acciones masivas* y seleccione _Quitar anotación_. Seleccione la anotación de entidad de negocio y haga clic en *Eliminar*.

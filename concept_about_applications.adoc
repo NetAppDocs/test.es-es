@@ -1,0 +1,43 @@
+---
+sidebar: sidebar 
+permalink: concept_about_applications.html 
+keywords: applications, asset, cost 
+summary: Comprender las aplicaciones utilizadas en el entorno de su empresa ayuda a realizar un seguimiento del uso de los activos y de los costes. 
+---
+= Realizar un seguimiento del uso de activos por aplicación
+:allow-uri-read: 
+
+
+[role="lead"]
+Comprender las aplicaciones utilizadas en el entorno de su empresa le ayuda a realizar un seguimiento del uso de los activos y los costes.
+
+Antes de poder realizar un seguimiento de los datos asociados a las aplicaciones que se ejecutan en el entorno, primero debe definir esas aplicaciones y asociarlas a los activos adecuados. Puede asociar las aplicaciones con los siguientes activos: Hosts, máquinas virtuales, volúmenes, volúmenes internos, qtrees, recursos compartidos e hipervisores.
+
+Este tema proporciona un ejemplo de seguimiento del uso de equipos virtuales que el equipo de marketing utiliza para su correo electrónico de Exchange.
+
+Puede que desee crear una tabla similar a la siguiente para identificar las aplicaciones utilizadas en su entorno y anotar el grupo o unidad de negocio que utiliza cada aplicación.
+
+[cols="5*"]
+|===
+
+
+| Inquilino | Línea de negocio | Unidad de negocio | Proyecto | Más grandes 
+
+
+| NetApp | Almacenamiento de datos | Legal | Estadounidenses | Oracle Identity Manager, Oracle On Demand, PatentWiz 
+
+
+| NetApp | Almacenamiento de datos | Marketing | Eventos de ventas | Exchange, base de datos compartida Oracle, Blastoff Event Planner 
+|===
+La tabla muestra que el equipo de marketing utiliza la aplicación Exchange. Queremos realizar un seguimiento del uso de su equipo virtual en Exchange para poder predecir cuándo necesitaremos añadir más almacenamiento. Podemos asociar la aplicación Exchange a todos los equipos virtuales de Marketing:
+
+. Cree una aplicación denominada _Exchange_
+. Vaya a *consultas > +Nueva consulta* para crear una nueva consulta para máquinas virtuales (o seleccione una consulta de VM existente, si procede).
++
+Suponiendo que todas las VM del equipo de marketing tengan un nombre que contenga la cadena “*mkt*”, cree su consulta para filtrar el nombre de la VM de “mkt”.
+
+. Seleccione las máquinas virtuales.
+. Asocie los equipos virtuales a la aplicación _Exchange_ mediante *acciones masivas > Agregar aplicaciones*.
+. Seleccione la aplicación deseada y haga clic en *Guardar*.
+. Cuando haya terminado, *Guardar* la consulta.
+

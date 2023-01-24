@@ -1,0 +1,79 @@
+---
+sidebar: sidebar 
+permalink: task_dc_na_cloud_volumes_ontap.html 
+summary: Configurar recopilador de datos de Cloud Volumes ONTAP de NetApp 
+keywords: data collector, NetApp, Cloud, ONTAP 
+---
+= Recopilador de datos de NetApp Cloud Volumes ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+Este recopilador de datos admite la recopilación de inventario de las configuraciones de Cloud Volumes ONTAP.
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP de administración de NetApp | La dirección IP para Cloud Volumess ONTAP 
+
+
+| Nombre de usuario | Nombre de usuario de Cloud Volumes ONTAP 
+
+
+| Contraseña | Contraseña para el usuario anterior 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Tipo de conexión | Se recomienda HTTPS. También muestra el puerto predeterminado. 
+
+
+| Anular puerto de comunicación | Puerto que se va a usar si no es el predeterminado. 
+
+
+| Intervalo de sondeo de inventario (mín.) | El valor predeterminado es 60 minutos. 
+
+
+| Recuento de subprocesos simultáneos de inventario | Número de subprocesos simultáneos. 
+
+
+| Fuerce TLS para HTTPS | Fuerce TLS sobre HTTPS 
+
+
+| Buscar automáticamente grupos de redes | Buscar automáticamente grupos de redes 
+
+
+| Expansión de netgroup | Seleccione Shell o File 
+
+
+| Tiempo de espera de lectura HTTP segundos | El valor predeterminado es 30 segundos 
+
+
+| Forzar respuestas como UTF-8 | Forzar respuestas como UTF-8 
+
+
+| Intervalo de sondeo de rendimiento (mín.) | El valor predeterminado es 900 segundos. 
+
+
+| Número de subprocesos simultáneos de rendimiento | Número de subprocesos simultáneos. 
+
+
+| Recopilación avanzada de datos de contador | Compruebe que Cloud Insights recopile las métricas avanzadas de la lista siguiente. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

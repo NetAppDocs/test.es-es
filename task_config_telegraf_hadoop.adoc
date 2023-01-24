@@ -1,0 +1,162 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_hadoop.html 
+keywords: telegraf, installation, install, Hadoop 
+summary: Configuración de recopiladores de datos de Hadoop 
+---
+= Recopilador de datos de Hadoop
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas de Hadoop.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija Hadoop.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:HadoopDCConfigLinux-1.png["Configuración de Hadoop"]
+image:HadoopDCConfigLinux-2.png["Configuración de Hadoop"]
+
+
+
+== Configuración
+
+Una puesta en marcha completa de Hadoop incluye los siguientes componentes:
+
+* NameNode: El sistema primario de archivos distribuidos de Hadoop (HDFS). Coordina una serie de DataNodes.
+* NombreNodo secundario: Una conmutación por error en caliente para el NameNode principal. En Hadoop, la promoción a NameNode no se realiza automáticamente. El NombreNodo secundario recopila información de NameNode para que esté listo para ser promovido cuando sea necesario.
+* DataNode: Propietario real de los datos.
+* ResourceManager: El sistema primario de computación (Yarn). Coordina una serie de NodeManagers.
+* NodeManager: El recurso para la computación. Ubicación real para ejecutar aplicaciones.
+* JobHistoryServer: Responsable del servicio de todas las solicitudes relacionadas con el historial de trabajos.
+
+
+El complemento Hadoop se basa en el complemento Jolokia de telegraf. Como un requisito para recopilar información de todos los componentes de Hadoop, JMX debe configurarse y exponerse a través de Jolokia en todos los componentes.
+
+
+
+==== Compatibilidad
+
+La configuración se desarrolló con Hadoop versión 2.9.2.
+
+
+
+==== Configuración
+
+
+
+===== Agente Jolokia Jar
+
+Para todos los componentes individuales, se debe descargar una versión del archivo JAR del agente JAR Jolokia. La versión probada contra fue link:https://jolokia.org/download.html["Agente Jolokia 1.6.0"].
+
+Las instrucciones siguientes asumen que el archivo JAR descargado (jolokia-jvm-1.6.0-agent.jar) se coloca en la ubicación '/opt/hadoop/lib/'.
+
+
+
+===== NombreNodo
+
+Para configurar NameNode para exponer la API de Jolokia, puede configurar lo siguiente en <HADOOP_HOME>/etc/hadoop/hadoop-env.sh:
+
+[listing]
+----
+export HADOOP_NAMENODE_OPTS="$HADOOP_NAMENODE_OPTS -javaagent:/opt/hadoop/lib/jolokia-jvm-1.6.0-agent.jar=port=7800,host=0.0.0.0 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8000 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=$HADOOP_HOME/conf/jmxremote.password"
+You can choose a different port for JMX (8000 above) and Jolokia (7800). If you have an internal IP to lock Jolokia onto you can replace the "catch all" 0.0.0.0 by your own IP. Notice this IP needs to be accessible from the telegraf plugin. You can use the option '-Dcom.sun.management.jmxremote.authenticate=false' if you don't want to authenticate. Use at your own risk.
+----
+
+
+===== NombreNodo secundario
+
+Para configurar el nodo secundario NameNode para exponer la API de Jolokia, puede configurar lo siguiente en <HADOOP_HOME>/etc/hadoop/hadoop-env.sh:
+
+[listing]
+----
+export HADOOP_SECONDARYNAMENODE_OPTS="$HADOOP_SECONDARYNAMENODE_OPTS -javaagent:/opt/hadoop/lib/jolokia-jvm-1.6.0-agent.jar=port=7802,host=0.0.0.0 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8002 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=$HADOOP_HOME/conf/jmxremote.password"
+You can choose a different port for JMX (8002 above) and Jolokia (7802). If you have an internal IP to lock Jolokia onto you can replace the "catch all" 0.0.0.0 by your own IP. Notice this IP needs to be accessible from the telegraf plugin. You can use the option '-Dcom.sun.management.jmxremote.authenticate=false' if you don't want to authenticate. Use at your own risk.
+----
+
+
+===== Nodo de datos
+
+Para configurar DataNodes para exponer la API de Jolokia, puede configurar lo siguiente en <HADOOP_HOME>/etc/hadoop/hadoop-env.sh:
+
+[listing]
+----
+export HADOOP_DATANODE_OPTS="$HADOOP_DATANODE_OPTS -javaagent:/opt/hadoop/lib/jolokia-jvm-1.6.0-agent.jar=port=7801,host=0.0.0.0 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8001 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=$HADOOP_HOME/conf/jmxremote.password"
+You can choose a different port for JMX (8001 above) and Jolokia (7801). If you have an internal IP to lock Jolokia onto you can replace the "catch all" 0.0.0.0 by your own IP. Notice this IP needs to be accessible from the telegraf plugin. You can use the option '-Dcom.sun.management.jmxremote.authenticate=false' if you don't want to authenticate. Use at your own risk.
+----
+
+
+===== ResourceManager
+
+Para configurar ResourceManager para exponer la API de Jolokia, puede configurar lo siguiente en <HADOOP_HOME>/etc/hadoop/hadoop-env.sh:
+
+[listing]
+----
+export YARN_RESOURCEMANAGER_OPTS="$YARN_RESOURCEMANAGER_OPTS -javaagent:/opt/hadoop/lib/jolokia-jvm-1.6.0-agent.jar=port=7803,host=0.0.0.0 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=$HADOOP_HOME/conf/jmxremote.password"
+You can choose a different port for JMX (8003 above) and Jolokia (7803). If you have an internal IP to lock Jolokia onto you can replace the "catch all" 0.0.0.0 by your own IP. Notice this IP needs to be accessible from the telegraf plugin. You can use the option '-Dcom.sun.management.jmxremote.authenticate=false' if you don't want to authenticate. Use at your own risk.
+----
+
+
+===== NodeManager
+
+Para configurar NodeManagers para exponer la API de Jolokia, puede configurar lo siguiente en <HADOOP_HOME>/etc/hadoop/hadoop-env.sh:
+
+[listing]
+----
+export YARN_NODEMANAGER_OPTS="$YARN_NODEMANAGER_OPTS -javaagent:/opt/hadoop/lib/jolokia-jvm-1.6.0-agent.jar=port=7804,host=0.0.0.0 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8004 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=$HADOOP_HOME/conf/jmxremote.password"
+You can choose a different port for JMX (8004 above) and Jolokia (7804). If you have an internal IP to lock Jolokia onto you can replace the "catch all" 0.0.0.0 by your own IP. Notice this IP needs to be accessible from the telegraf plugin. You can use the option '-Dcom.sun.management.jmxremote.authenticate=false' if you don't want to authenticate. Use at your own risk.
+----
+
+
+===== JobHistoryServer
+
+Para configurar JobHistoryServer para exponer la API de Jolokia, puede configurar lo siguiente en <HADOOP_HOME>/etc/hadoop/hadoop-env.sh:
+
+[listing]
+----
+export HADOOP_JOB_HISTORYSERVER_OPTS="$HADOOP_JOB_HISTORYSERVER_OPTS -javaagent:/opt/hadoop/lib/jolokia-jvm-1.6.0-agent.jar=port=7805,host=0.0.0.0 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8005 -Dcom.sun.management.jmxremote.password.file=$HADOOP_HOME/conf/jmxremote.password"
+You can choose a different port for JMX (8005 above) and Jolokia (7805). If you have an internal IP to lock Jolokia onto you can replace the "catch all" 0.0.0.0 by your own IP. Notice this IP needs to be accessible from the telegraf plugin. You can use the option '-Dcom.sun.management.jmxremote.authenticate=false' if you don't want to authenticate. Use at your own risk.
+----
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| Nombre secundario de Hadoop | Servidor de espacio de nombres del cluster | Nombre del nodo IP Compile Info Version | GC Count GC Copies Count GC Marks Barrer GC Count número de GC umbral de información excedido GC umbral de advertencia excedido GC tiempo de copia GC Marcas de Barrido Compact Time GC total registros de tiempo de inactividad adicional registros de errores recuento de sucesos registros de conteo de sucesos registros de información recuento de advertencias recuento de memoria asignado Memoria Heap memoria máxima memoria memoria memoria memoria memoria máxima memoria no heap memoria no asignada memoria no heap memoria máxima sin heap subprocesos usados subprocesos bloqueados subprocesos nuevos subprocesos Runnable subprocesos terminados subprocesos temporizados subprocesos en espera 
+
+
+| NodeManager de Hadoop | Servidor de espacio de nombres del cluster | Dirección IP del nodo de nombre | Contenedores memoria asignada asignar memoria asignada Oportunistic núcleos virtuales asignados Oportunistic núcleos virtuales asignados memoria virtual disponibles núcleos virtuales disponibles directorios Bad local Directories Tamaño incorrecto de la caché de registro antes de limpiar contenedor duración promedio de lanzamiento de contenedor duración número de operaciones contenedores completados contenedores con error en la entrada de contenedores muertos contenedores lanzados Contenedores Reineación de contenedores retrocedidos en contenedores de fallo ejecutando utilización del disco buenos directorios locales utilización del disco buenos directorios de registro bytes eliminados bytes privados eliminados Contenedores públicos ejecutando bytes oportunistas suprimidos total conexiones Shuffle bytes de salida Shuffle Salidas Shuffle Salidas error Shuffle Salidas OK recuento GC recuento de marcas de barrido GC El umbral de información del número de GC de recuento compacto superó el umbral de advertencia excedido el tiempo de GC GC tiempo de copia GC Marcas de barrido de tiempo compacto GC total registros de tiempo de inactividad extra registros de recuento de errores registros del recuento de sucesos fatales registros del recuento de información recuento de advertencias recuento de advertencias memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria Memoria no heap memoria no comprometida memoria no heap memoria máx. Sin heap subprocesos bloqueados subprocesos nuevos subprocesos Runnable hilos terminados subprocesos temporizados en espera 
+
+
+| Administrador de recursos de Hadoop | Servidor de espacio de nombres del cluster | Dirección IP del nodo de nombre | ApplicationMaster Launch Delay número de retraso de lanzamiento de ApplicationMaster Register DELAY promedio ApplicationMaster Register número de retraso de NodeManager número activo NodeManager número desintegrado NodeManager número de descomponissioning NodeManager número de pérdida de NodeManager número de reinicio de NodeManager número de apagado de NodeManager número de memoria límite de núcleo virtual de NodeManager capacidad usada aplicaciones activas usuarios activos Active Contenedores de agregados agregados contenedores de agregados asignados contenedores de agregados preventivos agregados de agregados lanzados segundos de memoria agregados anticipados nodo de agregado local contenedores asignados agregados fuera de contenedor de switch contenedores asignados agregados locales agregados compuestos núcleos virtuales asignados segundos prederechos de contenedores de memoria asignados núcleos virtuales asignados núcleos asignados aplicación asignados primer intento de retraso de asignación de contenedor tiempo medio de intento de aplicación Primera asignación de contenedores demora número de aplicaciones completadas aplicaciones fallidas aplicaciones asesinadas aplicaciones pendientes ejecución aplicaciones memoria enviada memoria disponible contenedores virtuales disponibles memoria pendiente memoria pendiente núcleos virtuales pendientes memoria reservada núcleos virtuales memoria reservada núcleos virtuales Reserved memoria reservada ApplicationMaster utilizó núcleos virtuales ApplicationMaster capacidad usada GC Count copias GC Count GC Marks Sweep Compact Count GC Number Info Threshold excedido GC Number Warning Threshold excedido GC Time GC Copy Time GC Marks Sweep Compact Time GC total Extra Sleep Time Logs Count error Count Logs Fatal Count Logs Info Count Logs WARN Count Ins WARN Count memoria Heap Max Memory Heap Heap Memoria no heap memoria no asignada memoria no heap memoria no heap memoria máxima no heap subprocesos usados subprocesos bloqueados nuevos subprocesos Runnable hilos terminados subprocesos temporizados en espera 
+
+
+| Nodo de datos de Hadoop | Servidor de espacio de nombres del cluster | Node Name IP Node Cluster ID Version | El recuento de transceptores transmite en progreso caché capacidad utilizada DFS utilizó capacidad estimada capacidad perdida total último fallo de volumen bloques de tasa número de bloques en caché no se pudo desalmacenar en caché número de volúmenes número de volúmenes no se pudo realizar el recuento de GC copias GC restantes recuento de GC recuento de marcas GC Barrido número de GC de recuento compacto Umbral de información excedido de número de GC umbral de advertencia excedido de tiempo de GC tiempo de copia GC Marcas de Barrido de tiempo compacto GC total de registros de tiempo de inactividad adicional registros de error recuento de sucesos de cuenta de registros de conteo de información recuento de advertencias recuento de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria de memoria asignada Memoria no heap memoria memoria máxima sin heap subprocesos no utilizados subprocesos bloqueados nuevos subprocesos Runnable subprocesos terminados subprocesos temporizados en espera 
+
+
+| NombreHadoop | Servidor de espacio de nombres del cluster | Nombre del nodo ID de transacción IP del nodo última vez que se cargó Edits ha Estado del sistema Estado del sistema bloque ID de grupo ID de clúster compilación Info Versión de recuento de versiones distinta | Bloques de capacidad de bloque capacidad total capacidad total capacidad utilizada bloques no DFS corrupción capacidad estimada bloques perdidos exceso de corazón archivos caducados total bloqueo del sistema de archivos longitud de cola bloques ausentes replicación con factores uno clientes nodos de datos activos nodos de datos muertos retirada de nodos de datos muertos Servicio de cierre activo Nodos de datos descomponiendo zonas de cifrado número nodos de datos entrando en Archivos de mantenimiento en Construcción nodos de datos muertos en Mantenimiento nodos de datos activos en mantenimiento nodos de datos almacenamientos en vivo replicación obsoleta tiempo de espera pendiente mensaje de nodo de datos Eliminación pendiente bloques pendientes bloques de replicación pendientes bloques pospuestos mal replicados replicación programada Snapshots de replicación programada directorios de Snapshottable Nodos de datos Archivos obsoletos carga total recuento de sincronización total transacciones totales desde último punto de comprobación desde último registro bloques de rodillo subreplicados fallos de volumen total sincronización veces total objetos total Operaciones bloque Agregar operaciones permitir Snapshots Operaciones Bloquear operaciones bloque bloque Operaciones en cola bloque bloque recibido y eliminado Operaciones informar tiempo medio Operaciones bloque Informe número de caché Informe de tiempo promedio caché número de informe Operaciones Crear Archivo Operaciones Crear instantáneas Operaciones Crear enlace simbólico Eliminar operaciones de archivo Eliminar operaciones de instantánea Desactivar permitir operaciones de instantánea Archivo de entrada/salida Archivos adjuntos Archivos creados Archivos eliminados Archivos Archivos Archivos renombrados Archivos truncados Archivo tiempo de carga del sistema Operaciones generar Operaciones de tiempo medio de EDEK generar operaciones de EDEK obtener bloques de nodos de datos adicionales obtener ubicaciones conseguir Editar tiempo medio obtener número de edición obtener imagen tiempo medio obtener número de imagen Operaciones obtener enlace Operaciones de destino obtener Lista de operaciones Lista de lista replicación Dir de Snapshottable no número programado colocar imagen tiempo medio de imagen número de imagen de imagen Operaciones Cambiar nombre de instantáneas tiempo de comprobación de recursos tiempo medio de comprobación número de tiempo de modo seguro Operaciones de tiempo de Diff Operaciones de informe de almacenamiento replicación de informe de bloque de replicación sincronización de tiempo medio de operaciones de sincronización de número de tiempo de espera de replicación total transacción tiempo medio de transacción Batchd en Sync número de transacción EDEK tiempo de calentamiento medio de EDEK Grupo de bloques número espacio usado caché capacidad utilizada agrupación de bloques libres utilizado porcentaje restante porcentaje restante porcentaje de subprocesos usados GC recuento de copias GC recuento de marcas GC Barrido recuento compacto número de GC excedido el umbral de advertencia número de GC excedido el tiempo de GC copia GC Marcas GC Barrido compacto tiempo GC total Extra Sleep Time Logs Contador de errores registros de conteo de sucesos registros de Info Count Logs WARN Count memoria Remised Heap memoria Remised Heap memoria máxima memoria memoria memoria no asignada sin heap memoria máx. Sin heap subprocesos usados subprocesos bloqueados subprocesos nuevos subprocesos Runnable subprocesos terminados Timed Subprocesos en espera 
+
+
+| Hadoop JobHistoryServer | Servidor de espacio de nombres del cluster | Dirección IP del nodo de nombre | GC Count GC Copies Count GC Marks Barrer GC Count número de GC umbral de información excedido GC umbral de advertencia excedido GC tiempo de copia GC Marcas de Barrido Compact Time GC total registros de tiempo de inactividad adicional registros de errores recuento de sucesos registros de conteo de sucesos registros de información recuento de advertencias recuento de memoria asignado Memoria Heap memoria máxima memoria memoria memoria memoria memoria máxima memoria no heap memoria no asignada memoria no heap memoria máxima sin heap subprocesos usados subprocesos bloqueados subprocesos nuevos subprocesos Runnable subprocesos terminados subprocesos temporizados subprocesos en espera 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

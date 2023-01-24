@@ -1,0 +1,52 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_jvm.html 
+keywords: telegraf, installation, install, jvm 
+summary: Configuración del recopilador de datos JVM 
+---
+= Recopilador de datos JVM
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas de JVM.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija JVM.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:JVMDCConfigLinux.png["Configuración de JVM"]
+
+
+
+== Configuración
+
+Puede encontrar información en link:https://docs.oracle.com/javase/specs/jvms/se12/html/index.html["Documentación de JVM"].
+
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| JVM | Espacio de nombres JVM | Arquitectura del sistema operativo Nombre del sistema operativo Versión tiempo de ejecución especificación de tiempo de ejecución de proveedor Versión de tiempo de ejecución tiempo de ejecución VM Nombre de tiempo de ejecución VM tiempo de ejecución de proveedor VM Versión de nodo Nombre IP de nodo | Clase cargada clase total cargada memoria descargada memoria recargada memoria heap memoria asignada Heap memoria Init Heap memoria máxima utilizada memoria no asignada memoria no heap Init no heap memoria máxima memoria no heap memoria no utilizada objetos de memoria pendientes finalización pendiente procesadores de sistema operativo disponibles SO memoria virtual confirmada SO libre Tamaño de memoria física OS espacio libre intercambio Tamaño de espacio SO máximo número de descriptores de archivos de sistema operativo número de descriptores de archivos de código de sistema procesador de SO carga de CPU tiempo de CPU sistema de sistema de sistema carga media del sistema OS Tamaño total de memoria física SO total intercambio espacio Tamaño total Demonio recuento de subprocesos recuento de subprocesos Recuento de subprocesos total iniciado recuento de basura Coleccionista de copias Colección recuento de basura Coleccionista de basura tiempo recolección de elementos de basura Coleccionista de elementos de basura Coleccionista de marcas-barrido Coleccionista de tiempo de recolección de elementos de la generación antigua G1 Coleccionista de elementos de recolección de elementos de basura Coleccionista de generaciones anteriores G1 Colección de recopilación de elementos de basura Coleccionista de productos de basura G1 Colección de la generación joven Coleccionista de basura Coleccionista de Marca-barrido simultáneo Coleccionista de basura Colecciones paralelas recolección de basura Colecciones paralelas Coleccionista de basura Coleccionista de basura paralela de la recolección de Marca-barrido de la recolección de la recolección de la recolección de la recolección de la basura Coleccionista paralela de la recolección de basura Coleccionista paralela de basura de la recolección de basura Hora de recogida 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

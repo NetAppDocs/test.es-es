@@ -1,0 +1,238 @@
+---
+sidebar: sidebar 
+permalink: task_add_collector_svm.html 
+keywords: data collector, ONTAP, NetApp, SVM, cloud ontap, firewall 
+summary: Adición de recopiladores de datos 
+---
+= Configurar el recopilador de datos de SVM de ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Secure utiliza recopiladores de datos para recopilar datos de acceso de archivos y usuarios desde dispositivos.
+
+
+
+=== Antes de empezar
+
+* Este recopilador de datos es compatible con lo siguiente:
++
+** Data ONTAP 9.2 y versiones posteriores. Para obtener el mejor rendimiento, utilice una versión de Data ONTAP donde link:https://mysupport.netapp.com/site/bugs-online/product/ONTAP/BURT/1372994["este problema"] es fijo.
+** Protocolo SMB, versión 3.1 y versiones anteriores
+** Protocolo NFS versión 4.0 y anteriores
+** ONTAP 9.4 y versiones posteriores admiten FlexGroup
+
+
+* Solo se admiten SVM de tipo de datos. No se admiten las SVM con Infinite Volume.
+* SVM tiene varios subtipos. De estos, sólo se admiten _default_ y _SYNC_Source_.
+* Un agente link:task_cs_add_agent.html["debe configurarse"] antes de configurar recopiladores de datos.
+* Asegúrese de que tiene un conector de directorio de usuario configurado correctamente; de lo contrario, los eventos mostrarán nombres de usuario codificados y no el nombre real del usuario (tal como se almacena en Active Directory) en la página “Activity Forensics”.
+* Para obtener un rendimiento óptimo, debe configurar el servidor FPolicy para que esté en la misma subred que el sistema de almacenamiento.
+
+
+* Debe añadir una SVM mediante uno de los siguientes dos métodos:
++
+** Mediante Cluster IP, SVM name y Cluster Management Username and Password. _Este es el método recomendado._
++
+*** El nombre de la SVM debe ser exactamente el que se muestra en ONTAP y distingue entre mayúsculas y minúsculas.
+
+
+** Mediante la administración de Vserver IP, nombre de usuario y contraseña de SVM
+** Si no puede o no desea utilizar el nombre de usuario y la contraseña de Administrator Cluster/SVM Management, puede crear un usuario personalizado con privilegios menores como se indica en la link:#a-note-about-permissions["“Una nota sobre los permisos”"] a continuación. Este usuario personalizado se puede crear tanto para SVM como para el acceso a clústeres.
++
+*** o también puede usar un usuario de AD con una función que tenga al menos los permisos de csrole como se menciona en la sección “una nota sobre los permisos” que aparece a continuación. Consulte también la link:https://docs.netapp.com/ontap-9/index.jsp?topic=%2Fcom.netapp.doc.pow-adm-auth-rbac%2FGUID-0DB65B04-71DB-43F4-9A0F-850C93C4896C.html["Documentación de ONTAP"].
+
+
+
+
+* Asegúrese de que se establecen las aplicaciones correctas para la SVM ejecutando el comando siguiente:
++
+ clustershell::> security login show -vserver <vservername> -user-or-group-name <username>
+
+
+Resultado de ejemplo:image:cs_svm_sample_output.png["Ejemplo de resultado de comando SVM"]
+
+* Asegúrese de que la SVM tenga un servidor CIFS configurado: Clustershell:> `vserver cifs show`
++
+El sistema devuelve el nombre de Vserver, el nombre del servidor CIFS y los campos adicionales.
+
+* Establezca una contraseña para el usuario de SVM vsadmin. Si utiliza un usuario personalizado o un usuario administrador del clúster, omita este paso. clustershell::> `security login password -username vsadmin -vserver svmname`
+* Desbloquee el usuario de SVM vsadmin para tener acceso externo. Si utiliza un usuario personalizado o un usuario administrador del clúster, omita este paso. clustershell::> `security login unlock -username vsadmin -vserver svmname`
+* Asegúrese de que la política de firewall de la LIF de datos esté configurada en ‘mgmt’ (no ‘data’). Omita este paso si utiliza un LIF de gestión dedicado para añadir la SVM. clustershell::> `network interface modify -lif <SVM_data_LIF_name> -firewall-policy mgmt`
+* Cuando se habilita un firewall, debe tener una excepción definida para permitir el tráfico TCP para el puerto mediante el recopilador de datos de Data ONTAP.
++
+Consulte link:concept_cs_agent_requirements.html["Requisitos del agente"] para obtener información sobre la configuración. Esto se aplica a los agentes y agentes de las instalaciones instalados en la nube.
+
+* Cuando se instala un agente en una instancia de AWS EC2 para supervisar una SVM de Cloud ONTAP, el agente y el almacenamiento deben estar en el mismo VPC. Si están en VPC independientes, debe haber una ruta válida entre el VPC.
+
+
+
+
+=== Una nota sobre los permisos
+
+
+
+==== Permisos al agregar mediante *IP de administración de clúster*:
+
+Si no puede utilizar el usuario administrador de administración de clústeres para permitir que Cloud Secure acceda al recopilador de datos de SVM de ONTAP, puede crear un nuevo usuario llamado “csuser” con los roles como se muestra en los comandos siguientes. Utilice el nombre de usuario “csuser” y la contraseña para “csuser” cuando configure el recopilador de datos de Cloud Secure para utilizar la IP de administración de clústeres.
+
+Para crear un nuevo usuario, inicie sesión en ONTAP con el nombre de usuario/contraseña del administrador de administración del clúster y ejecute los siguientes comandos en el servidor ONTAP:
+
+....
+security login role create -role csrole -cmddirname DEFAULT -access none
+security login role create -role csrole -cmddirname "network interface" -access readonly
+security login role create -role csrole -cmddirname version -access readonly
+security login role create -role csrole -cmddirname volume -access readonly
+security login role create -role csrole -cmddirname vserver -access readonly
+security login role create -role csrole -cmddirname "vserver fpolicy" -access all
+security login role create -role csrole -cmddirname "volume snapshot" -access all -query "-snapshot cloudsecure_*"
+security login role create -role csrole -cmddirname "event catalog" -access all
+security login role create -role csrole -cmddirname "event filter" -access all
+security login role create -role csrole -cmddirname "event notification destination" -access all
+security login role create -role csrole -cmddirname "event notification" -access all
+security login role create -role csrole -cmddirname "security certificate" -access all
+security login create -user-or-group-name csuser -application ontapi -authmethod password -role csrole
+security login create -user-or-group-name csuser -application ssh -authmethod password -role csrole
+security login role create -role csrole -cmddirname "vserver export-policy rule" -access all -query "-policyname cloudsecure_*"
+....
+
+
+==== Permisos al agregar mediante *IP de administración de Vserver*:
+
+Si no puede utilizar el usuario administrador de administración de clústeres para permitir que Cloud Secure acceda al recopilador de datos de SVM de ONTAP, puede crear un nuevo usuario llamado “csuser” con los roles como se muestra en los comandos siguientes. Utilice el nombre de usuario “csuser” y la contraseña para “csuser” cuando configure el recopilador de datos de Cloud Secure para utilizar Vserver Management IP.
+
+Para crear el nuevo usuario, inicie sesión en ONTAP con el nombre de usuario/contraseña del administrador de administración del clúster y ejecute los siguientes comandos en el servidor ONTAP. Para facilitar la operación, copie estos comandos en un editor de texto y sustituya la <vservername> por su nombre Vserver antes y ejecute estos comandos en ONTAP:
+
+....
+security login role create -vserver <vservername> -role csrole -cmddirname DEFAULT -access none
+security login role create -vserver <vservername> -role csrole -cmddirname "network interface" -access readonly
+security login role create -vserver <vservername> -role csrole -cmddirname version -access readonly
+security login role create -vserver <vservername> -role csrole -cmddirname volume -access readonly
+security login role create -vserver <vservername> -role csrole -cmddirname vserver -access readonly
+security login role create -vserver <vservername> -role csrole -cmddirname "vserver fpolicy" -access all
+security login role create -vserver <vservername> -role csrole -cmddirname "volume snapshot" -access all
+security login create -user-or-group-name csuser -application ontapi -authmethod password -role csrole -vserver <vservername>
+security login role create -vserver <vservername> -role csrole -cmddirname "vserver export-policy rule" -access all -query "-policyname cloudsecure_*"
+....
+
+
+=== Configure el recopilador de datos
+
+.Pasos para la configuración
+. Inicie sesión como administrador o propietario de cuenta en su entorno de Cloud Insights.
+. Haga clic en *Admin > colectores de datos > +colectores de datos*
++
+El sistema muestra los colectores de datos disponibles.
+
+. Pase el ratón por el icono *NetApp SVM y haga clic en *+Monitor*.
++
+El sistema muestra la página de configuración de la SVM de ONTAP. Introduzca los datos necesarios para cada campo.
+
+
+
+[cols="2*"]
+|===
+
+
+| Campo | Descripción 
+
+
+| Nombre | Nombre único para el recopilador de datos 
+
+
+| Agente | Seleccione un agente configurado de la lista. 
+
+
+| Conéctese a través de la IP de administración para: | Seleccione Cluster IP o SVM Management IP 
+
+
+| Dirección IP de administración del clúster/SVM | La dirección IP del clúster o la SVM, según lo seleccionado anteriormente. 
+
+
+| Nombre de SVM | Nombre de la SVM (este campo es obligatorio cuando se realiza la conexión mediante la IP del clúster) 
+
+
+| Nombre de usuario | Nombre de usuario para acceder a la SVM/Cluster cuando se añade mediante la IP del clúster las opciones son: 1. Administrador de clúster 2. ‘csuser’ 3. USUARIO AD que tiene un papel similar a csuser. Cuando se añaden mediante IP de SVM, las opciones son: 4. vsadmin 5. ‘csuser’ 6. NOMBRE DE USUARIO DE AD que tiene un papel similar a csuser. 
+
+
+| Contraseña | Contraseña para el nombre de usuario anterior 
+
+
+| Filtre los recursos compartidos/volúmenes | Elija si desea incluir o excluir recursos compartidos/volúmenes de la colección de eventos 
+
+
+| Introduzca los nombres completos de recursos compartidos para excluir o incluir | Lista de recursos compartidos separados por comas para excluir o incluir (según corresponda) de la colección de eventos 
+
+
+| Introduzca los nombres completos de los volúmenes para excluirlos o incluirlos | Lista de volúmenes separados por comas para excluir o incluir (según corresponda) de la colección de eventos 
+
+
+| Supervisar el acceso a carpetas | Cuando esta opción está activada, activa los eventos para la supervisión del acceso a carpetas. Tenga en cuenta que la creación, el cambio de nombre y la eliminación de carpetas se supervisarán incluso sin seleccionar esta opción. Al activar esta opción, aumentará el número de eventos supervisados. 
+
+
+| Establezca el tamaño del búfer de envío de ONTAP | Establece el tamaño del búfer de envío de la directiva de ONTAP. Si se utiliza una versión de ONTAP anterior a 9.8p7 y se observa un problema de rendimiento, el tamaño del búfer de envío de ONTAP se puede modificar para mejorar el rendimiento de ONTAP. Póngase en contacto con el soporte de NetApp si no ve esta opción y desea explorarla. 
+
+
+| Establezca el tamaño del búfer de envío de ONTAP | Establece el tamaño del búfer de envío de la directiva de ONTAP. Si se utilizan versiones de ONTAP anteriores a 9.8p7 y se produce un problema de rendimiento de ONTAP, el tamaño del búfer de envío de ONTAP se puede modificar para mejorar el rendimiento de ONTAP. Se trata de una función oculta que se habilita a petición del cliente. 
+|===
+.Después de terminar
+* En la página Recolectores de datos instalados, utilice el menú de opciones situado a la derecha de cada recopilador para editar el recopilador de datos. Puede reiniciar el recopilador de datos o editar los atributos de configuración del recopilador de datos.
+
+
+
+
+=== Resolución de problemas
+
+Los problemas conocidos y sus resoluciones se describen en la siguiente tabla.
+
+En caso de error, haga clic en _more detail_ en la columna _Status_ para obtener más información sobre el error.
+
+image:CS_Data_Collector_Error.png[""]
+
+[cols="2*"]
+|===
+| Problema: | Resolución: 
+
+
+| El recopilador de datos se ejecuta durante algún tiempo y se detiene después de un tiempo aleatorio, con el error "mensaje de error: El conector está en estado de error. Nombre del servicio: Auditoría. Motivo del fallo: Servidor de fpolicy externo sobrecargado." | La velocidad de eventos de ONTAP era mucho mayor que la que puede manejar el cuadro Agente. Por lo tanto, la conexión finalizó. Compruebe el tráfico máximo en CloudSecure cuando se haya realizado la desconexión. Esto puede comprobar en la página *CloudSecure > Activity Forensics > All Activity*. Si el tráfico agregado pico es superior al que puede controlar Agent Box, consulte la página Comprobador de tasa de eventos sobre cómo ajustar el tamaño de la implementación de Collector en un cuadro de agente. Si el Agente fue instalado en el cuadro Agente antes del 4 de marzo de 2021, ejecute los siguientes comandos en el cuadro Agente: Echo 'net.core.rmem_max=8388608' >> /etc/sysctl.conf echo 'net.ipv4.tcp_rmem = 4096 2097152 8388608' >> /etc/sysctl.conf sysctl -p después de reiniciar el colector. 
+
+
+| El recopilador informa de un mensaje de error: “No se ha encontrado ninguna dirección IP local en el conector que pueda llegar a las interfaces de datos de la SVM”. | Lo más probable es que esto se deba a un problema de red en ONTAP. Siga estos pasos: 1. Asegúrese de que no haya firewalls en el LIF de datos de la SVM o el LIF de gestión que bloquee la conexión de la SVM. 2. Al añadir una SVM a través de una IP de administración de clúster, asegúrese de que el LIF de datos y el LIF de gestión de la SVM se pueden pingable desde el equipo virtual del agente. En caso de problemas, compruebe la puerta de enlace, la máscara de red y las rutas del LIF. También puede intentar iniciar sesión en el clúster a través de ssh mediante la IP de administración del clúster y hacer ping a la IP del agente. Asegúrese de que el IP del agente es pingable: _Network ping -vserver <vserver name> -destination <Agent IP> -lif <Lif Name> -show-detail_ Si no se puede pingable, asegúrese de que la configuración de red en ONTAP es correcta, de modo que el equipo del agente es pingable. 3. Si ha intentado realizar la conexión a través de la IP del clúster y no funciona, intente realizar la conexión directamente a través de la IP de SVM. Consulte los pasos anteriores para conectar mediante IP de SVM. 4. Al añadir el recopilador a través de las credenciales de SVM IP y vsadmin, compruebe si la SVM Lif tiene el rol Data más Mgmt habilitado. En este caso, ping a la SVM Lif funcionará, sin embargo SSH a la SVM Lif no funcionará. Si la respuesta es sí, cree una Lif de solo para gestión de SVM y pruebe a conectarse a través de esta Lif de gestión de SVM. 5. Si todavía no funciona, cree una nueva SVM Lif e intente conectarse a través de esa Lif. Asegúrese de que la máscara de subred esté configurada correctamente. 6. Depuración avanzada: A) Inicie un seguimiento de paquetes en ONTAP. b) intente conectar un recopilador de datos a la SVM desde la interfaz de usuario de CloudSecure. c) Espere hasta que aparezca el error. Detenga el seguimiento de paquetes en ONTAP. D) abra el seguimiento de paquetes desde ONTAP. Está disponible en esta ubicación _\https://<cluster_mgmt_ip>/spi/<clustername>/etc/log/packet_Traces/_ e) Asegúrese de que hay un SYN de ONTAP al cuadro Agente. f) Si no hay SYN de ONTAP entonces es un problema con el firewall en ONTAP. g) abra el firewall en ONTAP para que ONTAP pueda conectar la caja del agente. 7. Si sigue sin funcionar, consulte al equipo de red para asegurarse de que no hay ningún firewall externo que bloquee la conexión de ONTAP al cuadro Agente. 8. Si ninguna de las anteriores resuelve el problema, abra un caso con link:http://docs.netapp.com/us-en/cloudinsights/concept_requesting_support.html["Soporte de NetApp"] para más ayuda. 
+
+
+| Mensaje: "No se ha podido determinar el tipo de ONTAP para [hostname: <IP Address>. Motivo: Error de conexión con Storage System <IP Address>: No se puede acceder al host (no se puede acceder al host)" | 1. Compruebe que se ha proporcionado la dirección IP de administración de SVM o la IP de administración de clúster correctas. 2. SSH a la SVM o el clúster al que pretende conectarse. Una vez que esté conectado, asegúrese de que la SVM o el nombre del clúster sean correctos. 
+
+
+| Mensaje de error: "El conector está en estado de error. service.name: Auditoría. Motivo del fallo: El servidor de fpolicy externo ha finalizado." | 1. Lo más probable es que un firewall esté bloqueando los puertos necesarios en el equipo del agente. Compruebe que el intervalo de puertos 35000-55000/tcp está abierto para que la máquina del agente se conecte desde la SVM. Asegúrese también de que no hay firewalls habilitados desde la comunicación de bloqueo del lado ONTAP al equipo agente. 2. Escriba el siguiente comando en el cuadro Agente y asegúrese de que el intervalo de puertos está abierto. _Sudo iptables-save | grep 3500*_ la salida de la muestra debería ser: _-A IN_public_allow -p tcp -m tcp --dport 35000 -m conntrack -ctstate NEW -j ACCEPT_ 3. Inicie sesión en SVM, introduzca los siguientes comandos y compruebe que no hay ningún firewall configurado para bloquear la comunicación con ONTAP. _servidor de seguridad show_ _servidor de seguridad de los servicios del sistema muestra_link:https://docs.netapp.com/ontap-9/index.jsp?topic=%2Fcom.netapp.doc.dot-cm-nmg%2FGUID-969851BB-4302-4645-8DAC-1B059D81C5B2.html["Compruebe los comandos del firewall"] En el lado ONTAP. 4. SSH a la SVM/clúster que desea supervisar. Haga ping en la casilla Agent desde el LIF de datos de la SVM (con compatibilidad con CIFS y protocolos NFS) y asegúrese de que funciona ping: _Network ping -vserver <vserver name> -Destination <Agent IP> -lif <Lif Name> -show-detail_ Si no se pueden pingable, asegúrese de que la configuración de red en ONTAP sea correcta, de modo que el agente se pueda pingable. 5.Si se agrega una única SVM dos veces a un inquilino a través de 2 recopiladores de datos, se mostrará este error. Elimine uno de los recopiladores de datos a través de la interfaz de usuario. A continuación, reinicie el otro recopilador de datos a través de la interfaz de usuario. A continuación, el recopilador de datos mostrará el estado “RUNNING” y comenzará a recibir eventos de SVM. Básicamente, en un inquilino, se debe añadir 1 SVM solo una vez, mediante 1 recopilador de datos. 1 SVM no debe añadirse dos veces a través de 2 recopiladores de datos. 6. En los casos en los que se añadió la misma SVM en dos entornos de Cloud Secure distintos (clientes), el último siempre tendrá éxito. El segundo colector configurará fpolicy con su propia dirección IP y la pondrá en marcha la primera. De modo que el cobrador en el primero dejará de recibir eventos y su servicio de "auditoria" entrará en estado de error. Para evitar esto, configure cada SVM en un único entorno. 
+
+
+| No se ven eventos en la página de actividad. | 1. Compruebe si el colector de ONTAP está en el estado "EN EJECUCIÓN". Si la respuesta es sí, asegúrese de que algunos eventos de cifs se generan en las máquinas virtuales del cliente cifs abriendo algunos archivos. 2. Si no se ve ninguna actividad, inicie sesión en la SVM e introduzca el siguiente comando. _<SVM> learlog show -source fpolicy_ por favor, asegúrese de que no hay errores relacionados con fpolicy. 3. Si no se ve ninguna actividad, inicie sesión en el SVM. Introduzca el siguiente comando _<SVM> policy show_ Compruebe si se ha establecido la directiva fpolicy llamada con el prefijo “cloudsecure_” y el estado es “on”. Si no se establece, lo más probable es que el agente no pueda ejecutar los comandos en la SVM. Asegúrese de que se han seguido todos los requisitos previos descritos al principio de la página. 
+
+
+| El colector de datos SVM está en estado de error y el mensaje Ererrror es “el agente no ha podido conectarse al recopilador”. | 1. Lo más probable es que el agente esté sobrecargado y no pueda conectarse a los recopiladores de origen de datos. 2. Compruebe cuántos recopiladores de origen de datos están conectados al agente. 3. Compruebe también el flujo de datos en la página “All Activity” de la interfaz de usuario. 4. Si el número de actividades por segundo es significativamente alto, instale otro agente y mueva algunos de los colectores de origen de datos al nuevo agente. 
+
+
+| El recopilador de datos de SVM muestra el mensaje de error "fpolicy.server.connectError: Node Failed to establecer una conexión con el servidor FPolicy "12.195.15.146" ( Reason: "Select Timed out")" | El firewall está habilitado en SVM/Cluster. Por lo tanto, fpolicy Engine no puede conectarse al servidor fpolicy. Las CLI de ONTAP que pueden utilizarse para obtener más información son: Event log show -source fpolicy que muestra el error event log show -source fpolicy -fields event,action,description que muestra más detalles.link:https://docs.netapp.com/ontap-9/index.jsp?topic=%2Fcom.netapp.doc.dot-cm-nmg%2FGUID-969851BB-4302-4645-8DAC-1B059D81C5B2.html["Compruebe los comandos del firewall"] En el lado ONTAP. 
+
+
+| Mensaje de error: “El conector está en estado de error. Nombre del servicio:audit. Motivo del fallo: No hay una interfaz de datos válida (función: Datos, protocolos de datos: NFS o CIFS o ambos, estado: Up) encontrado en la SVM.” | Compruebe que hay una interfaz operativa (teniendo la función de protocolo de datos y de datos como CIFS/NFS). 
+
+
+| El recopilador de datos entra en el estado error y, a continuación, pasa al estado EN EJECUCIÓN después de algún tiempo y, a continuación, vuelve a error. Este ciclo se repite. | Esto ocurre normalmente en el siguiente escenario: 1. Se han agregado varios recopiladores de datos. 2. Los recopiladores de datos que muestran este tipo de comportamiento tendrán 1 SVM agregado a estos recopiladores de datos. Esto significa que 2 o más recopiladores de datos están conectados a 1 SVM. 3. Asegúrese de que 1 recopilador de datos se conecta a solo 1 SVM. 4. Elimine los otros recopiladores de datos que estén conectados a la misma SVM. 
+
+
+| El conector está en estado de error. Nombre del servicio: Auditoría. Motivo del fallo: No se puede configurar (política en svmname de SVM. Motivo: Se ha especificado un valor no válido para el elemento "hay que incluir" dentro de "fpolicy.policy.scope-modify: "Federal" | Los nombres de los recursos compartidos deben indicarse sin comillas. Edite la configuración DSC de la SVM ONTAP para corregir los nombres de los recursos compartidos. _Include y exclude shares_ no está destinado a una larga lista de nombres de recursos compartidos. En su lugar, utilice el filtrado por volumen si tiene un gran número de recursos compartidos que incluir o excluir. 
+
+
+| Existen fPolicies en el Cluster que no se utilizan. ¿Qué se debe hacer con esas personas antes de instalar Cloud Secure? | Se recomienda eliminar toda la configuración existente de fpolicy sin usar incluso si están en estado desconectado. Cloud Secure creará fpolicy con el prefijo "cloudsecure_". Se pueden eliminar todas las demás configuraciones de fpolicy no utilizadas. Comando de la CLI para mostrar la lista de fpolicy: _Fpolicy show_ pasos para eliminar las configuraciones de fpolicy: _Fpolicy disable -vserver <svmname> -policy-name <policy_name>_ _fpolicy scope delete -vserver <svmname> -policy-name <policy_name>_ _fpolicy delete -vserver <svmname> -policy-name <policy_name> <svmname>_ _fpolicy event delete -vserver <svmname> <engine_name> -event-name <event_list>_ _fpolicy Engine 
+
+
+| Después de habilitar las Cloud Secure, el rendimiento de las ONTAP se ve afectado: La latencia se vuelve esporádicamente alta, la tasa de IOPS pasa a ser esporádica. | Asegúrese de utilizar una versión de Data ONTAP donde link:https://mysupport.netapp.com/site/bugs-online/product/ONTAP/BURT/1415152["este problema"] es fijo. La versión mínima de ONTAP recomendada es 9.8P7. Si se utiliza una versión de ONTAP anterior a 9.8p7 y se observa este problema de rendimiento, el tamaño del búfer de envío de ONTAP se puede modificar para mejorar el rendimiento de ONTAP. Póngase en contacto con el soporte de NetApp si desea explorar esta opción y no vea esta configuración al añadir un nuevo recopilador de datos o editar uno existente. 
+
+
+| El recopilador de datos está en error, muestra este mensaje de error. “Error: El conector está en estado de error. Nombre del servicio: Auditoría. Motivo del fallo: No se puede configurar la política en SVM_test. Motivo: Falta el valor del campo zapi: Eventos. “ | Empiece con una nueva SVM solo con el servicio NFS configurado. Añada un recopilador de datos de SVM de ONTAP en Cloud Secure. CIFS se configura como un protocolo permitido para la SVM mientras se añade el recopilador de datos de la SVM de ONTAP en Cloud Secure. Espere hasta que el recopilador de datos de Cloud Secure muestre un error. Dado que el servidor CIFS NO está configurado en la SVM, este error, tal como se muestra en la izquierda, se muestra en Cloud Secure. Edite el recopilador de datos de la SVM de ONTAP y anule la comprobación de CIFS como protocolo permitido. Guarde el recopilador de datos. Empezará a funcionar únicamente con el protocolo NFS habilitado. 
+
+
+| El recopilador de datos muestra el mensaje de error: “Error: No se pudo determinar el estado del recopilador en 2 reintentos, intente reiniciar el colector de nuevo (código de error: AGENT008)”. | En la página colectores de datos, desplácese a la derecha del recopilador de datos indicando el error y haga clic en el menú 3 puntos. Seleccione _Edit_. Vuelva a introducir la contraseña del recopilador de datos. Guarde el recopilador de datos pulsando el botón _Save_. El recopilador de datos se reiniciará y se debería solucionar el error. 
+|===
+Si todavía tiene problemas, póngase en contacto con los enlaces de soporte mencionados en la página *Ayuda > Soporte*.

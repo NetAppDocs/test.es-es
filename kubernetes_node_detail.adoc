@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: kubernetes_node_detail.html 
+keywords: kubernetes, pods, clusters, nodes. troubleshooting, planning 
+summary: La página de detalles del nodo de Kubernetes proporciona información sobre el almacenamiento PV back-end y Pod. 
+---
+= Página de detalles del nodo de Kubernetes
+:allow-uri-read: 
+
+
+[role="lead"]
+En el Explorador de Kubernetes, puede hacer clic en un icono de nodo para abrir una página de información detallada para ese nodo. En esta página, puede ver información sobre el nodo y explorar información de VM, Pod y contenedor.
+
+image:KubernetesNodeFiltering.png["Página de detalles de nodos de Kubernetes que muestra el filtrado"]
+
+
+
+==== Análisis de los pods y los volúmenes persistentes de los nodos
+
+Cloud Insights ofrece visibilidad del almacenamiento de back-end para los entornos de Kubernetes, lo que le proporciona información sobre sus pods de Kubernetes y los volúmenes persistentes (VP). Puede realizar un seguimiento de contadores de VP como IOPS, latencia y rendimiento desde el uso de un único Pod a través de un contador de VP a un VP y hasta el dispositivo de almacenamiento del entorno de administración.
+
+En el nivel de VP, Cloud Insights recopila información de capacidad del back-end (volumen interno o volumen según el tipo de VP) (total, usado, porcentaje usado), así como número de snapshots de volúmenes internos. En el Pod a nivel de almacenamiento, recopila capacidad back-end y número de snapshots de volumen interno.
+
+En la página de destino volumen o volumen interno, se muestran dos tablas:
+
+image:Kubernetes_PV_Table.png["Tabla PV de Kubernetes"]
+image:Kubernetes_Pod_Table.png["Tabla de Kubernetes Pod"]
+
+
+NOTE: Si ha personalizado la página de destino de volumen o volumen interno, no podrá ver automáticamente las tablas PV y Pod. Para ver estas tablas, debe revertir la página a la predeterminada, en cuyo punto verá las tablas PV y Pod. A continuación, puede continuar para volver a personalizar la página según lo desee.
+
+Tenga en cuenta que para aprovechar estas nuevas tablas, se recomienda desinstalar su agente de Kubernetes actual e instalarlo desde cero. También debe instalar Kube-State-Metrics versión 2.1.0 o posterior.
+
+
+
+==== Enlaces del nodo de Kubernetes a la máquina virtual
+
+En una página Kubernetes Node, puede hacer clic en para abrir la página de máquina virtual del nodo. La página de la máquina virtual también incluye un enlace de vuelta al nodo en sí.
+
+image:Kubernetes_Node_Page_with_VM_Link.png["Página de Kubernetes Node mostrando el enlace de la máquina virtual"]
+image:Kubernetes_VM_Page_with_Node_Link.png["Página de la máquina virtual de Kubernetes con el enlace Node"]

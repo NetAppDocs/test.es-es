@@ -1,0 +1,75 @@
+---
+sidebar: sidebar 
+permalink: reporting_data_retention.html 
+summary: Retención de datos de Cloud Insights para creación de informes 
+keywords: reporting, cognos, data warehouse, dwh, managing, customizing, copying, retention 
+---
+= Cómo se conservan los datos históricos para la creación de informes
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights conserva datos históricos para usarlos en generación de informes basados en los mercados de datos y la granularidad de los datos, como se muestra en la siguiente tabla.
+
+|===
+
+
+| Data mart | Objeto medido | Granularidad | Período de retención 
+
+
+| Marts de rendimiento | Volúmenes y volúmenes internos | Cada hora | 14 días 
+
+
+| Marts de rendimiento | Volúmenes y volúmenes internos | Todos los días | 13 meses 
+
+
+| Marts de rendimiento | Cliente más | Cada hora | 13 meses 
+
+
+| Marts de rendimiento | Host | Cada hora | 13 meses 
+
+
+| Marts de rendimiento | Cambie el rendimiento del puerto | Cada hora | 35 días 
+
+
+| Marts de rendimiento | Cambie el rendimiento del host, el almacenamiento y la cinta | Cada hora | 13 meses 
+
+
+| Marts de rendimiento | Nodo de almacenamiento | Cada hora | 14 días 
+
+
+| Marts de rendimiento | Nodo de almacenamiento | Todos los días | 13 meses 
+
+
+| Marts de rendimiento | Rendimiento de VM | Cada hora | 35 días 
+
+
+| Marts de rendimiento | Rendimiento de VM | Todos los días | 13 meses 
+
+
+| Marts de rendimiento | Rendimiento del hipervisor | Cada hora | 35 días 
+
+
+| Marts de rendimiento | Rendimiento del hipervisor | Todos los días | 13 meses 
+
+
+| Marts de rendimiento | Rendimiento de VMDK | Cada hora | 35 días 
+
+
+| Marts de rendimiento | Rendimiento de VMDK | Todos los días | 13 meses 
+
+
+| Marts de rendimiento | Rendimiento de disco | Cada hora | 14 días 
+
+
+| Marts de rendimiento | Rendimiento de disco | Todos los días | 13 meses 
+
+
+| Marts de capacidad | Todos (excepto volúmenes individuales) | Todos los días | 13 meses 
+
+
+| Marts de capacidad | Todos (excepto volúmenes individuales) | Representante mensual | 14 meses o más 
+
+
+| Marts de inventario | Volúmenes individuales | Estado actual | 1 día (o hasta el siguiente ETL) 
+|===

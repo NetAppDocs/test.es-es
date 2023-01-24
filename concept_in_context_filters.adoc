@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: concept_in_context_filters.html 
+summary: Puede filtrar los objetos que estén relacionados directamente con el activo actual. 
+keywords: Assets, landing page, filtering, context, related 
+---
+= Filtrado de objetos en contexto
+:allow-uri-read: 
+
+
+[role="lead"]
+Al configurar un widget en la página de inicio de un activo, puede establecer filtros _in-context_ para que sólo muestren objetos directamente relacionados con el activo actual. De forma predeterminada, al agregar un widget, se muestran los objetos _All_ del tipo seleccionado en el entorno. Los filtros en contexto permiten mostrar sólo los datos relevantes para el activo actual.
+
+En la mayoría de las páginas de destino de activos, los widgets le permiten filtrar los objetos relacionados con el activo actual. En las listas desplegables de filtros, los tipos de objetos que muestran un icono de vínculo image:LinkIcon.png["Icono de enlace"] se puede filtrar en contexto al activo actual.
+
+Por ejemplo, en una página Storage Asset, puede añadir un widget Bar Chart para mostrar el IOPS superior en los volúmenes internos solo en ese almacenamiento. De forma predeterminada, al agregar un widget, se muestran los volúmenes _All_ internos del entorno.
+
+Para mostrar solo los volúmenes internos en el activo de almacenamiento actual, haga lo siguiente:
+
+.Pasos
+. Abra una página de activos para cualquier activo *almacenamiento*.
+. Haga clic en *Editar* para abrir la página de activos en el modo Editar.
+. Haga clic en *Agregar widget* y seleccione _Bar Chart_.
+. Seleccione *volumen interno* para que el tipo de objeto se muestre en el gráfico de barras. Observe que el tipo de objeto de volumen interno tiene un icono de enlace image:LinkIcon.png["Icono de enlace"] a su lado. El icono "vinculado" está activado de forma predeterminada.
++
+image:LinkingObjects.png["volúmenes del gráfico de barras"]
+
+. Elija _IOPS - total_ y establezca los filtros adicionales que desee.
+. Para contraer el campo *Roll Up*, haga clic en [X] situado junto a él. Aparece el campo *Mostrar*.
+. Seleccione para mostrar los 10 principales.
+. Guarde el widget.
++
+El gráfico de barras muestra sólo los volúmenes internos que residen en el activo de almacenamiento actual.
+
+
+
+El widget se mostrará en las páginas de activos para todos los objetos de almacenamiento. Cuando el enlace en contexto está activado en el widget, el gráfico de barras muestra los datos de los volúmenes internos relacionados únicamente con el activo de almacenamiento que se muestra en ese momento.
+
+Para desvincular los datos del objeto, edite el widget y haga clic en el icono del vínculo image:LinkIconEnabled.png["Icono de enlace activado"] junto al tipo de objeto. El enlace se desactiva image:LinkIconDisabled.png["Icono de enlace desactivado"] y el gráfico muestra los datos de los objetos _all_ en su entorno.
+
+También puede utilizar link:concept_dashboard_features.html#variables["*variables especiales en widgets*"] para mostrar información relacionada con activos en las páginas de destino.

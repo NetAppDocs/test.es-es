@@ -1,0 +1,30 @@
+---
+sidebar: sidebar 
+permalink: task_getting_started_with_cloud_secure.html 
+summary: Primeros pasos con Cloud Secure. 
+keywords: invite, roles, data collector, agent 
+---
+= Primeros pasos con Cloud Secure
+:allow-uri-read: 
+
+
+Después de registrarse en Cloud Secure e iniciar sesión en su entorno por primera vez, existen pasos de configuración que se deben completar antes de comenzar a recopilar y analizar la información de acceso a los datos.
+
+
+
+== Instale un agente
+
+Se requiere un agente para recopilar datos para su análisis por parte de Cloud Secure. El software del agente se instala en un servidor o equipo virtual del entorno. Un solo agente se puede utilizar para varios recopiladores de datos.
+
+* Consulte link:concept_cs_agent_requirements.html["Requisitos del agente"] y.. link:task_cs_add_agent.html["Instalación del agente"] Para instalar el agente.
+
+
+
+
+== Configurar colectores de datos
+
+Cloud Secure recopila datos de recopiladores de directorio de usuario para información de usuario y recopila datos de sistemas de almacenamiento. Cloud Secure utiliza los datos para analizar el acceso de los usuarios a entidades en los sistemas de almacenamiento.
+
+* Para configurar un conector de directorio de usuarios, consulte: link:task_config_user_dir_connect.html["Configuración del recopilador de directorios del usuario"]
+* Para configurar un recopilador de datos, consulte la documentación del menú a la izquierda de cada recopilador de datos específico.
+

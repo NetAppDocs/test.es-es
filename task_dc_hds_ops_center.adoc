@@ -1,0 +1,107 @@
+---
+sidebar: sidebar 
+permalink: task_dc_hds_ops_center.html 
+keywords: data collector, Hitachi Ops Center 
+summary: Configurar el recopilador de datos del centro de HDS. 
+---
+= Recopilador de datos del centro de Hitachi OPS
+:allow-uri-read: 
+
+
+[role="lead"]
+Este recopilador de datos usa la suite de aplicaciones integrada de Hitachi OPS Center para acceder a los datos de inventario y rendimiento de varios dispositivos de almacenamiento.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario de este recopilador de datos. Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Sistemas de almacenamiento | Reducida 
+
+
+| Volumen | Volumen 
+
+
+| Grupos de paridad | Grupos de discos, Storage Pool(RAID) 
+
+
+| Disco | Disco 
+
+
+| Pool de almacenamiento | Pool de almacenamiento (fino, SNAP) 
+
+
+| Grupos de paridad externa | Pool de almacenamiento (backend), grupos de discos 
+
+
+| Puerto | Nodo de almacenamiento → nodo de controladora → puerto 
+
+
+| Grupos de hosts | Asignación de volúmenes y enmascaramiento 
+
+
+| Parejas de volúmenes | Sincronización de almacenamiento 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos de inventario
+
+Para recopilar datos de inventario, debe contar con lo siguiente:
+
+* La dirección IP del servidor del centro de operaciones
+* Nombre de usuario y contraseña de solo lectura para el software OPS Center y privilegios de mismo nivel
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP del centro de operaciones de Hitachi | La dirección IP o el nombre de dominio completo del servidor del centro de operaciones 
+
+
+| Nombre de usuario | Nombre de usuario del servidor del Centro de operaciones. 
+
+
+| Contraseña | Contraseña que se utiliza para el servidor del centro de operaciones. 
+|===
+
+
+== Configuración avanzada
+
+|===
+
+
+| Campo | Descripción 
+
+
+| Tipo de conexión | HTTPS (puerto 443) es la opción predeterminada 
+
+
+| Anular puerto TCP | Especifique el puerto que se va a utilizar si no es el predeterminado 
+
+
+| Intervalo de sondeo de inventario (mín.) | Intervalo entre sondeos de inventario. El valor predeterminado es 40. 
+
+
+| Elija "excluir" o "incluir" para especificar una lista | Especifique si desea incluir o excluir la lista de matrices a continuación al recopilar datos. 
+
+
+| Filtrar lista de dispositivos | Lista separada por comas de los ID de dispositivo o los nombres de matriz que se van a incluir o excluir 
+
+
+| Intervalo de sondeo de rendimiento (s) | Intervalo entre sondeos de rendimiento. El valor predeterminado es 300. 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

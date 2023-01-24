@@ -1,0 +1,58 @@
+---
+sidebar: sidebar 
+permalink: forensic_user_overview.html 
+keywords: Forensic, user, user, activity 
+summary: detalles forenses del usuario 
+---
+= Descripción general del usuario forense
+:allow-uri-read: 
+
+
+La información de cada usuario se proporciona en la sección Información general del usuario. Utilice estas vistas para comprender las características del usuario, las entidades asociadas y las actividades recientes.
+
+
+
+== Perfil de usuario
+
+La información del perfil de usuario incluye la información de contacto y la ubicación del usuario. El perfil proporciona la siguiente información:
+
+* Nombre del usuario
+* Dirección de correo electrónico del usuario
+* Administrador del usuario
+* Contacto telefónico para el usuario
+* Ubicación del usuario
+
+
+
+
+== Comportamiento del usuario
+
+La información sobre el comportamiento del usuario identifica las actividades y operaciones recientes realizadas por el usuario. Esta información incluye:
+
+* Actividad reciente
++
+** Última ubicación de acceso
+** Gráfico de actividades
+** Alertas
+
+
+
+
+* Operaciones de los últimos siete días
++
+** Cantidad de operaciones
+
+
+
+
+
+
+== Actualizar intervalo
+
+La lista de usuarios se actualiza cada 12 horas.
+
+
+
+== Política de retención
+
+Si no se vuelve a actualizar, la lista de usuarios se conserva durante 13 meses. Después de 13 meses, los datos se eliminarán. Si se elimina el entorno Cloud Secure, se eliminan todos los datos asociados con el entorno.

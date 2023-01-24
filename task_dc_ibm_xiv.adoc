@@ -1,0 +1,112 @@
+---
+sidebar: sidebar 
+permalink: task_dc_ibm_xiv.html 
+keywords: IBM, XIV, SAN, A9000 
+summary: Configuración del recopilador de datos IBM XIV/A9000. 
+---
+= Configuración del recopilador de datos IBM XIV/A9000
+:allow-uri-read: 
+
+
+[role="lead"]
+El recopilador de datos de IBM XIV y A9000 (CLI) utiliza la interfaz de línea de comandos de XIV para recopilar datos de inventario mientras que la recopilación de rendimiento se realiza realizando llamadas SMI-S a la matriz XIV/A9000, que ejecuta un proveedor SMI-S en el puerto 7778.
+
+
+
+== Terminología
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Disco | Disco 
+
+
+| Sistema de almacenamiento | Reducida 
+
+
+| Pool de almacenamiento | Pool de almacenamiento 
+
+
+| Volumen | Volumen 
+|===
+
+
+== Requisitos
+
+Se deben cumplir los siguientes requisitos para configurar y utilizar este recopilador de datos:
+
+* Requisito de puerto: Puerto TCP 7778
+* Nombre de usuario y contraseña de solo lectura
+* La CLI de XIV debe estar instalada en la AU
+
+
+
+
+== Requisitos de rendimiento
+
+Los siguientes son requisitos para la recopilación del rendimiento:
+
+* SMI-S Agent 1.4 o superior
+* CIMService compatible con SMI-S que se ejecuta en matriz. La mayoría de las matrices XIV tienen un cimserver instalado de forma predeterminada.
+* Se debe proporcionar un inicio de sesión de usuario para el servidor cimserver. El inicio de sesión debe tener acceso completo de lectura a la configuración y las propiedades de la matriz.
+* Espacio de nombres SMI-S. El valor predeterminado es root/ibm. Esto se puede configurar en el cimserver.
+* Requisitos de puerto: 5988 para HTTP, 5989 para HTTPS.
+* Consulte el siguiente enlace sobre cómo crear una cuenta para la recopilación del rendimiento de SMI-S: http://publib.boulder.ibm.com/infocenter/tivihelp/v4r1/index.jsp?topic=%2Fcom.ibm.tpc_V41.doc%2Ffqz0_t_adding_cim_agent.html[]
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| XIV dirección IP | La dirección IP o el nombre de dominio completo del almacenamiento de XIV 
+
+
+| Nombre de usuario | Nombre de usuario del almacenamiento de XIV 
+
+
+| Contraseña | Contraseña para el almacenamiento XIV 
+
+
+| Ruta completa al directorio CLI de XIV | Ruta completa a la carpeta que contiene la CLI de XIV 
+
+
+| Dirección IP del host SMI-S. | Dirección IP del host SMI-S. 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Intervalo de sondeo de inventario (mín.) | Intervalo entre sondeos de inventario. El valor predeterminado es 40 minutos. 
+
+
+| Protocolo SMI-S. | Protocolo utilizado para conectar con el proveedor SMI-S. También muestra el puerto predeterminado. 
+
+
+| Anular puerto SMI-S. | Si está en blanco, utilice el puerto predeterminado en el campo Tipo de conexión; de lo contrario, introduzca el puerto de conexión que desea utilizar 
+
+
+| Nombre de usuario | Nombre de usuario para el host del proveedor de SMI-S. 
+
+
+| Contraseña | Contraseña para el host del proveedor SMI-S. 
+
+
+| Intervalo de sondeo de rendimiento (s) | Intervalo entre sondeos de rendimiento. El valor predeterminado es 300 segundos. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

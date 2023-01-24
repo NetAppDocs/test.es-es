@@ -1,0 +1,131 @@
+---
+sidebar: sidebar 
+permalink: task_dc_hp_3par.html 
+keywords: data collector, 3PAR, HP, HP 3PAR, HPE, 
+summary: 'Configuración del recopilador de datos de HP Enterprise Alletra 9000 / primera (anteriormente 3PAR).' 
+---
+= Recopilador de datos de HP Enterprise Alletra 9000 / primera Storage
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza el recopilador de datos de HP Enterprise Alletra 9000 / HP Enterprise primera (anteriormente 3PAR) para descubrir el inventario y el rendimiento.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario de este recopilador de datos. Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Disco físico | Disco 
+
+
+| Sistema de almacenamiento | Reducida 
+
+
+| Nodo de controladoras | Nodo de almacenamiento 
+
+
+| Grupo de aprovisionamiento común | Pool de almacenamiento 
+
+
+| Volumen virtual | Volumen 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+Para configurar este colletor de datos, se requieren los siguientes elementos:
+
+* La dirección IP o el FQDN del clúster InServ
+* Para el inventario, el nombre de usuario y la contraseña de sólo lectura del servidor StoreServ
+* Para obtener más rendimiento, lea el nombre de usuario y la contraseña para StoreServ Server
+* Requisitos de puerto: 22 (recopilación de inventario), 5988 o 5989 (recopilación de rendimiento) [Nota: Se admite el rendimiento con StoreServ OS 3.x+]
+* Para la recogida del rendimiento, confirme que SMI-S está habilitado mediante el inicio de sesión en la cabina mediante SSH.
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP de almacenamiento | La dirección IP de almacenamiento o el nombre de dominio completo del clúster StoreServ 
+
+
+| Nombre de usuario | Nombre de usuario de StoreServ Server 
+
+
+| Contraseña | Contraseña utilizada para StoreServ Server 
+
+
+| Nombre de usuario de SMI-S. | Nombre de usuario para el host del proveedor de SMI-S. 
+
+
+| Contraseña SMI-S. | Contraseña utilizada para el host del proveedor SMI-S. 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Intervalo de sondeo de inventario (mín.) | Intervalo entre sondeos de inventario. El valor predeterminado es 40 minutos. 
+
+
+| Conectividad SMI-S. | Protocolo utilizado para conectar con el proveedor SMI-S. 
+
+
+| Anular el puerto predeterminado de SMI-S. | Si está en blanco, utilice el puerto predeterminado de la conectividad SMI-S; de lo contrario, introduzca el puerto de conexión que desea utilizar 
+
+
+| Intervalo de sondeo de rendimiento (s) | Intervalo entre sondeos de rendimiento. El valor predeterminado es 300 segundos. 
+|===
+
+
+== Resolución de problemas
+
+Algunas cosas para intentar si tiene problemas con este recopilador de datos:
+
+
+
+==== Inventario
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| el comando "showsys" no devuelve ningún resultado. | Ejecute "showsys" y "showversion -a" desde la línea de comandos y compruebe si la matriz admite la versión. 
+|===
+
+
+==== Rendimiento
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Error al conectar o iniciar sesión. Error al inicializar el proveedor. | Un nombre de matriz completamente numérico puede causar problemas con el servidor SMI-S. Intente cambiar el nombre de la cabina. 
+
+
+| El usuario de SMI-S configurado no tiene ningún dominio | Conceda privilegios de dominio adecuados al usuario de SMI-S configurado 
+
+
+| Cloud Insights indica que no se puede conectar/iniciar sesión al servicio SMI-S. | Confirme que no existe un firewall entre la AU de CI y la matriz que bloquearía la AU de CI para realizar conexiones TCP a 5988 o 5989. Una vez que se haya hecho, y si ha confirmado que no hay firewall, debe SSH a la matriz y usar el comando “showcim” para confirmar. Verifique que: * El servicio está habilitado * HTTPS está habilitado * el puerto HTTPS debe ser 5989 Si todos lo están, puede intentar “stopcim” y luego “startcim” para reiniciar el CIM (por ejemplo, el servicio SMI-S). 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

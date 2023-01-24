@@ -1,0 +1,52 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_zookeeper.html 
+keywords: telegraf, installation, install, apache, zookeeper 
+summary: Configuración del recopilador de datos de Apache Zookeeper 
+---
+= Recopilador de datos de zookeeper
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas de Apache Zookeeper.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija Apache Zookeeper.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:ZookeeperDCConfigLinux.png["Configuración del zomantenimiento"]
+
+
+
+== Configuración
+
+Como mínimo, debe permitir los comandos del servidor de cuatro letras Zookeeper _mntr_, _srvr_ y _stat_. Puede activar estos comandos con el siguiente formato: _4lw.commands.whitelist=mntr, srvr, stat_ en el archivo _zoo.cfg_. Puede que haya otros cuatro comandos de letras que se requieran en su configuración. Consulte link:https://zookeeper.apache.org/["Zookeeper"] documentación para obtener más información.
+
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| Zookeeper | Servidor de espacio de nombres | Puerto de nombre de nodo IP del nodo de estado | Tamaño aproximado de datos promedio de latencia de los Ephementierros recuento máximo de descriptores de archivos latencia máxima latencia mínima número de conexiones de conexión de funcionamiento recuento de descriptores de archivos pendientes recuento de Znode de observación 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

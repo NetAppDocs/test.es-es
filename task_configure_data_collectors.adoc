@@ -1,0 +1,114 @@
+---
+sidebar: sidebar 
+permalink: task_config_cs_data_collectors.html 
+keywords: acquisition, AU, data collector, collector 
+summary: Configurar recopiladores de datos 
+---
+= Configuración de los colectores de datos
+:allow-uri-read: 
+
+
+[role="lead"]
+Puede configurar los recolectores de datos en el entorno de Cloud Insights para recopilar datos de hosts, servicios o dispositivos en el centro de datos.
+
+.Antes de empezar
+* Debe tener privilegios de propietario de cuenta o administrador para configurar los recopiladores de datos.
+* Debe haber configurado una unidad de adquisición (para infraestructura) o un agente (para servicios o hosts) antes de poder empezar a recopilar datos.
+* Se necesitan credenciales para los dispositivos de infraestructura desde los que se recopilan datos.
++
+Las direcciones de red del dispositivo, la información de la cuenta y las contraseñas son necesarias para todos los dispositivos desde los que desea recopilar datos.
+
+
+
+
+
+=== Seguridad de credenciales
+
+Las credenciales del recopilador de datos se cifran cuando se introducen en Cloud Insights y se envían a la unidad de adquisición (AU) cifrada primero por la clave pública de la AU y, a continuación, se cifran mediante HTTPS. Los valores cifrados se descifran cuando el AU los utiliza para comunicarse con dispositivos y software.
+
+
+
+=== Configuración del recopilador de datos
+
+* En el menú Cloud Insights, haga clic en *Admin > colectores de datos* y haga clic en el botón *+ colector de datos*. Puede elegir mostrar todos los recopiladores de datos o filtrar para mostrar sólo los recopiladores de datos disponibles en función de su suscripción.
+
+
+* Dependiendo del tipo de recopilador de datos que elija, los pasos de instalación variarán.
+
+
+
+
+==== Sistemas operativos:
+
+Debe instalar al menos un agente de Cloud Insights para comenzar a recopilar datos del sistema operativo o del servicio desde el entorno. Puede instalar tantos agentes como desee. Cada agente puede recopilar datos de varios Servicios.
+
+Además de recopilar datos de los Servicios, cada agente también actúa como recopilador de datos para el equipo virtual/host en el que se instala. Los datos recopilados se presentan como datos de "nodo" en widgets o consultas del panel.
+
+. Haga clic en el tipo de plataforma o sistema operativo de la máquina virtual o el host (es decir, el nodo) desde el que accede a Cloud Insights.
+. Elija una clave de acceso del agente.
+. Copie el comando que se muestra en el portapapeles. Puede hacer clic en el icono del portapapeles para copiar rápidamente el comando.
+. Abra una ventana de terminal o comando en el host/VM del agente y pegue el comando. Pulse Intro para ejecutar el comando.
+. Después de instalar el agente, haga clic en *Finalizar*. El agente comienza a recopilar datos.
++
+Puede tardar hasta dos períodos de sondeo antes de que los datos del nodo se muestren en paneles o estén disponibles para realizar consultas.
+
+
+
+
+
+==== Servicios:
+
+Los recopiladores de datos de servicios son los basados en el agente de telegraf, como Docker o Kibana.
+
+.Antes de empezar
+* Debe tener al menos un agente de Cloud Insights para recopilar datos del servicio de su entorno. Si no tiene un agente instalado, se le pedirá que instale uno cuando configure un recopilador de datos de servicio.
+* El Servicio del que desea recopilar datos debe estar instalado y en ejecución en su entorno.
++
+.. Haga clic en un recopilador de datos de Servicios.
+.. Elija un sistema operativo de agente o plataforma. Si no ha instalado un agente para la plataforma, siga las instrucciones para hacerlo.
+.. Elija una clave de acceso del agente.
+.. Haga clic en *continuar*.
+.. Siga las instrucciones para configurar el recopilador de datos. Puede hacer clic en el icono del portapapeles para copiar rápidamente los comandos o fragmentos de código mostrados.
+.. Una vez configurado correctamente el recopilador de datos, haga clic en *Finalizar*.
++
+Puede tardar hasta dos períodos de sondeo antes de que los datos del servicio se muestren en paneles o estén disponibles para realizar consultas.
+
+
+
+
+
+
+
+==== Infraestructura:
+
+Los recopiladores de datos de infraestructura incluyen aspectos como el almacenamiento o los switches.
+
+.Antes de empezar
+* Debe tener al menos una unidad de adquisición configurada para comenzar a recopilar datos de la infraestructura.
++
+.. Haga clic en un recopilador de datos de Infrastructure.
+.. Introduzca un nombre para el recopilador de datos. Los nombres pueden contener los siguientes caracteres:
+
+
+* letra (a-z)
+* número (0-9)
+* guión (-)
+* guión bajo (_)
+* período (.)
+* espacio ( )
++
+Los nombres pueden no comenzar o terminar con un espacio, punto o guión.
+
++
+.. Introduzca la unidad de adquisición para asociar a este recopilador de datos.
+.. Introduzca los campos obligatorios en la pantalla Configuración.
+.. Haga clic en *Configuración avanzada* para introducir campos de configuración adicionales. No todos los recopiladores de datos necesitan configuración avanzada.
+.. Haga clic en *Configuración de prueba* para comprobar que el recopilador de datos está configurado correctamente.
+.. Cuando termine, haga clic en *Agregar colector*.
+
+
+
+
+Para obtener ayuda sobre la adición de una nueva unidad de adquisición, consulte link:task_configure_acquisition_unit.html["Configuración de unidades de adquisición"]
+
++ puede tardar hasta dos períodos de sondeo antes de que los datos del entorno se muestren en paneles o estén disponibles para realizar consultas.

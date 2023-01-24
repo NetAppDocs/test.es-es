@@ -1,0 +1,114 @@
+---
+sidebar: sidebar 
+permalink: concept_cs_agent_requirements.html 
+summary: El servidor o equipo virtual que utilice como agente debe cumplir los requisitos mínimos 
+keywords: agent, Linux, requirements, docker, browsers, permissions, Network 
+---
+= Requisitos del agente
+:allow-uri-read: 
+
+
+[role="lead"]
+Debe link:task_cs_add_agent.html["Instale un agente"] para adquirir información de sus recopiladores de datos. Antes de instalar el agente, debe asegurarse de que su entorno cumple con los requisitos de sistema operativo, CPU, memoria y espacio en disco.
+
+[cols="36,60"]
+|===
+| Componente | Requisitos de Linux 
+
+
+| De NetApp | Un ordenador que ejecuta una versión con licencia de uno de los siguientes: Red Hat Enterprise Linux 7.x, 8.x 64-bit CentOS 7.x 64-bit CentOS 8 Stream este ordenador no debe ejecutar ningún otro software a nivel de aplicación. Se recomienda un servidor dedicado. 
+
+
+| Comandos | El comando 'so su –' es necesario para la instalación, ejecución de scripts y desinstalación. 
+
+
+| CPU | 4 núcleos de CPU 
+
+
+| Memoria | 16 GB DE MEMORIA RAM 
+
+
+| Espacio disponible en disco | El espacio en disco se deberá asignar de la siguiente manera: /Opt/netapp 25-30 GB 
+
+
+| Red | Conexión Ethernet de 100 Mbps a 1 Gbps, dirección IP estática, conectividad IP con todos los dispositivos y un puerto requerido para la instancia de Cloud Secure (80 o 443). 
+|===
+Tenga en cuenta que el agente de Cloud Secure puede instalarse en la misma máquina que una unidad de adquisición y/o agente de Cloud Insights. Sin embargo, es una mejor práctica instalar estos en máquinas independientes. En el caso de que se instalen en el mismo equipo, asigne espacio en disco como se muestra a continuación:
+
+|===
+
+
+| Espacio disponible en disco | 50-55 GB para Linux, el espacio en disco se debe asignar de esta manera: /Opt/netapp 25-30 GB /var/log/netapp 25 GB 
+|===
+
+
+=== Recomendaciones adicionales
+
+* Se recomienda encarecidamente sincronizar el tiempo tanto en el sistema ONTAP como en la máquina del agente mediante *Protocolo de tiempo de red (NTP)* o *Protocolo simple de tiempo de red (SNTP)*.
+
+
+
+
+== Reglas de acceso a la red de cloud
+
+Para entornos *Cloud Secure basados en EE.UU.*:
+
+[cols="5*"]
+|===
+| Protocolo | Puerto | Destino | Dirección | Descripción 
+
+
+| TCP | 443 | <site_name>.cs01.cloudinsights.netapp.com <site_name>.c01.cloudinsights.netapp.com <site_name>.c02.cloudinsights.netapp.com | Saliente | Acceso a Cloud Insights 
+
+
+| TCP | 443 | gateway.c01.cloudinsights.netapp.com agentlogin.cs01.cloudinsights.netapp.com | Saliente | Acceso a los servicios de autenticación 
+|===
+Para entornos Cloud Secure * basados en Europa:
+
+[cols="5*"]
+|===
+| Protocolo | Puerto | Destino | Dirección | Descripción 
+
+
+| TCP | 443 | <site_name>.cs01-eu-1.cloudinsights.netapp.com <site_name>.c01-eu-1.cloudinsights.netapp.com <site_name>.c02-eu-1.cloudinsights.netapp.com | Saliente | Acceso a Cloud Insights 
+
+
+| TCP | 443 | gateway.c01.cloudinsights.netapp.com agentlogin.cs01-eu-1.cloudinsights.netapp.com | Saliente | Acceso a los servicios de autenticación 
+|===
+Para entornos Cloud Secure * basados en APAC*:
+
+[cols="5*"]
+|===
+| Protocolo | Puerto | Destino | Dirección | Descripción 
+
+
+| TCP | 443 | <site_name>.cs01-ap-1.cloudinsights.netapp.com <site_name>.c01-ap-1.cloudinsights.netapp.com <site_name>.c02-ap-1.cloudinsights.netapp.com | Saliente | Acceso a Cloud Insights 
+
+
+| TCP | 443 | gateway.c01.cloudinsights.netapp.com agentlogin.cs01-ap-1.cloudinsights.netapp.com | Saliente | Acceso a los servicios de autenticación 
+|===
+
+
+== Reglas dentro de la red
+
+[cols="5*"]
+|===
+| Protocolo | Puerto | Destino | Dirección | Descripción 
+
+
+| TCP | 389(LDAP) 636 (LDAPS / start-tls) | URL del servidor LDAP | Saliente | Conéctese a LDAP 
+
+
+| TCP | 443 | Dirección IP de administración de SVM | Saliente | Comunicación API con ONTAP 
+
+
+| TCP | 35000 - 55000 | Direcciones IP de LIF de datos de SVM | Entrante/saliente | Comunicación con ONTAP para eventos de Fpolicy 
+
+
+| TCP | 7 | Direcciones IP de LIF de datos de SVM | Saliente | Bidireccional entre ONTAP y Cloud Secure. El agente hace ping a las LIF de SVM. 
+|===
+
+
+==== Relacionado:
+
+Consulte link:concept_cs_event_rate_checker.html["Comprobador de frecuencia de eventos"] documentación para obtener información sobre el ajuste de tamaño.

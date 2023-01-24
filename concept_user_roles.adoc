@@ -1,0 +1,224 @@
+---
+sidebar: sidebar 
+permalink: concept_user_roles.html 
+keywords: roles, guest, user, administrator, SSO, Federate, federation, identity, single sign-on, Account Owner, Reporting, Cloud Secure 
+summary: Cloud Insights proporciona varias cuentas de usuario con diferentes niveles de permiso. 
+---
+= Funciones y cuentas de usuario
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights proporciona hasta cuatro roles de cuenta de usuario: Propietario de cuenta, administrador, usuario e invitado. A cada cuenta se le asignan niveles de permiso específicos, como se indica en la tabla siguiente. (Tenga en cuenta que los roles _User_ y _Guest_ no están disponibles en la función Cloud Secure.) Los usuarios ya lo están link:#creating-accounts-by-inviting-users["invitado"] A Cloud Insights y a un rol específico, o puede iniciar sesión a través de link:#single-sign-on-sso-accounts["Autorización de inicio de sesión único (SSO)"] con un rol predeterminado. La autorización de SSO está disponible como función de la edición Premium de Cloud Insights.
+
+
+
+== Niveles de permisos
+
+Utilice una cuenta con privilegios de administrador para crear o modificar cuentas de usuario. Cada cuenta de usuario tiene asignado un rol para cada función Cloud Insights desde los siguientes niveles de permisos.
+
+|===
+| Función | Supervisión | Cloud Secure | Creación de informes 
+
+
+| Propietario de la cuenta 3+| Puede modificar las suscripciones, ver la información de facturación y uso, y realizar todas las funciones del administrador para la supervisión y optimización, Cloud Secure y creación de informes. Los propietarios también pueden invitar y gestionar usuarios, así como gestionar la autenticación de SSO y la configuración de Federación de identidades. El primer propietario de cuenta se crea al registrarse para Cloud Insights. Se recomienda contar con al menos dos propietarios de cuentas por cada entorno de Cloud Insights.  
+
+
+| Administrador | Puede realizar todas las funciones de supervisión y optimización, todas las funciones de usuario, así como la gestión de recopiladores de datos, claves de API y notificaciones. Un administrador también puede invitar a otros usuarios, pero sólo puede asignar funciones Monitor y Optimize. | Puede realizar todas las funciones de Cloud Secure, incluidas las de Alertas, forenses, recopiladores de datos, directivas de respuesta automatizadas y API para Cloud Secure. Un administrador también puede invitar a otros usuarios, pero sólo puede asignar funciones de Cloud Secure. | Puede realizar todas las funciones de usuario/autor, así como todas las tareas administrativas, como la configuración de informes, y el cierre y reinicio de las tareas de creación de informes. Un administrador también puede invitar a otros usuarios, pero sólo puede asignar funciones de informes. 
+
+
+| Usuario | Puede ver y modificar paneles, consultas, alertas, anotaciones, reglas de anotación, y aplicaciones, y administrar la resolución del dispositivo. | Puede ver y gestionar alertas y visualizar información forense. El rol de usuario puede cambiar el estado de alerta, agregar una nota, tomar instantáneas manualmente y gestionar restringir el acceso de usuario. | Puede realizar todas las funciones de invitado/consumidor, así como crear y gestionar informes y paneles. 
+
+
+| Invitado | Dispone de acceso de sólo lectura a páginas de activos, paneles, alertas y puede ver y ejecutar consultas. | Puede ver Alertas y Forensics. El rol de invitado no puede cambiar el estado de alerta, agregar una nota, tomar instantáneas manualmente o restringir el acceso de usuario. | Puede ver, programar y ejecutar informes y establecer preferencias personales como las de idiomas y zonas horarias. Los invitados/consumidores no pueden crear informes ni realizar tareas administrativas. 
+|===
+La práctica recomendada es limitar el número de usuarios con permisos de administrador. El mayor número de cuentas debe ser cuentas de usuario o de invitado.
+
+
+
+=== Permisos de Cloud Insights por rol de usuario
+
+En la siguiente tabla, se muestran los permisos de Cloud Insights concedidos a cada rol de usuario.
+
+|===
+
+
+| Función | Administrador/propietario de la cuenta | Usuario | Invitado 
+
+
+| Unidades de adquisición: Agregar/modificar/Eliminar | Y | N | N 
+
+
+| Alertas*: Crear/modificar/Eliminar | Y | Y | N 
+
+
+| Alertas*: Ver | Y | Y | Y 
+
+
+| Reglas de anotación: Crear/Ejecutar/Modificar/Eliminar | Y | Y | N 
+
+
+| Anotaciones: Crear/modificar/asignar/Ver/Eliminar/Eliminar | Y | Y | N 
+
+
+| Acceso API*: Crear/Cambiar nombre/Desactivar/revocar | Y | N | N 
+
+
+| Aplicaciones: Crear/Ver/Modificar/Eliminar | Y | Y | N 
+
+
+| Páginas de activos: Modificar | Y | Y | N 
+
+
+| Páginas de activos: Ver | Y | Y | Y 
+
+
+| Auditoría: Ver | Y | N | N 
+
+
+| Coste del cloud | Y | N | N 
+
+
+| Cloud Secure* | Y | N | N 
+
+
+| Paneles: Crear/modificar/Eliminar | Y | Y | N 
+
+
+| Paneles: Ver | Y | Y | Y 
+
+
+| Colectores de datos: Agregar/modificar/sondeo/Eliminar | Y | N | N 
+
+
+| Notificaciones: Ver/modificar | Y | N | N 
+
+
+| Consultas: Crear/modificar/Eliminar | Y | Y | N 
+
+
+| Consultas: Ver/ejecutar | Y | Y | Y 
+
+
+| Resolución del dispositivo | Y | Y | N 
+
+
+| Informes*: Ver/ejecutar | Y | Y | Y 
+
+
+| Informes*: Crear/Modificar/Eliminar/planificar | Y | Y | N 
+
+
+| Suscripción: Ver/modificar | Y | N | N 
+
+
+| Gestión de usuarios: Invitar/Añadir/Modificar/Desactivar | Y | N | N 
+|===
+*Requiere Premium Edition
+
+
+
+== Creación de cuentas invitando a usuarios
+
+La creación de una nueva cuenta de usuario se logra a través de Cloud Central. Un usuario puede responder a la invitación enviada a través de correo electrónico, pero si el usuario no tiene una cuenta con Cloud Central, el usuario necesita registrarse en Cloud Central para que pueda aceptar la invitación.
+
+.Antes de empezar
+* El nombre de usuario es la dirección de correo electrónico de la invitación.
+* Comprenda los roles de usuario que va a asignar.
+* Las contraseñas las define el usuario durante el proceso de registro.
+
+
+.Pasos
+. Inicie sesión en Cloud Insights
+. En el menú, haga clic en *Administración > Administración de usuarios*
++
+Aparecerá la pantalla Gestión de usuarios. La pantalla contiene una lista de todas las cuentas del sistema.
+
+. Haga clic en *+ Usuario*
++
+Aparece la pantalla *Invitar usuario*.
+
+. Introduzca una dirección de correo electrónico o varias direcciones para las invitaciones.
++
+*Nota:* cuando se introducen varias direcciones, se crean todas con la misma función. Solo puede configurar varios usuarios con el mismo rol.
+
+
+
+. Seleccione el rol del usuario para cada función de Cloud Insights.
++
+
+NOTE: Las funciones y funciones que puede elegir dependen de las funciones a las que tenga acceso en su función de administrador particular. Por ejemplo, si tiene el rol de administrador solo para Reporting, podrá asignar usuarios a cualquier rol en Reporting, pero no podrá asignar roles para Monitor y Optimize o Cloud Secure.
+
++
+image:UserRoleChoices.png["Opciones de funciones de usuario"]
+
+. Haga clic en *Invitar*
++
+La invitación se envía al usuario. Los usuarios tendrán 14 días para aceptar la invitación. Una vez que un usuario acepte la invitación, se llevará al Cloud Portal de NetApp, donde se inscribirá con la dirección de correo electrónico de la invitación. Si ya disponen de una cuenta para esa dirección de correo electrónico, tan solo tienen que iniciar sesión y acceder a su entorno Cloud Insights.
+
+
+
+
+
+== Eliminando usuarios
+
+Un usuario con la función Administrador puede eliminar un usuario (por ejemplo, alguien que ya no tenga la compañía) haciendo clic en el nombre del usuario y haciendo clic en _Delete User_ en el cuadro de diálogo. El usuario se eliminará del entorno Cloud Insights.
+
+Tenga en cuenta que cualquier consola, consulta, etc. que haya creado el usuario permanecerá disponible en el entorno de Cloud Insights incluso después de haber eliminado el usuario.
+
+
+
+== Inicio de sesión único (SSO) y Federación de identidades
+
+
+
+=== Habilitar la Federación de identidades para SSO en Cloud Insights
+
+Con Federación de identidades:
+
+* La autenticación se delega en el sistema de gestión de identidades del cliente, utilizando las credenciales del cliente del directorio corporativo y las políticas de automatización como la autenticación multifactor (MFA).
+* Los usuarios inician sesión una vez en todos los NetApp Cloud Services (inicio de sesión único).
+
+
+Las cuentas de usuario se gestionan en Cloud Central de NetApp para todos los servicios de cloud. De forma predeterminada, la autenticación se realiza mediante el perfil de usuario local de Cloud Central. A continuación se ofrece una descripción general simplificada de ese proceso:
+
+image:CloudCentralAuthentication.png["Autenticación de Cloud Central"]
+
+Sin embargo, algunos clientes desean usar su propio proveedor de identidades para autenticar a sus usuarios para Cloud Insights y sus otros servicios centrales de cloud de NetApp. Con la Federación de identidades, las cuentas de Cloud Central de NetApp se autentican mediante credenciales del directorio corporativo.
+
+A continuación se muestra un ejemplo simplificado de ese proceso:
+
+image:IdentityFederationDiagram-2.png["Federación de identidades ilustrada"]
+
+En el diagrama anterior, cuando un usuario accede a Cloud Insights, ese usuario se dirige al sistema de gestión de identidades del cliente para su autenticación. Una vez autenticada la cuenta, se dirige al usuario a la URL del inquilino Cloud Insights.
+
+Cloud Central utiliza Auth0 para implementar la Federación de identidades e integrarse con servicios como Active Directory Federation Services (ADFS) y Microsoft Azure Active Directory (AD). Para obtener más información sobre la configuración y la configuración de la Federación de identidades, consulte la documentación de Cloud Central en link:https://services.cloud.netapp.com/misc/federation-support["Federación de identidades"].
+
+Es importante comprender que el cambio de la federación de identidades en Cloud Central no solo se aplicará a Cloud Insights, sino a todos los servicios cloud de NetApp. El cliente debe hablar sobre este cambio con el equipo de NetApp de cada producto de Cloud Central que sea propietario para asegurarse de que la configuración que utiliza funcionará con la Federación de identidades o si es necesario realizar ajustes en cualquier cuenta. El cliente tendrá que implicar también a su equipo de SSO interno en el cambio de la federación de identidades.
+
+También es importante darse cuenta de que una vez que se habilita la federación de identidades, es probable que cualquier cambio en el proveedor de identidades de la empresa (por ejemplo, al pasar de SAML a Microsoft AD) requiera la solución de problemas/cambios/atención en Cloud Central para actualizar los perfiles de los usuarios.
+
+
+
+=== Aprovisionamiento automático del usuario de inicio de sesión único (SSO)
+
+Además de invitar a los usuarios, los administradores pueden activar el acceso a Cloud Insights para todos los usuarios de su dominio corporativo a *Single Sign-On (SSO), sin tener que invitarlos individualmente. Con SSO activado, cualquier usuario con la misma dirección de correo electrónico del dominio puede iniciar sesión en Cloud Insights utilizando sus credenciales corporativas.
+
+
+NOTE: _El autoaprovisionamiento del usuario SSO_ está disponible en Cloud Insights Premium Edition y debe configurarse para poder activarlo en Cloud Insights. La configuración de Provising automático de usuario SSO incluye link:https://services.cloud.netapp.com/misc/federation-support["Federación de identidades"] Mediante Cloud Central de NetApp, como se describe en la sección anterior. La Federación permite a los usuarios de inicio de sesión único acceder a sus cuentas de Cloud Central de NetApp usando las credenciales de su directorio corporativo, usando estándares abiertos como Security Assertion Markup Language 2.0 (SAML) y OpenID Connect (OIDC).
+
+Para configurar _SSO User Auto-Provisioning_, en la página *Admin > User Management*, haga clic en el botón *Request Federation*. Una vez configurado, los administradores podrán habilitar el inicio de sesión de usuario SSO. Cuando un administrador habilita _SSO User Auto-Provisioning_, eligen una función predeterminada para todos los usuarios SSO (como Invitado o Usuario). Los usuarios que inicien sesión mediante SSO tendrán el rol predeterminado.
+
+image:Roles_federation_Banner.png["Gestión de usuarios con Federación"]
+
+En algunas ocasiones, un administrador querrá promocionar a un único usuario del rol SSO predeterminado (por ejemplo, para hacerlos un administrador). Pueden lograrlo en la página *Admin > User Management* haciendo clic en el menú del lado derecho del usuario y seleccionando _Assign role_. Los usuarios a los que se les ha asignado una función explícita de esta manera continúan teniendo acceso a Cloud Insights incluso si _SSO User Auto-Provisioning_ se deshabilita posteriormente.
+
+Si el usuario ya no necesita el rol elevado, puede hacer clic en el menú para _Remove User_. El usuario se eliminará de la lista. Si _SSO User Auto-Provisioning_ está activado, el usuario puede continuar con el inicio de sesión en Cloud Insights a través de SSO, con la función predeterminada.
+
+Puede ocultar a los usuarios SSO desactivando la casilla de verificación *Mostrar usuarios SSO*.
+
+Sin embargo, no active _SSO User Auto-Provisioning_ si alguno de estos casos es cierto:
+
+* La organización tiene más de un inquilino Cloud Insights
+* La organización no desea que ningún usuario del dominio federado tenga algún nivel de acceso automático al inquilino Cloud Insights. _En este momento, no tenemos la capacidad de usar grupos para controlar el acceso a funciones con esta opción_.
+

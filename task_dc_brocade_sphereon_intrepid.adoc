@@ -1,0 +1,95 @@
+---
+sidebar: sidebar 
+permalink: task_dc_brocade_sphereon_intrepid.html 
+keywords: data collector, Brocade, Sphereon Intrepid, 
+summary: Configuración del recopilador de datos Brocade Sphereon/Intrepid Switch 
+---
+= Configuración del recopilador de datos Brocade Sphereon/Intrepid Switch
+:toc: macro
+:hardbreaks:
+:toclevels: 2
+:allow-uri-read: 
+:toc: 
+:toclevels: 2
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:toc-position: content
+
+
+[role="lead"]
+Cloud Insights utiliza el recopilador de datos Brocade Sphereon/Intrepid Switch (SNMP) para descubrir el inventario de los switches Brocade Sphereon o Intrepid.
+
+
+
+== Requisitos
+
+Se deben cumplir los siguientes requisitos para configurar este recopilador de datos:
+
+* Debe haber conectividad IP a todos los switches de la estructura. Si selecciona la casilla de comprobación detectar todos los switches en la estructura, Cloud Insights identifica todos los switches de la estructura; sin embargo, necesita conectividad IP a estos switches adicionales para detectarlos.
+* Cadena de comunidad de sólo lectura si se utiliza SNMP V1 o SNMP V2.
+* Acceso HTTP al switch para obtener información de división en zonas.
+* Acceda a la validación ejecutando la utilidad snmpwalk al conmutador (consulte _<install_path>\bin\_).
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Conmutador Sphereon | Dirección IP o nombre de dominio completo del switch 
+
+
+| Versión de SNMP | Versión de SNMP 
+
+
+| Cadena de comunidad SNMP | Cadena de comunidad de sólo lectura de SNMP que se utiliza para acceder al conmutador 
+
+
+| Nombre de usuario SNMP | Nombre de usuario SMI-S para el conmutador (sólo SNMP v3) 
+
+
+| Contraseña SNMP | Contraseña SMI-S para el conmutador (sólo SNMP v3) 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Intervalo de sondeo de inventario (mín.) | Intervalo entre sondeos de inventario. El valor predeterminado es 15 minutos. 
+
+
+| Protocolo de autenticación SNMP | Protocolo de autenticación SNMP (solo SNMP v3) 
+
+
+| Contraseña de privacidad de SNMP | Contraseña de privacidad de SNMP (sólo SNMP v3) 
+
+
+| Número SNMP de reintentos | Número de intentos de reintento SNMP 
+
+
+| Nombre de la estructura | Nombre de la estructura que informará el recopilador de datos. Deje en blanco para informar el nombre de la estructura como WWN. 
+
+
+| Habilite el solapamiento | Seleccione esta opción para activar la adquisición al recibir una captura SNMP del dispositivo. Si selecciona Activar solapamiento, también debe activar SNMP. 
+
+
+| Tiempo mínimo entre solapamientos (segundos) | Tiempo mínimo entre intentos de adquisición activados por solapamientos. El valor predeterminado es 10 segundos. 
+
+
+| Intervalo de sondeo de rendimiento (s) | Intervalo entre sondeos de rendimiento. El valor predeterminado es 300 segundos. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

@@ -1,0 +1,57 @@
+---
+sidebar: sidebar 
+permalink: reporting_overview.html 
+summary: Informes personalizados y predefinidos de sus datos con Cloud Insights. 
+keywords: reporting, cognos, data warehouse, dwh 
+---
+= Información general sobre informes de Cloud Insights
+:allow-uri-read: 
+
+
+[role="lead"]
+La generación de informes Cloud Insights es una herramienta de inteligencia empresarial que permite ver informes predefinidos o crear informes personalizados.
+
+
+NOTE: La función Reporting se encuentra disponible en Cloud Insights link:concept_subscribing_to_cloud_insights.html["Edición Premium"].
+
+Los informes de Cloud Insights permiten realizar las siguientes tareas:
+
+* Ejecute un informe predefinido
+* Cree un informe personalizado
+* Personalizar el formato y el método de entrega de un informe
+* Programar informes para que se ejecuten automáticamente
+* Informes por correo electrónico
+* Utilice colores para representar umbrales de datos
+
+
+Los informes de Cloud Insights pueden generar informes personalizados para áreas como pago por uso, análisis de consumo y pronósticos, y pueden ayudar a responder preguntas como las siguientes:
+
+* ¿Qué inventario tengo?
+* ¿Dónde está mi inventario?
+* ¿Quién utiliza nuestros activos?
+* ¿Cuál es el pago por uso para el almacenamiento asignado a una unidad de negocio?
+* ¿Cuánto tiempo hasta que necesite adquirir capacidad de almacenamiento adicional?
+* ¿Las unidades de negocio están alineadas en los niveles de almacenamiento adecuados?
+* ¿Cómo cambia la asignación de almacenamiento a lo largo de un mes, trimestre o año?
+
+
+
+
+== Acceder a Informes de Cloud Insights
+
+Para acceder a los informes de Cloud Insights, haga clic en el enlace *Informes* del menú.
+
+Se le llevará a la interfaz de Informes. Cloud Insights utiliza IBM Cognos Analytics para su motor de generación de informes. Inicie sesión con sus credenciales de Reporting.
+
+
+
+== ¿Qué es ETL?
+
+Al trabajar con Reporting, oirá los términos "almacén de datos" y "ETL". ETL significa "Extracción, transformación y carga". El proceso ETL recupera los datos recopilados en Cloud Insights y los transforma en un formato para su uso en Informes. "Data Warehouse" se refiere a los datos recogidos disponibles para la elaboración de informes.
+
+El proceso ETL incluye estos procesos individuales:
+
+* *Extract*: Toma datos de Cloud Insights.
+* *Transform*: Aplica las reglas o funciones de la lógica de negocio a los datos a medida que se extraen de Cloud Insights.
+* *Load*: Guarda los datos transformados en el almacén de datos para su uso en Reporting.
+

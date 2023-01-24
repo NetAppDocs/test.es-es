@@ -1,0 +1,39 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_openzfs.html 
+keywords: telegraf, installation, install, openzfs 
+summary: Configuración de recopiladores de datos de OpenZFS 
+---
+= Colector de datos OpenZFS
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas de OpenZFS.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija OpenZFS.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:OpenZFSDCConfigLinux.png["Configuración de OpenZFS de Linux"]
+
+
+
+== Configuración
+
+Puede encontrar información adicional en la link:http://open-zfs.org/wiki/Documentation["Documentación de OpenZFS"].
+
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

@@ -1,0 +1,87 @@
+---
+sidebar: sidebar 
+permalink: concept_ttl_and_downsampling.html 
+summary: 'Explicación de tiempo de vida (TTL) y reducción del muestreo' 
+keywords: time-to-live, TTL, downsampling, downsample, 
+---
+= Tiempo de vida (TTL) y datos de reducción de la muestra
+:allow-uri-read: 
+
+
+[role="lead"]
+Dado que Cloud Insights conserva los datos durante un período determinado (por edición), existe la posibilidad de procesar miles de puntos de datos. Por lo tanto, los datos pueden reducirse antes de mostrarse en gráficos y tablas.
+
+
+
+== Retención de datos (tiempo de actividad)
+
+Cloud Insights conserva los datos durante un período de tiempo determinado por la edición suscrita activa. La retención de datos también se conoce como tiempo de vida o TTL.
+
+|===
+| Edición | TTL 
+
+
+| Básico | 7 días 
+
+
+| Estándar | 90 días 
+
+
+| Premium | 13 meses 
+|===
+Las suscripciones Premium Edition con al menos 500 unidades administradas (MU) también conservan los datos de Business Intelligence e Informes durante el período de 13 meses.
+
+
+
+== Reducción del muestreo de datos
+
+*Downsampling* proporciona una aproximación estadística de sus datos en gráficos, que le proporciona una visión general eficiente de los datos sin tener que mostrar cada punto de datos, manteniendo al mismo tiempo una visión precisa de los datos recopilados.
+
+
+
+=== ¿Por qué es necesario reducir el muestreo?
+
+Dado que se necesita una gran cantidad de procesamiento para preparar los datos para su visualización en gráficos y gráficos, con el fin de permitir que los gráficos se muestren de forma rápida y eficaz, los datos se pueden reducir de forma que mantenga la forma general de un gráfico sin necesidad de procesar cada punto de datos para ese gráfico.
+
+Nota: No se pierden datos reales durante la reducción de la muestra. Puede elegir ver los datos reales del gráfico en lugar de los datos de muestra descendente siguiendo los pasos que se muestran a continuación.
+
+
+
+=== Cómo funciona la reducción de muestras
+
+Los datos se reducen en las siguientes condiciones:
+
+* Cuando el intervalo de tiempo seleccionado incluye 7 días de datos o menos, no se produce ninguna reducción de la muestra. Los gráficos muestran datos reales.
+* Cuando el intervalo de tiempo seleccionado incluye más de 7 días de datos pero menos de 1,000 puntos de datos, no se produce ninguna reducción de muestreo. Los gráficos muestran datos reales.
+* Cuando el intervalo de tiempo seleccionado incluye más de 7 días de datos y más de 1,000 puntos de datos, se reduce la muestra de los datos. Los gráficos muestran datos aproximados.
+
+
+Los siguientes ejemplos muestran la acción de reducción de la muestra. En la primera ilustración, se muestran los gráficos de latencia e IOPS en una página de activo de almacén de datos durante un periodo de 24 horas, como se muestra seleccionando 24 horas en el selector de tiempo de la página Asset. También puede ver los mismos datos seleccionando personalizado y configurando el intervalo de tiempo en el mismo periodo de 24 horas.
+
+Dado que estamos eligiendo un intervalo de tiempo inferior a 7 días y tenemos menos de 1,000 puntos de datos para trazar, los datos mostrados son datos reales. No se produce ninguna reducción de la muestra.
+
+image:Charts_NoDownsample.png["No hay reducción de muestreo"]
+
+Sin embargo, si está viendo datos eligiendo 30d en el selector de tiempo de página de activos, O bien, al configurar un intervalo de tiempo personalizado de más de 7 días (o si Cloud Insights recogió más de 1,000 muestras de datos durante el período de tiempo elegido), se reduce la muestra de los datos antes de que se muestren. Al ampliar un gráfico de muestra descendente, la pantalla continúa mostrando los datos aproximados.
+
+
+NOTE: Al ampliar un gráfico de muestra descendente, el zoom es un zoom digital. La pantalla continúa mostrando los datos aproximados.
+
+Puede verlo en la siguiente ilustración, donde el intervalo de tiempo se establece por primera vez en 30d, y el gráfico se amplía para mostrar el mismo período de 24 horas como se ha indicado anteriormente.
+
+image:Charts_Downsampled.png["Reducción de muestreo"]
+
+Los gráficos de muestra descendente muestran el mismo período de 24 horas que los gráficos "reales" anteriores, por lo que las líneas siguen la misma forma general, lo que le permite detectar rápidamente picos o valles interesantes en sus datos de rendimiento.
+
+
+NOTE: Debido a la forma en que se aproximan los datos para la reducción de muestras, las líneas de la carta pueden estar ligeramente desactivadas al comparar las líneas de la muestra descendente vs datos reales, para permitir una mejor alineación en los gráficos. Sin embargo, la diferencia es mínima y no afecta a la precisión general de los datos mostrados.
+
+
+
+=== Infracciones en gráficos con muestreo inferior
+
+Al ver gráficos con muestras descendentes, tenga en cuenta que no se muestran las infracciones. Para ver las violaciones, puede hacer una de estas dos cosas:
+
+* Para ver los datos reales de ese intervalo de tiempo, seleccione personalizado en el selector de tiempo de página de activos e introduzca un intervalo de tiempo inferior a 7 días. Pase el ratón sobre cada punto rojo. La información sobre herramientas mostrará la infracción que se ha producido.
+* Anote el intervalo de tiempo y busque las infracciones en el panel de infracciones.
+

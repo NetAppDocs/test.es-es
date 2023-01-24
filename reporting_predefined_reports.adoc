@@ -1,0 +1,176 @@
+---
+sidebar: sidebar 
+permalink: reporting_predefined_reports.html 
+summary: Descripción general de los informes predefinidos 
+keywords: reporting, cognos, data warehouse, dwh, pre-defined 
+---
+= Informes predefinidos más sencillos
+:allow-uri-read: 
+
+
+[role="lead"]
+Los informes de Cloud Insights incluyen informes predefinidos que abordan una serie de requisitos comunes de creación de informes, con los que se proporciona información crucial que las partes interesadas necesitan para tomar decisiones informadas sobre su infraestructura de almacenamiento.
+
+
+NOTE: La función Reporting se encuentra disponible en Cloud Insights link:concept_subscribing_to_cloud_insights.html["Edición Premium"].
+
+Puede generar informes predefinidos en el portal de informes de Cloud Insights, enviarlos por correo electrónico a otros usuarios e incluso modificarlos. Varios informes permiten filtrar por dispositivo, entidad de negocio o nivel. Las herramientas de elaboración de informes utilizan IBM Cognos como base y le proporcionan muchas opciones de presentación de datos.
+
+Los informes predefinidos muestran su inventario, capacidad de almacenamiento, pago por uso, rendimiento, eficiencia del almacenamiento, y los datos de costes del cloud. Puede modificar estos informes predefinidos y guardar sus modificaciones.
+
+Puede generar informes en distintos formatos, incluidos HTML, PDF, CSV, XML, Y Excel.
+
+Cloud Insights da cabida a múltiples usuarios para la creación de informes, lo que le permite asociar usuarios con unidades de negocio. Con esta función, los administradores pueden separar los datos o los informes de acuerdo con los atributos de un usuario o su afiliación.
+
+
+
+== Navegación a Informes predefinidos
+
+Al abrir el Portal de informes, la carpeta _Team Content_ es el punto de partida para que seleccione el tipo de información que necesita en los informes de Cloud Insights.
+
+. En el panel de navegación izquierdo, haga clic en *Contenido del equipo* y seleccione la categoría de información que desea utilizar.
+. Haga clic en *Informes* para acceder a los informes predefinidos.
+
+
+image:Reporting-TeamContent.png["Contenido del equipo"]
+
+
+
+== Uso de informes predefinidos para responder preguntas comunes
+
+Los siguientes informes predefinidos están disponibles en *Contenido del equipo > Informes*.
+
+
+
+=== Capacidad y rendimiento a nivel de servicio de las aplicaciones
+
+El informe rendimiento y capacidad de nivel de servicio de la aplicación proporciona una descripción general de alto nivel de las aplicaciones. Esta información se puede utilizar para planificar la capacidad o para diseñar un plan de migración.
+
+
+
+=== Pago por uso
+
+El informe de pago por uso proporciona información de pago por uso y responsabilidad de la capacidad de almacenamiento por hosts, aplicaciones y entidades de negocio, e incluye datos actuales e históricos.
+
+Para evitar el doble recuento no se incluyen los servidores ESX, sólo supervisar los equipos virtuales.
+
+
+
+=== Fuentes de datos
+
+El informe orígenes de datos muestra todos los orígenes de datos instalados en su sitio, el estado del origen de datos (correcto/fallo) y los mensajes de estado. El informe proporciona información acerca de dónde empezar a solucionar problemas de orígenes de datos. Las fuentes de datos fallidas afectan a la precisión de los informes y a la facilidad de uso general del producto.
+
+
+
+=== Rendimiento de ESX frente a VM
+
+El informe de rendimiento de ESX frente a VM ofrece una comparación de los servidores ESX y los equipos virtuales, donde se muestran la tasa media y máxima de IOPS, rendimiento y latencia, así como su utilización para servidores ESX y equipos virtuales. Para evitar el doble recuento, excluya los servidores ESX; sólo incluya los equipos virtuales. Hay una versión actualizada de este informe disponible en Storage Automation Store de NetApp.
+
+
+
+=== Resumen de estructura
+
+El informe Fabric Summary identifica la información de los switches y los switches, incluidos el número de puertos, las versiones de firmware y el estado de la licencia. El informe no incluye puertos de conmutador NPV.
+
+
+
+=== HBA del host
+
+El informe HBA del host ofrece una descripción general de los hosts del entorno y proporciona la versión del proveedor, el modelo y el firmware de los HBA, así como el nivel de firmware de los switches a los que están conectados. Este informe se puede utilizar para analizar la compatibilidad de firmware cuando se planifica una actualización del firmware para un switch o un HBA.
+
+
+
+=== Capacidad y rendimiento para el nivel de servicio de host
+
+El informe rendimiento y capacidad del nivel de servicio del host proporciona una visión general del uso del almacenamiento por host para aplicaciones únicamente de bloques.
+
+
+
+=== Resumen de host
+
+El informe Host Summary ofrece una descripción general del aprovechamiento del almacenamiento en cada host seleccionado con información sobre Fibre Channel y hosts iSCSI. El informe le permite comparar puertos y rutas, la capacidad de Fibre Channel e ISCSI y el número de infracciones.
+
+
+
+=== Detalles de licencia
+
+El informe Detalles de licencia muestra la cantidad de recursos con licencia en todos los sitios con licencias activas. El informe también muestra una suma de la cantidad real en todos los sitios con licencias activas. La suma puede incluir superposiciones de cabinas de almacenamiento gestionadas por varios servidores.
+
+
+
+=== Volúmenes asignados pero no Masquear
+
+El informe volúmenes asignados pero no Masqued enumera los volúmenes cuyo número de unidad lógica (LUN) ha sido asignado para su uso por un host en particular, pero no está enmascarado con ese host. En algunos casos, se pueden retirar del servicio las LUN que se han desenmascarado. Cualquier host puede acceder a los volúmenes sin enmascarar, lo que hace que sean vulnerables a la corrupción de datos.
+
+
+
+=== Capacidad y rendimiento de NetApp
+
+El informe sobre capacidad y rendimiento de NetApp proporciona datos globales para la capacidad asignada, utilizada y comprometida con datos de tendencias y rendimiento de la capacidad de NetApp.
+
+
+
+=== Tarjeta de puntuación
+
+El informe de la tabla de puntuación proporciona un resumen y el estado general de todos los activos adquiridos por Cloud Insights. El estado se indica con indicadores verde, amarillo y rojo:
+
+* El verde indica que la condición es normal
+* El amarillo indica un posible problema en el entorno
+* El rojo indica un problema que requiere atención
+
+
+Todos los campos del informe se describen en el diccionario de datos que se proporciona con el informe.
+
+
+
+=== Resumen del almacenamiento
+
+El informe Storage Summary proporciona un resumen global de datos de capacidad utilizada y no utilizada para los pools de almacenamiento, los pools de almacenamiento y los volúmenes sin configurar. Este informe proporciona una descripción general de todo el almacenamiento detectado.
+
+
+
+=== Capacidad y rendimiento de los equipos virtuales
+
+Describe el entorno de máquinas virtuales y el uso de capacidad. Las herramientas de VM deben habilitarse para ver algunos datos, como, por ejemplo, el momento del apagado de las máquinas virtuales.
+
+
+
+=== Rutas de VM
+
+El informe de rutas de VM proporciona datos de capacidad del almacén de datos y métricas de rendimiento para los que se ejecuta la máquina virtual en el host, qué hosts están accediendo a qué volúmenes compartidos, qué es la ruta de acceso activa y qué comprende la asignación y el uso de la capacidad.
+
+
+
+=== Capacidad de HDS por thin Pool
+
+El informe capacidad de HDS por thin Pool muestra la cantidad de capacidad utilizable de un pool de almacenamiento que es con thin provisioning.
+
+
+
+=== Capacidad de NetApp por agregado
+
+En el informe capacidad de NetApp por agregado, se muestra el espacio total bruto, total, utilizado, disponible y comprometido de los agregados.
+
+
+
+=== Capacidad de Symmetrix mediante una cabina gruesa
+
+El informe Symmetrix Capacity by thick Array muestra capacidad bruta, capacidad utilizable, capacidad libre, asignada, enmascarada, y la capacidad libre total.
+
+
+
+=== Capacidad de Symmetrix mediante un pool ligero
+
+El informe Symmetrix Capacity by Thin Pool muestra capacidad bruta, capacidad utilizable, capacidad utilizada, capacidad libre, porcentaje utilizado, capacidad de la suscripción y tasa de suscripción.
+
+
+
+=== XIV capacidad por matriz
+
+En el informe XIV capacidad por matriz se muestra la capacidad utilizada y no utilizada de la matriz.
+
+
+
+=== XIV capacidad por Pool
+
+En el informe XIV capacidad por pool se muestra la capacidad utilizada y no utilizada de los pools de almacenamiento.

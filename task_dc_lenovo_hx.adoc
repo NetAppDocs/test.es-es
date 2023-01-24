@@ -1,0 +1,83 @@
+---
+sidebar: sidebar 
+permalink: task_dc_lenovo_hx.html 
+keywords: data collector, Lenovo, HX 
+summary: Configuración del recopilador de datos HX de Lenovo. 
+---
+= Recopilador de datos HX de Lenovo
+:allow-uri-read: 
+
+
+[role="lead"]
+El recopilador de datos HX de Lenovo adquiere información de inventario y rendimiento de los sistemas de almacenamiento HX de Lenovo.
+
+
+
+== Requisitos
+
+Para configurar este recopilador de datos se necesita la siguiente información:
+
+* Un nombre único para el recopilador de datos
+* La unidad de adquisición asociada con el recopilador de datos
+* Requisito de puerto TCP 9440
+
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario y rendimiento del recopilador de datos HX de Lenovo. Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Pool de almacenamiento | Pool de almacenamiento 
+
+
+| Contenedor | Volumen interno 
+
+
+| Nodo | Controladora 
+
+
+| Share | Recurso compartido de archivos 
+
+
+| Sistema de archivos distribuidos de Nutanix (NDF) | Share 
+
+
+| Grupo de volúmenes | LUN back-end 
+|===
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Dirección IP externa del prisma | Dirección IP utilizada para conectar con el sistema de almacenamiento 
+
+
+| Nombre de usuario | Nombre de usuario para iniciar sesión en el sistema de almacenamiento. El valor predeterminado es admin. 
+
+
+| Contraseña | Contraseña del sistema de almacenamiento HX de Lenovo 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Puerto TCP | Puerto TCP utilizado para conectar con Lenovo HX. El valor predeterminado es 9440. 
+
+
+| Intervalo de sondeo de inventario | Intervalo entre sondeos de inventario. El valor predeterminado es 60 minutos. 
+|===

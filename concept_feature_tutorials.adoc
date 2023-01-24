@@ -1,0 +1,69 @@
+---
+sidebar: sidebar 
+permalink: concept_feature_tutorials.html 
+summary: Cloud Insights tiene tutoriales para mostrarle cómo realizar muchas tareas. 
+keywords: onboarding, getting started, video, tutorial, resolution, dashboard, query, troubleshooting 
+---
+= Tutoriales de funciones
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights cuenta con útiles funciones que le permiten encontrar datos de forma rápida y sencilla, solucionar problemas y proporcionar información sobre su entorno corporativo. Encuentre datos fácilmente con consultas potentes, visualice datos en paneles y envíe alertas por correo electrónico para los umbrales de datos que ha establecido.
+
+Cloud Insights incluye una serie de tutoriales en vídeo para ayudarle a entender estas funciones e implementar mejor sus estrategias de información empresarial. Todos los usuarios que tengan acceso a su entorno Cloud Insights pueden aprovechar estos tutoriales.
+
+
+
+== Introducción
+
+Vea un breve tutorial en el que se explica cómo funciona Cloud Insights.
+
+video::howTo.mp4[]
+
+
+== Lista de verificación y tutoriales en vídeo
+
+La *Lista de comprobación de inicio* que se muestra en el sitio Cloud Insights contiene una lista de varias tareas y conceptos útiles. Al seleccionar un elemento de la lista de comprobación, se abre la página Cloud Insights correspondiente a ese concepto. Por ejemplo, al hacer clic en el elemento _Crear un panel_ se abre la página Cloud Insights *Paneles*.
+
+image:OnboardingChecklist.png["Curso de la lista de comprobación del tutorial"]
+
+En la parte superior de la página hay un vínculo a un tutorial de vídeo que muestra cómo crear un panel de control. Puede ver el vídeo tantas veces como desee hasta que haga clic en el _got! No mostrar este enlace de nuevo_ para ese vídeo. El vídeo está disponible cada vez que vaya a la página Paneles, hasta que lo descarte.
+
+image:Startup-DashboardWatchVideo.png["Vea el enlace del vídeo"]
+
+Después de ver el vídeo al menos una vez, el elemento _Create a Dashboard_ de la lista de comprobación está desactivado, lo que indica que ha completado el tutorial. A continuación, puede continuar con el siguiente tutorial.
+
+
+NOTE: Puede ver los tutoriales en cualquier orden que desee, tantas veces como desee hasta que se desestime.
+
+
+
+=== No se ha recibido la lista de comprobación
+
+La Lista de comprobación de inicio se muestra en su sitio hasta que haga clic en el enlace _do't Show this Again_ en la parte inferior de la lista de comprobación. Incluso después de descartar la lista de comprobación, los tutoriales están aún disponibles en cada página Cloud Insights adecuada hasta que se desestime cada uno de la barra de encabezado de mensaje.
+
+
+
+== Vea los tutoriales
+
+
+
+=== Consulta de datos
+
+video::Queries.mp4[]
+
+
+=== Crear una consola
+
+video::Dashboards.mp4[]
+
+
+=== Resolución de problemas
+
+video::Troubleshooting.mp4[]
+
+
+=== Resuelva los dispositivos
+
+video::AHR_small.mp4[]

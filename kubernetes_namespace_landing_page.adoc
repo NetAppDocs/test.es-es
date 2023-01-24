@@ -1,0 +1,22 @@
+---
+sidebar: sidebar 
+permalink: kubernetes_namespace_landing_page.html 
+keywords: telegraf, installation, install, kubernetes, pods, clusters, filters, filtering, k8s, namespace 
+summary: Explicación de la página de destino del espacio de nombres de Kubernetes 
+---
+= Página detallada del espacio de nombres de Kubernetes
+:allow-uri-read: 
+
+
+[role="lead"]
+La página de detalles Kubernetes Namespace ofrece un resumen de todos los activos utilizados por un espacio de nombres, incluidos todos los recursos de almacenamiento de back-end y su utilización de capacidad.
+
+Al hacer clic en un enlace de espacio de nombres en cualquier página del Explorador de Kubernetes, se abre una página de detalles para ese espacio de nombres.
+
+image:Kubernetes_Namespace_Detail_Example_2.png["Página de detalles del espacio de nombres"]
+
+Al igual que otras páginas de Kubernetes Excplorer, puede configurar un filtro para que se centre en nodos específicos u otros objetos. También puede ver una descripción general del estado del pod y el estado del espacio de nombres, junto con gráficos que muestran la demanda de CPU y memoria, así como la capacidad persistente del volumen, si corresponde.
+
+Por último, la página muestra una tabla de cargas de trabajo asociadas con el espacio de nombres.
+
+Haga clic en los enlaces de la página para explorar aún más su entorno de Kubernetes o solucionar otros problemas.

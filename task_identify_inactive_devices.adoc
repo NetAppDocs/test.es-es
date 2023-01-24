@@ -1,0 +1,24 @@
+---
+sidebar: sidebar 
+permalink: task_identify_inactive_devices.html 
+keywords: inactive, device, 
+summary: La identificación de dispositivos inactivos permite elegir eliminarlos o asignarles una función activa. 
+---
+= Identificación de dispositivos inactivos
+:allow-uri-read: 
+
+
+[role="lead"]
+Identificar los activos de los que dispone y quién los utiliza es fundamental para “dimensionar correctamente” y liberar infraestructura no utilizada. Puede reasignar o retirar recursos infrautilizados fácilmente y evitar compras innecesarias.
+
+Siga estos pasos para identificar activos inactivos.
+
+.Pasos
+. En el menú Cloud Insights, haga clic en *consultas > Nueva consulta*
+. En la `Search For` seleccione el tipo de activo que desea consultar
+. Haga clic en *+ > es activo*
+. Haga clic en *cualquiera* y cámbielo a *no*
++
+El sistema muestra una lista de activos inactivos del tipo de dispositivo seleccionado.
+
+

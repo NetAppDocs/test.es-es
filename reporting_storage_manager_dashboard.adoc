@@ -1,0 +1,75 @@
+---
+sidebar: sidebar 
+permalink: reporting_storage_manager_dashboard.html 
+summary: Es posible usar la consola de Storage Manager para la gestión diaria de los servicios de almacenamiento. 
+keywords: reporting, cognos, data warehouse, dwh, smd, storage manager dashboard 
+---
+= Consola de Storage Manager
+:allow-uri-read: 
+
+
+[role="lead"]
+El panel de Storage Manager ofrece una visualización centralizada que permite comparar y contrastar el uso de recursos a lo largo del tiempo con los rangos aceptables y los días anteriores de actividad. Mostrando solo las métricas de rendimiento clave de los servicios de almacenamiento, puede tomar decisiones sobre cómo mantener sus centros de datos.
+
+
+NOTE: La función Reporting se encuentra disponible en Cloud Insights link:concept_subscribing_to_cloud_insights.html["Edición Premium"].
+
+La consola incluye siete componentes que contienen información contextual sobre ciertos aspectos del entorno de almacenamiento. Puede analizar los aspectos de sus servicios de almacenamiento para realizar un análisis en profundidad de una sección que más le interese.
+
+
+
+== Resumen
+
+image:Reporting-SMD.png["Consola de Storage Manager"]
+
+Este componente muestra la capacidad de almacenamiento utilizada frente a la utilizable, el número total de puertos del switch relacionados con el número total de puertos del switch conectados y el aprovechamiento total de los puertos del switch conectados con respecto al ancho de banda total, así como cómo cada uno de estos tendencias durante el tiempo. Puede ver la utilización real en comparación con los rangos inferior, medio y alto, lo que le permite comparar y contrastar el uso entre proyecciones y los datos reales deseados, en función de un objetivo. Para los puertos de switch y de capacidad, puede configurar este destino. La previsión se basa en una extrapolación de la tasa de crecimiento actual y la fecha establecida. Cuando la capacidad utilizada prevista, que se basa en la fecha de proyección de uso futura, excede el objetivo, aparece una alerta (círculo rojo sólido) junto a la capacidad.
+
+
+
+=== Capacidad de niveles de almacenamiento
+
+Este componente muestra la capacidad del nivel utilizada frente a la capacidad asignada al nivel, que indica cómo aumenta o disminuye la capacidad utilizada en un periodo de 12 meses y cuántos meses quedan a la capacidad completa. El uso de la capacidad se muestra con los valores proporcionados para el uso real, el pronóstico de uso y un objetivo de capacidad que se pueden configurar. Cuando la capacidad utilizada prevista, que se basa en la fecha de proyección de uso futura, excede la capacidad objetivo, aparece una alerta (círculo rojo sólido) junto a un nivel.
+
+Puede hacer clic en cualquier nivel para mostrar el informe de detalles de rendimiento y capacidad de pools de almacenamiento, que muestra detalles de capacidad libre frente a uso, número de días a completos y detalles de rendimiento (IOPS y tiempo de respuesta) para todos los pools del nivel seleccionado. También puede hacer clic en cualquier nombre de pool de almacenamiento o pool de almacenamiento de este informe para mostrar la página de activos donde se resume el estado actual de ese recurso.
+
+
+
+=== Tráfico de almacenamiento diario
+
+Este componente muestra el rendimiento del entorno, si hay un gran crecimiento, cambios o problemas potenciales en comparación con los seis meses anteriores. También muestra el tráfico promedio frente al tráfico de los siete días anteriores y del día anterior. Puede visualizar cualquier anomalía en el funcionamiento de la infraestructura porque proporciona información que resalta tanto las variaciones cíclicas (siete días anteriores) como estacionales (seis meses anteriores).
+
+Puede hacer clic en el título (tráfico de almacenamiento diario) para mostrar el informe Detalles del tráfico de almacenamiento, que muestra el mapa térmico del tráfico de almacenamiento por horas del día anterior de cada sistema de almacenamiento. Haga clic en cualquier nombre de almacenamiento de este informe para mostrar la página del activo donde se resume el estado actual de ese recurso.
+
+
+
+=== Los centros de datos deben alcanzar su capacidad completa
+
+Este componente muestra todos los centros de datos, en comparación con todos los niveles, y la capacidad restante en cada centro de datos para cada nivel de almacenamiento basándose en las tasas de crecimiento previstas. El nivel de capacidad se muestra en azul; cuanto más oscuro es el color, menor es el tiempo que el nivel de la ubicación ha dejado antes de que esté lleno.
+
+Puede hacer clic en una sección de un nivel para mostrar el informe Storage Pools days to Full Details, donde se muestra la capacidad total, la capacidad libre y la cantidad de días que se deben completar para todos los pools del nivel seleccionado y el centro de datos. Haga clic en cualquier nombre de almacenamiento o pool de almacenamiento de este informe para mostrar la página de activos donde se resume el estado actual de ese recurso.
+
+
+
+=== 10 aplicaciones principales
+
+Este componente muestra las 10 principales aplicaciones en función de la capacidad utilizada. Independientemente de cómo organice los datos el nivel, este área muestra la capacidad utilizada actual y el uso compartido de la infraestructura. Puede visualizar la gama de experiencia del usuario de los siete días anteriores para ver si los consumidores experimentan tiempos de respuesta aceptables (o, lo que es más importante, inaceptables).
+
+Este área también muestra tendencias, lo que indica si las aplicaciones cumplen sus objetivos de nivel de servicio (SLO) de rendimiento. Puede ver el tiempo de respuesta mínimo de la semana anterior, el primer cuartil, el tercer cuartil y el tiempo de respuesta máximo, con una mediana que se muestra contra un objetivo de nivel de servicio aceptable, que puede configurar. Cuando el tiempo de respuesta medio de cualquier aplicación está fuera del rango aceptable de SLO, aparece una alerta (círculo rojo fijo) junto a la aplicación. Puede hacer clic en una aplicación para mostrar la página de activos que resume el estado actual de ese recurso.
+
+
+
+=== Niveles de almacenamiento rendimiento diario
+
+Este componente muestra un resumen del rendimiento del nivel en cuanto al tiempo de respuesta y las IOPS de los siete días anteriores. Este rendimiento se compara con un objetivo de nivel de servicio, que puede configurar, lo que le permite ver si existe la oportunidad de consolidar niveles, volver a alinear las cargas de trabajo proporcionadas con estos niveles o identificar problemas con niveles concretos. Cuando el tiempo de respuesta medio o IOPS promedio están fuera del rango aceptable de SLO, aparece una alerta (círculo rojo sólido) junto a un nivel.
+
+Puede hacer clic en el nombre de un nivel para mostrar el informe Storage Pools Capacity and Performance Details, donde se muestran detalles de las capacidades libres versus utilizadas, el número de días que deben llenarse y el rendimiento (IOPS y tiempo de respuesta) de todos los pools en el nivel seleccionado. Haga clic en cualquier pool de almacenamiento o pool de almacenamiento de este informe para mostrar la página de activos donde se resume el estado actual de ese recurso.
+
+
+
+=== Capacidad huérfana
+
+Este componente muestra la capacidad total huérfana y la capacidad huérfana por nivel, comparándola con los rangos aceptables de la capacidad utilizable total y mostrando la capacidad real huérfana. La capacidad huérfana se define mediante la configuración y el rendimiento. El almacenamiento huérfano mediante configuración describe una situación en la que hay almacenamiento asignado a un host. Sin embargo, la configuración no se realizó correctamente y el host no puede acceder al almacenamiento. Huérfanas por el rendimiento se produce cuando un host configura correctamente el acceso al almacenamiento. Sin embargo, no ha habido tráfico de almacenamiento.
+
+La barra apilada horizontal muestra los rangos aceptables. Cuanto más oscuro sea el gris, más inaceptable será la situación. La situación actual se muestra con la estrecha barra de bronce que muestra la capacidad real que está huérfana.
+
+Puede hacer clic en un nivel para mostrar el informe Detalles de almacenamiento huérfano, lo que muestra todos los volúmenes identificados como huérfanos por la configuración y el rendimiento del nivel seleccionado. Haga clic en cualquier almacenamiento, pool de almacenamiento o volumen de este informe para mostrar el resumen de la página del activo del estado actual de ese recurso.

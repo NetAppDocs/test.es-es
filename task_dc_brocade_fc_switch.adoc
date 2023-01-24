@@ -1,0 +1,157 @@
+---
+sidebar: sidebar 
+permalink: task_dc_brocade_fc_switch.html 
+keywords: data collector, Brocade, FC switch, 
+summary: Configurar el recopilador de datos de los switches FC de Brocade. 
+---
+= Recopilador de datos de switches Brocade FC
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza la fuente de datos de switch FC de Brocade (SSH) para descubrir el inventario de Brocade o dispositivos de switch nuevos que ejecutan el firmware 4.2 de sistema operativo (FOS) incluido en versiones posteriores. Son compatibles los dispositivos en los modos de switch FC y Access Gateway.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario a través del recopilador de datos de switches FC de Brocade. Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Conmutador | Conmutador 
+
+
+| Puerto | Puerto 
+
+
+| Estructura virtual, estructura física | Estructura 
+
+
+| Zona | Zona 
+
+
+| Cambio lógico | Cambio lógico 
+
+
+| Volumen virtual | Volumen 
+
+
+| Zona LSAN | Zona IVR 
+|===
+Nota: Sólo son asignaciones de terminología comunes y es posible que no representen todos los casos de este recopilador de datos.
+
+
+
+== Requisitos
+
+* La unidad de adquisición Cloud Insights (AU) iniciará conexiones al puerto TCP 22 en los switches Brocade para recopilar datos de inventario. El AU también iniciará conexiones al puerto UDP 161 para la recopilación de datos de rendimiento.
+* Debe haber conectividad IP a todos los switches de la estructura. Si selecciona la casilla de comprobación detectar todos los switches en la estructura, Cloud Insights identifica todos los switches de la estructura; sin embargo, necesita conectividad IP a estos switches adicionales para detectarlos.
+* La misma cuenta es necesaria globalmente en todos los switches del entramado. Puede utilizar PuTTY (emulador de terminal de código abierto) para confirmar el acceso.
+* Los puertos 161 y 162 deben estar abiertos a todos los switches de la estructura para poder realizar sondeos de rendimiento de SNMP.
+* Cadena de comunidad de sólo lectura SNMP
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Cambie IP | Dirección IP o nombre de dominio completo del servidor EFC 
+
+
+| Nombre de usuario | Nombre de usuario del conmutador 
+
+
+| Contraseña | Contraseña para el conmutador 
+
+
+| SNMP | Versión de SNMP 
+
+
+| Cadena de comunidad SNMP | Cadena de comunidad de sólo lectura de SNMP que se utiliza para acceder al conmutador 
+
+
+| Nombre de usuario SNMP | Nombre de usuario SNMP 
+
+
+| Contraseña SNMP | Contraseña SNMP 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Nombre de la estructura | Nombre de la estructura que informará el recopilador de datos. Deje en blanco para informar el nombre de la estructura como WWN. 
+
+
+| Intervalo de sondeo de inventario (mín.) | Intervalo entre sondeos de inventario. El valor predeterminado es 15. 
+
+
+| Dispositivos excluidos | Lista separada por comas de ID de dispositivo que se van a excluir del sondeo 
+
+
+| Dominios de administración activos | Seleccione si utiliza dominios de administración 
+
+
+| Recuperar datos MPR | Seleccione esta opción para obtener los datos de enrutamiento del enrutador multiprotocolo. 
+
+
+| Habilite el solapamiento | Seleccione esta opción para activar la adquisición al recibir una captura SNMP del dispositivo. Si selecciona Activar solapamiento, también debe activar SNMP. 
+
+
+| Tiempo mínimo entre solapamientos (seg) | Tiempo mínimo entre intentos de adquisición activados por solapamientos. El valor predeterminado es 10. 
+
+
+| Descubra todos los switches del entramado | Seleccione para detectar todos los switches de la estructura 
+
+
+| Elija favorecer HBA frente a Alias de zona | Elija si prefiere los alias de HBA o de zona 
+
+
+| Intervalo de sondeo de rendimiento (s) | Intervalo entre sondeos de rendimiento. El valor predeterminado es 300. 
+
+
+| Protocolo de autenticación SNMP | Protocolo de autenticación SNMP (solo SNMP v3) 
+
+
+| Contraseña de privacidad de SNMP | Contraseña de privacidad de SNMP (sólo SNMP v3) 
+
+
+| Reintentos SNMP | Número de intentos de reintento SNMP 
+|===
+
+
+== Resolución de problemas
+
+Algunas cosas para intentar si tiene problemas con este recopilador de datos:
+
+
+
+==== Inventario
+
+[cols="2*"]
+|===
+| Problema: | Pruebe lo siguiente: 
+
+
+| Error: "Cloud Insights recibido no válido rol de chasis" | Compruebe que el usuario configurado en este origen de datos ha obtenido el permiso de función de chasis. 
+
+
+| Error: "La dirección IP del chasis no coincide" | Cambie la configuración del origen de datos para utilizar la dirección IP del chasis. 
+
+
+| Reciba un mensaje que indica que más de 1 nodo ha iniciado sesión en el puerto Access Gateway | Compruebe que el dispositivo NPV funciona correctamente y que se esperan todos los WWN conectados. No adquiera directamente el dispositivo NPV. En lugar de ello, la adquisición del switch de estructura principal recopilará los datos del dispositivo NPV. 
+|===
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

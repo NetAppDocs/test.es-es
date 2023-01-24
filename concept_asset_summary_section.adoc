@@ -1,0 +1,47 @@
+---
+sidebar: sidebar 
+permalink: concept_asset_summary_section.html 
+summary: Descripción general de la sección de resumen de página de activos en Cloud Insights. 
+keywords: asset, summary, landing page, topology 
+---
+= Sección Resumen de páginas de activos
+:allow-uri-read: 
+
+
+[role="lead"]
+La sección Resumen de una página de activos muestra información general sobre un activo, incluido si hay alguna métrica o política de rendimiento que le preocupen. Las áreas con problemas potenciales se indican mediante un círculo rojo.
+
+image:Summary_Section_Example.png[""]
+
+Nota: La información que se muestra en la sección Resumen varía en función del tipo de activo que esté viendo.
+
+Puede hacer clic en cualquiera de los vínculos de activos para ver sus páginas de activos. Por ejemplo, si está viendo un nodo de almacenamiento, puede hacer clic en un enlace para ver la página de activos del almacenamiento con el que está asociado.
+
+Puede ver las métricas asociadas al activo. Un círculo rojo junto a una métrica indica que podría necesitar diagnosticar y resolver problemas potenciales.
+
+
+NOTE: Puede observar que la capacidad del volumen puede mostrar más del 100 % en algunos activos de almacenamiento. Esto se debe a que los metadatos relacionados con la capacidad del volumen que forma parte de los datos de capacidad consumida que notifica el activo.
+
+Si corresponde, puede hacer clic en un enlace de alerta para ver la alerta y el monitor asociados con el activo.
+
+
+
+== Topología
+
+En determinadas páginas de activos, la sección de resumen contiene un vínculo para ver la topología del activo y sus conexiones.
+
+La topología está disponible para los siguientes tipos de activos:
+
+* Cliente más
+* Disco
+* Estructura
+* Host
+* Volumen interno
+* Puerto
+* Conmutador
+* Máquina virtual
+* VMDK
+* Volumen
+
+
+image:TopologyExample.png[""]

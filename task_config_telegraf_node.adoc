@@ -1,0 +1,72 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_node.html 
+keywords: telegraf, installation, install, node, host 
+summary: Configuración del recopilador de datos de Flink 
+---
+= Recopilación de datos de nodo
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights recopila métricas del nodo en el que instala un agente.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, elija un sistema operativo/plataforma. Tenga en cuenta que instalar cualquier recopilador de datos de integración (Kubernetes, Docker, Apache, etc.) también configurará la recogida de datos de nodos.
+. Siga las instrucciones para configurar el agente. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+
+
+== Objetos y contadores
+
+Los objetos siguientes y sus contadores se recopilan como métricas Node:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| Sistema de archivos de nodos | Tipo de ruta de dispositivo de UUID de nodo | Nodo IP nodo Nombre nodo modo de sistema operativo nodo | Inodos libres inodos total inodos usados total usado total usado 
+
+
+| Disco de nodo | Disco UUID de nodo | Nodo IP nodo Nombre nodo SO nodo | Tiempo de I/o IOPS total en curso bytes de lectura (por segundo) tiempo de lectura total de lecturas (por segundo) tiempo de I/o ponderado total de bytes de escritura (por segundo) tiempo de escritura total de escrituras (por segundo) tiempo de I/o de lectura actual duración de la cola de disco tiempo de escritura tiempo de I/O. 
+
+
+| CPU del nodo | CPU UUID de nodo | Nodo IP nodo Nombre nodo SO nodo | Uso de CPU del sistema uso de CPU de usuario uso de CPU inactivo procesador uso de CPU interrupción uso de CPU uso de DPC uso de CPU 
+
+
+| Nodo | UUID de nodo | Nodo IP nodo Nombre nodo SO nodo | Switches de contexto de kernel de tiempo de arranque del kernel (por segundo) interrupciones de kernel disponibles (por segundo) procesos de kernel Forked (por segundo) Memoria activa memoria total disponible memoria en búfer memoria memoria caché memoria caché memoria caché límite de confirmación memoria comprometida como memoria sucia memoria libre memoria alta memoria total alta memoria enorme tamaño de página memoria enorme memoria libre Páginas enormes memoria total memoria baja memoria total memoria baja memoria asignada total memoria tablas de páginas de memoria asignada total baja memoria Memoria compartida Slab Memory Swap memoria caché intercambio memoria en caché memoria libre intercambio memoria total memoria total utilizada memoria total memoria utilizada memoria utilizada memoria utilizada memoria Vmalloc memoria Vmalloc memoria usada memoria cableada Writeback memoria total Writeback tmp fallos memoria caché memoria demanda cero fallos memoria memoria memoria páginas memoria Memoria no paginada caché de memoria caché de núcleo memoria caché de espera memoria normal memoria en espera Reserva de memoria errores de transición de memoria procesos bloqueados procesos inactivos procesos de espera procesos en ejecución procesos de suspensión procesos detenidos procesos totales procesos procesos totales procesos procesos desconocidos procesos zombis procesador longitud de cola intercambio libre intercambio total de intercambio utilizado total Intercambio usado en intercambio sistema de tiempo de actividad sistema Num CPU System Num usuarios del sistema llamadas del sistema 
+
+
+| Red de nodos | UUID de nodo de interfaz de red | Nombre del nodo IP nodo SO del nodo | Bytes recibidos bytes enviados paquetes Outboud descartados paquetes Outboud errores recibidos paquetes descartados errores recibidos paquetes recibidos paquetes enviados 
+|===
+
+
+== Configuración
+
+Encontrará información sobre la configuración y la solución de problemas en la link:task_config_telegraf_agent.html["Configuración de un agente"] página.
+
+
+
+== Uso de memoria de MacOS
+
+Cloud Insights (a través de Telegraf) y MacOS informan de diferentes números para el uso de memoria. Tanto Telegraf como el monitor de actividad Mac utilizan métricas recopiladas de _vm_stat_; sin embargo, el uso total de la memoria se calcula de forma diferente para cada uno.
+
+*Telegraf* calcula _memoria usada total_ de la siguiente manera:
+
+ Memory Used Total = Memory Total - Memory Available Total
+Donde _Memory Available total_ se deriva de la suma de "Pages free" y "Pages inactive" en _vm_stat_.
+
+*El monitor de actividad Mac*, por otro lado, calcula la memoria utilizada de la siguiente manera:
+
+ Memory Used = App Memory + Wired Memory + Compressed
+Donde:
+
+* _App Memory_ se deriva de la diferencia entre “páginas anónimas” y “Páginas purgable” en _vm_stat_,
+* _Wired Memory_ se deriva de “Pages wired down” en _vm_stat_, y.
+* _Compressed_ se deriva de “Páginas ocupadas por compresor” en _vm_stat_.
+

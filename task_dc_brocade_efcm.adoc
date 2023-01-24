@@ -1,0 +1,79 @@
+---
+sidebar: sidebar 
+permalink: task_dc_brocade_efcm.html 
+keywords: data collector, Brocade, EFCM, 
+summary: Configurar el recopilador de datos de Brocade. 
+---
+= Configurar el recopilador de datos de Brocade Enterprise Fabric Connectivity Manager
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza el recopilador de datos de Brocade Enterprise Fabric Connectivity Manager (EFCM) para descubrir el inventario de los switches Brocade EFCM. Cloud Insights es compatible con las versiones 9.5, 9.6 y 9.7 de EFCM.
+
+
+
+== Requisitos
+
+* Dirección de red o nombre de dominio completo para el servidor EFCM
+* La versión de EFCM debe ser 9.5, 9.6 o 9.7
+* Dirección IP del servidor EFCM
+* Nombre de usuario y contraseña de sólo lectura para el servidor EFCM
+* Acceso validado al conmutador Connectrix mediante Telnet desde el servidor Cloud Insights, utilizando el nombre de usuario de sólo lectura y la contraseña a través del puerto 51512
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Servidor EFC | Dirección IP o nombre de dominio completo del servidor EFC 
+
+
+| Nombre de usuario | Nombre de usuario del conmutador 
+
+
+| Contraseña | Contraseña para el conmutador 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Intervalo de sondeo de inventario (mín.) | Intervalo entre sondeos de inventario. El valor predeterminado es 15 minutos. 
+
+
+| Nombre de la estructura | El nombre de la estructura que debe informar el recopilador de datos de EFCM. Deje en blanco para informar el nombre de la estructura como WWN. 
+
+
+| Puerto de comunicación | Puerto que se utiliza para la comunicación con el switch 
+
+
+| Habilite el solapamiento | Seleccione esta opción para activar la adquisición al recibir una captura SNMP del dispositivo. Si selecciona Activar solapamiento, también debe activar SNMP. 
+
+
+| Tiempo mínimo entre solapamientos (seg) | Tiempo mínimo entre intentos de adquisición activados por solapamientos. El valor predeterminado es 15 segundos. 
+
+
+| Zonesets inactivos | Lista separada por comas de los conjuntos de zonas inactivas en los que realizar la adquisición, además de realizar la adquisición en los conjuntos de zonas activas 
+
+
+| NIC para utilizar | Especifique la interfaz de red que se debe utilizar en la RAU al informar sobre dispositivos SAN 
+
+
+| Excluir dispositivos | Lista de nombres de unidades separados por comas para incluir o excluir del sondeo 
+
+
+| Utilice el apodo del interruptor EFCM como nombre del conmutador | Seleccione esta opción para utilizar el apodo del interruptor EFCM como nombre del conmutador Cloud Insights. 
+
+
+| Intervalo de sondeo de rendimiento (s) | Intervalo entre sondeos de rendimiento. El valor predeterminado es 300 segundos. 
+|===

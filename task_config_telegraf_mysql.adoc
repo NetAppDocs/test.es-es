@@ -1,0 +1,52 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_mysql.html 
+keywords: telegraf, installation, install, mysql 
+summary: Configuración del recopilador de datos de MySQL 
+---
+= Recopilador de datos de MySQL
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar métricas de MySQL.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija MySQL.
++
+Seleccione el sistema operativo o la plataforma en la que está instalado el agente Telegraf.
+
+. Si todavía no ha instalado un agente para la colección o desea instalar un agente para un sistema operativo o plataforma diferente, haga clic en _Mostrar instrucciones_ para expandir el link:task_config_telegraf_agent.html["Instalación del agente"] instrucciones.
+. Seleccione la clave de acceso del agente para utilizarla con este recopilador de datos. Puede agregar una nueva clave de acceso del agente haciendo clic en el botón *+ clave de acceso del agente*. Práctica recomendada: Utilice una clave de acceso de agente diferente sólo cuando desee agrupar recopiladores de datos, por ejemplo, por sistema operativo/plataforma.
+. Siga los pasos de configuración para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+image:MySQLDCConfigWindows.png["Configuración de MySQL"]
+
+
+
+== Configuración
+
+Puede encontrar información en la link:https://dev.mysql.com/doc/["Documentación de MySQL"].
+
+
+
+== Objetos y contadores
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| MySQL | Espacio de nombres MySQL Server | Nombre del nodo IP | Clientes cancelados (por segundo) conexiones canceladas (por segundo) bytes RX (por segundo) bytes TX (por segundo) comandos Admin (por segundo) Comandos Alter Event Commands Alter Function Alter Instance Commands Alter Procedure comandos Alter Server comandos Alter Table comandos Alter Tablespace comandos Alter comandos Alter comandos de usuario analizar comandos asignar a Keycache comandos Begin comandos Binlog comandos de procedimiento de llamada comandos Cambiar DB comandos Cambiar Master comandos Change Repl Filter comandos Check comandos Comandos de suma de comprobación comandos commit Crear comandos de base de datos Crear comandos de evento Crear comandos de índice Crear comandos de procedimiento Crear comandos de servidor Crear comandos de tabla Crear comandos de desencadenador Crear comandos UDF Crear comandos de usuario Crear comandos de vista errores de conexión SQL de bloque aceptar tablas de disco de tmp creados errores de retardo comandos Flush Handler commit InnoDB Buffer Pool bytes de datos bloques de claves no vaciados Key Read Requests de escritura de claves Escrituras de clave tiempo de ejecución máximo excedido máximo conexiones usadas Archivos abiertos Cuentas de esquema de rendimiento perdido recuento de stmt preparado Qcache Free Blocks consultas Seleccione unirse completo Seleccionar rango completo unirse selección de rango de comprobación Seleccione Escanear tabla bloqueos inmediatamente 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

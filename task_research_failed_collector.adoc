@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: task_research_failed_collector.html 
+keywords: data collector, changes, failures 
+summary: Errores del recopilador de datos 
+---
+= Investigar un recopilador de datos fallido
+:allow-uri-read: 
+
+
+[role="lead"]
+Si un recopilador de datos tiene un mensaje de error y un impacto alto o medio, debe investigar este problema utilizando la página de resumen del recopilador de datos con su información vinculada.
+
+Siga estos pasos para determinar la causa de los recopiladores de datos fallidos. Los mensajes de error del recopilador de datos se muestran en el menú *Admin* y en la página *colectores de datos instalados*.
+
+.Pasos
+. Haga clic en *Admin* > *colectores de datos* > *colectores de datos instalados*.
+. Haga clic en el Nombre vinculado del recopilador de datos que falla para abrir la página Resumen.
+. En la página Summary (Resumen), compruebe el área Comments (Comentarios) para leer las notas que haya dejado otro ingeniero que también podría estar investigando este error.
+. Anote cualquier mensaje de rendimiento.
+. Mueva el puntero del ratón sobre los segmentos del gráfico línea de tiempo del evento para mostrar información adicional.
+. Seleccione un mensaje de error para un dispositivo y se mostrará debajo de la línea de tiempo del evento y haga clic en el icono de detalles del error que aparece a la derecha del mensaje.
++
+Los detalles del error incluyen el texto del mensaje de error, las causas más probables, la información en uso, y sugerencias de lo que se puede intentar corregir el problema.
+
+. En el área dispositivos informados por este colector de datos, puede filtrar la lista para mostrar sólo los dispositivos de interés, y puede hacer clic en el *Nombre* vinculado de un dispositivo para mostrar la página de activos de ese dispositivo.
+. Cuando vuelva a la página de resumen del recopilador de datos, compruebe el área *Mostrar cambios recientes* en la parte inferior de la página para ver si los cambios recientes podrían haber causado el problema.
+

@@ -1,0 +1,45 @@
+---
+sidebar: sidebar 
+permalink: task_cs_delete_agent.html 
+keywords: agent, Cloud Secure, delete agent 
+summary: Eliminando agentes Cloud Secure 
+---
+= Eliminación de un agente de Cloud Secure
+:allow-uri-read: 
+
+
+[role="lead"]
+Al eliminar un agente de Cloud Secure, primero se deben eliminar todos los recopiladores de datos asociados con el agente.
+
+
+
+== Eliminar un agente
+
+
+IMPORTANT: Al eliminar un agente se eliminan todos los recopiladores de datos asociados al agente. Si planea configurar los recopiladores de datos con un agente diferente, debe crear una copia de seguridad de las configuraciones de recopilador de datos antes de eliminar el agente.
+
+.Antes de empezar
+. Asegúrese de que todos los recopiladores de datos asociados con el agente se eliminan del portal de Cloud Secure.
++
+Nota: Ignore este paso si todos los recopiladores asociados están EN estado DETENIDO.
+
+
+
+.Pasos para eliminar un agente:
+. SSH en la VM del agente y ejecute el siguiente comando. Cuando se le solicite, introduzca "y" para continuar.
++
+....
+sudo /opt/netapp/cloudsecure/agent/install/cloudsecure-agent-uninstall.sh
+Uninstall CloudSecure Agent? [y|N]:
+....
+. Haga clic en *Administración > colectores de datos > agentes*
++
+El sistema muestra la lista de agentes configurados.
+
+. Haga clic en el menú de opciones del agente que va a eliminar.
+. Haga clic en *Eliminar*.
++
+El sistema muestra la página *Eliminar agente*.
+
+. Haga clic en *Eliminar* para confirmar la eliminación.
+

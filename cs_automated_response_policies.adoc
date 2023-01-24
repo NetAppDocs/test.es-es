@@ -1,0 +1,30 @@
+---
+sidebar: sidebar 
+permalink: cs_automated_response_policies.html 
+keywords: alert, snapshot, ransomware, attack 
+summary: 'Puede definir políticas de respuesta automatizadas para ataques potenciales (como ransomware) y/o advertencias de actividad' 
+---
+= Políticas de respuesta automatizadas
+:allow-uri-read: 
+
+
+[role="lead"]
+Las directivas de respuesta activan acciones como la toma de instantáneas o la restricción del acceso de los usuarios en caso de un ataque o un comportamiento anómalo del usuario.
+
+Puede establecer políticas en dispositivos específicos o en todos los dispositivos. Para establecer una directiva de respuesta, seleccione *Admin > Directivas de respuesta automatizadas* y haga clic en el botón *+Policy+ correspondiente. Puede crear directivas para ataques o advertencias.
+
+image:AutomatedAttackPolicy.png["Crear directiva de ataque"]
+
+Se debe guardar la política con un nombre exclusivo.
+
+Para deshabilitar una acción de respuesta automática (por ejemplo, tomar Snapshot), solo tiene que quitar el control de la acción y guardar la política.
+
+Cuando se activa una alerta en los dispositivos especificados (o en todos los dispositivos, si se ha seleccionado), la política de respuesta automática toma una instantánea de los datos. Puede ver el estado de la instantánea en link:cs_alert_data.html#the-alert-details-page["Página de detalles Alert"].
+
+Consulte link:cs_restrict_user_access.html["Restringir acceso de usuarios"] Para obtener más información sobre cómo restringir el acceso de los usuarios mediante IP.
+
+Puede modificar o poner en pausa una directiva de respuesta automática seleccionando la opción del menú desplegable de la directiva.
+
+Cloud Secure eliminará automáticamente las snapshots una vez al día en función de la configuración de purgado de snapshot.
+
+image:CloudSecure_SnapshotPurgeSettings.png["Configuración de purga de instantáneas"]

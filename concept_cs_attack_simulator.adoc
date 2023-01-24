@@ -1,0 +1,149 @@
+---
+sidebar: sidebar 
+permalink: concept_cs_attack_simulator.html 
+keywords: ransomware, simulation, simulator, restrict, attack 
+summary: Con un script, puede simular un ataque de ransomware para probar o demostrar Cloud Secure 
+---
+= Cloud Secure: Simulación de un ataque
+:allow-uri-read: 
+
+
+[role="lead"]
+Puede utilizar las instrucciones de esta página para simular un ataque con el fin de probar o demostrar Cloud Secure utilizando el script de simulación de Ransomware de Cloud Secure incluido.
+
+
+
+== Cosas que tomar en cuenta antes de empezar
+
+* El script de simulación de ransomware sólo funciona en Linux.
+* El script se proporciona con los archivos de instalación del agente Cloud Secure. Está disponible en cualquier equipo que tenga instalado un agente de Cloud Secure.
+* Puede ejecutar la secuencia de comandos en la máquina del agente Cloud Secure; no es necesario preparar otra máquina Linux. Sin embargo, si prefiere ejecutar la secuencia de comandos en otro sistema, simplemente copie la secuencia de comandos y ejecútela donde desee.
+
+
+
+
+== Tener al menos 1,000 archivos de ejemplo
+
+Este script debe ejecutarse en una SVM con una carpeta que tenga archivos para cifrar. Recomendamos tener al menos 1,000 archivos dentro de esa carpeta y cualquier subcarpeta. Los archivos no deben estar vacíos. No cree los archivos ni los cifre utilizando el mismo usuario. Cloud Secure considera esto una actividad de bajo riesgo y, por lo tanto, no generará una alerta (es decir, el mismo usuario modifica los archivos que acaba de crear).
+
+Consulte a continuación las instrucciones para link:#create-files-programmatically["cree archivos no vacíos mediante programación"].
+
+
+
+== Prepare el sistema
+
+En primer lugar, monte el volumen objetivo en la máquina. Puede montar un montaje NFS o una exportación CIFS.
+
+Para montar la exportación NFS en Linux:
+
+....
+mount -t nfs -o vers=4.0 10.193.177.158:/svmvol1 /mntpt
+mount -t nfs -o vers=4.0 Vserver data IP>:/nfsvol /destinationlinuxfolder
+....
+No monte NFS versión 4.1; no es compatible con Fpolicy.
+
+Para montar CIFS en Linux:
+
+ mount -t cifs //10.193.77.91/sharedfolderincluster /root/destinationfolder/ -o username=raisa
+A continuación, configure un recopilador de datos:
+
+. Configure el agente Cloud Secure si aún no lo ha hecho.
+. Configure el recopilador de datos de SVM si aún no ha terminado.
+
+
+
+
+== Ejecute el script Ransomware Simulator
+
+. Inicie sesión (ssh) en la máquina del agente de Cloud Secure.
+. Desplácese hasta: _/opt/netapp/cloudsecure/agent/install_
+. Llame al script del simulador sin parámetros para ver el uso:
++
+....
+# pwd
+/opt/netapp/cloudsecure/agent/install
+# ./ransomware_simulator.sh
+Error: Invalid directory  provided.
+Usage: ./ransomware_simulator.sh [-e] [-d] [-i <input_directory>]
+       -e to encrypt files (default)
+       -d to restore files
+       -i <input_directory> - Files under the directory to be encrypted
+....
++
+....
+Encrypt command example: ./ransomware_simulator.sh -e -i /mnt/audit/reports/
+Decrypt command example: ./ransomware_simulator.sh -d -i /mnt/audit/reports/
+....
+
+
+
+
+== Cifre sus archivos de prueba
+
+Para cifrar los archivos, ejecute el siguiente comando:
+
+....
+# ./ransomware_simulator.sh -e -i /root/for/
+Encryption key is saved in /opt/netapp/cloudsecure/cloudsecure-agent-1.251.0/install/encryption-key,
+which can be used for restoring the files.
+Encrypted /root/for/File000.txt
+Encrypted /root/for/File001.txt
+Encrypted /root/for/File002.txt
+...
+....
+
+
+== Restaurar archivos
+
+Para descifrar, ejecute el siguiente comando:
+
+....
+[root@scspa2527575001 install]# ./ransomware_simulator.sh -d -i /root/for/
+File /root/for/File000.txt is restored.
+File /root/for/File001.txt is restored.
+File /root/for/File002.txt is restored.
+...
+....
+
+
+== Ejecute el script varias veces
+
+Después de generar un ataque de ransomware para un usuario, cambie a otro usuario para generar un ataque adicional. Cloud Secure aprende el comportamiento del usuario y no avisa sobre ataques repetidos de ransomware dentro de un período de tiempo breve para el mismo usuario.
+
+
+
+== Cree archivos mediante programación
+
+Antes de crear los archivos, primero debe detener el procesamiento del recopilador de datos. Realice los pasos siguientes antes de agregar el recopilador de datos al agente. Si ya ha agregado el recopilador de datos, simplemente edite el recopilador de datos, introduzca una contraseña no válida y guárdelo. Esto pondrá temporalmente el recopilador de datos en el estado de error. NOTA: Asegúrese de anotar la contraseña original.
+
+Antes de ejecutar la simulación, primero debe agregar archivos para su cifrado. Puede copiar manualmente los archivos que se van a cifrar en la carpeta de destino o utilizar una secuencia de comandos (vea el ejemplo siguiente) para crear los archivos mediante programación. Sea cual sea el método que utilice, copie al menos 1,000 archivos.
+
+Si elige crear los archivos mediante programación, haga lo siguiente:
+
+. Inicie sesión en el cuadro Agente.
+. Monte una exportación NFS desde la SVM del servidor dedicado a almacenamiento al equipo del agente. CD en esa carpeta.
+. En esa carpeta, cree un archivo denominado createfiles.sh
+. Copie las siguientes líneas en ese archivo.
++
+....
+for i in {000..1000}
+do
+   echo hello > "File${i}.txt"
+done
+echo 3 > /proc/sys/vm/drop_caches ; sync
+....
+. Guarde el archivo.
+. Asegúrese de que ejecuta el permiso en el archivo:
++
+ chmod 777 ./createfiles.sh
+. Ejecute el script:
++
+ ./createfiles.sh
++
+se crearán archivos 1000 en la carpeta actual.
+
+. Vuelva a habilitar el recopilador de datos
++
+Si deshabilitó el recopilador de datos en el paso 1, edite el recopilador de datos, introduzca la contraseña correcta y guárdelo. Asegúrese de que el recopilador de datos vuelve a estar en estado de ejecución.
+
+

@@ -1,0 +1,51 @@
+---
+sidebar: sidebar 
+permalink: task_config_telegraf_consul.html 
+keywords: telegraf, installation, install, consul 
+summary: Configuración del recopilador de datos de Consul 
+---
+= Cónsul colector de datos
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights utiliza este recopilador de datos para recopilar mediciones del cónsul.
+
+
+
+== Instalación
+
+. En *Admin > colectores de datos*, haga clic en *+colector de datos*. En *Servicios*, elija Cónsul.
++
+Si no ha configurado un agente para la colección, se le pedirá que lo haga link:task_config_telegraf_agent.html["instale un agente"] en su entorno.
+
++
+Si ya ha configurado un agente, seleccione el sistema operativo o la plataforma adecuados y haga clic en *continuar*.
+
+. Siga las instrucciones de la pantalla Configuración del Cónsul para configurar el recopilador de datos. Las instrucciones varían en función del tipo de sistema operativo o plataforma que utilice para recopilar datos.
+
+
+
+
+== Configuración
+
+Puede encontrar información en la link:https://www.consul.io/docs/index.html["Documentación del Cónsul"].
+
+
+
+== Objetos y contadores para consul
+
+Se recopilan los objetos siguientes y sus contadores:
+
+[cols="<.<,<.<,<.<,<.<"]
+|===
+| Objeto: | Identificadores: | Atributos: | Puntos de datos: 
+
+
+| Cónsul | Nodo del servicio de identificación de comprobación de espacio de nombres | Nodo IP nodo OS nodo UUID Nombre de nodo Nombre de servicio comprobar nombre ID de servicio Estado | Advertencia de paso crítico 
+|===
+
+
+== Resolución de problemas
+
+Puede encontrar información adicional en link:concept_requesting_support.html["Soporte técnico"] página.

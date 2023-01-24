@@ -1,0 +1,17 @@
+---
+sidebar: sidebar 
+permalink: cs_notifications_email.html 
+summary: Adición de direcciones de correo electrónico para notificaciones de alertas de Cloud Secure. 
+keywords: email, notifications, alerts, warnings, attacks 
+---
+= Configuración de notificaciones por correo electrónico de alerta
+:allow-uri-read: 
+
+
+[role="lead"]
+Las notificaciones por correo electrónico de alertas se envían a la lista de destinatarios de alertas para cada acción de la alerta.
+
+Para configurar destinatarios de alertas, haga clic en *Admin > Notificaciones* e introduzca una dirección de correo electrónico para cada destinatario.
+
+[role="thumb"]
+image:CS-Alert-Notification-List.png["Lista de destinatarios de notificaciones por correo electrónico de alerta"]

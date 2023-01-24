@@ -1,0 +1,64 @@
+---
+sidebar: sidebar 
+permalink: task_webhook_example_slack.html 
+keywords: webhook, notification, Slack, integration 
+summary: Cree un webhook para alertar sobre el rendimiento o los umbrales de inventario de demora 
+---
+= Ejemplo de Webhook para Slack
+:allow-uri-read: 
+
+
+[role="lead"]
+Los enlaces Web permiten a los usuarios enviar notificaciones de alerta a varias aplicaciones mediante un canal de webhook personalizado. Esta página proporciona un ejemplo para configurar los enlaces web para Slack.
+
+
+NOTE: Esta página hace referencia a instrucciones de terceros, que podrían estar sujetas a cambios. Consulte la link:https://slack.com/help/articles/115005265063-Incoming-webhooks-for-Slack["Documentación de Slack"] para obtener la información más actualizada.
+
+
+
+=== Ejemplo de Slack:
+
+* Vaya a. https://api.slack.com/apps[] Y cree una nueva aplicación. Asigne un nombre significativo y seleccione el espacio de trabajo Slack.
++
+image:Webhooks_Slack_Create_Webhook.png["Cree Slack Webhook"]
+
+* Vaya a Webanzuelos entrantes, haga clic en _Activar Webanzuelos entrantes_, solicitar _Agregar nuevo Webhook_ y seleccione el canal en el que enviar.
+* Copie la URL de Webhook. Deberá pegarlo en la configuración de webhook de Cloud Insights.
++
+image:Webhook_Slack_Config.jpg["Dirección URL de Slack Webhook"]
+
+
+
+
+
+=== Crear enlace web de Cloud Insights:
+
+. En Cloud Insights, vaya a *Admin > Notificaciones* y seleccione la ficha *Webanches*. Haga clic en *+Webhook* para crear un nuevo webhook.
+. Dé al webhook un nombre significativo, como "Slack Webhook".
+. En el menú desplegable _Template Type_, seleccione *Slack*.
+. Pegue la URL de arriba en el campo _URL_.
+
+
+image:Webhooks-Slack_example.png["Plantilla de gancho web Slack"]
+
+
+
+=== Notificaciones a través de Webhook
+
+Para notificar los eventos a través de webhook, en Cloud Insights vaya a *Alertas > Monitores* y haga clic en *+Monitor* para crear un nuevo link:task_create_monitor.html["supervisar"].
+
+* Seleccione una métrica y defina las condiciones del monitor.
+* En _Configurar notificación(s) de equipo, elija el método de entrega *Webhook*.
+* Elija el enlace web "Slack" para los eventos deseados (crítico, Advertencia, resuelto)
++
+image:Webhooks_Slack_Notifications.png["Notificaciones de Webhook"]
+
+
+
+
+
+==== Más información:
+
+* Para modificar el formato y el diseño del mensaje, consulte https://api.slack.com/messaging/composing[]
+* Gestión de errores: https://api.slack.com/messaging/webhooks#handling_errors[]
+

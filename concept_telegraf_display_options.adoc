@@ -1,0 +1,22 @@
+---
+sidebar: sidebar 
+permalink: concept_telegraf_display_options.html 
+keywords: telegraf, data, display, 
+summary: Opciones de visualización de datos de Telegraf 
+---
+= Transformando las métricas
+:allow-uri-read: 
+
+
+[role="lead"]
+Cloud Insights proporciona diferentes opciones de *transformación* para ciertas métricas en widgets (específicamente aquellas métricas llamadas "personalizadas" o métricas de integración, como de Kubernetes, datos avanzados de ONTAP, plugins de Telegraf, etc.), lo que le permite visualizar los datos de varias maneras. Al añadir medidas transformables a un widget, se presenta con una lista desplegable dando las siguientes opciones de transformación:
+
+Ninguno:: Los datos se muestran tal cual, sin manipulación.
+Velocidad:: Valor actual dividido entre el intervalo de tiempo desde la observación anterior.
+Acumulativo:: Acumulación de la suma de valores anteriores y del valor actual.
+Delta:: La diferencia entre el valor de observación anterior y el valor actual.
+Tasa diferencial:: Valor delta dividido por el intervalo de tiempo desde la observación anterior.
+Tasa acumulada:: Valor acumulativo dividido entre el intervalo de tiempo desde la observación anterior.
+
+
+Tenga en cuenta que la transformación de las métricas no cambia los datos subyacentes en sí, sino sólo la forma en que se muestran los datos.

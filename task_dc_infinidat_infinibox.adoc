@@ -1,0 +1,85 @@
+---
+sidebar: sidebar 
+permalink: task_dc_infinidat_infinibox.html 
+keywords: data collector, infinidat, InfiniBox 
+summary: Configurar el recopilador de datos Infinidat InfiniBox. 
+---
+= Recopilador de datos Infinidat InfiniBox
+:allow-uri-read: 
+
+
+[role="lead"]
+El recopilador de datos Infinidat InfiniBox (HTTP) se utiliza para recopilar información de inventario del sistema de almacenamiento Infinidat InfiniBox.
+
+
+
+== Terminología
+
+Cloud Insights adquiere la siguiente información de inventario del recopilador de datos Infinidat InfiniBox. Para cada tipo de activo adquirido por Cloud Insights, se muestra la terminología más común utilizada para este activo. Al ver o solucionar problemas de este recopilador de datos, tenga en cuenta la siguiente terminología:
+
+[cols="2*"]
+|===
+| Plazo del proveedor/modelo | Término de Cloud Insights 
+
+
+| Pool de almacenamiento | Pool de almacenamiento 
+
+
+| Nodo | Controladora 
+
+
+| Sistema de archivos | Volumen interno 
+
+
+| Sistema de archivos | Recurso compartido de archivos 
+
+
+| Exportaciones de sistemas de archivos | Share 
+|===
+
+
+== Requisitos
+
+Los siguientes son requisitos al configurar este recopilador de datos.
+
+* Dirección IP o FQDN del nodo de gestión de InfiniBox
+* ID de usuario y contraseña de administrador
+* Puerto 443 a través de la API REST
+
+
+
+
+== Configuración
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Host InfiniBox | Dirección IP o nombre de dominio completo del nodo de gestión de InfiniBox 
+
+
+| Nombre de usuario | Nombre de usuario para el nodo de gestión de InfiniBox 
+
+
+| Contraseña | Contraseña para el nodo de gestión de InfiniBox 
+|===
+
+
+== Configuración avanzada
+
+[cols="2*"]
+|===
+| Campo | Descripción 
+
+
+| Puerto TCP | Puerto TCP utilizado para conectarse a InfiniBox Server. El valor predeterminado es 443. 
+
+
+| Intervalo de sondeo de inventario | Intervalo entre sondeos de inventario. El valor predeterminado es 60 minutos. 
+|===
+
+
+== Resolución de problemas
+
+Se puede encontrar información adicional sobre este colector de datos en la link:concept_requesting_support.html["Soporte técnico"] o en la link:https://docs.netapp.com/us-en/cloudinsights/CloudInsightsDataCollectorSupportMatrix.pdf["Matriz de compatibilidad de recopilador de datos"].

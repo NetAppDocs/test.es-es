@@ -1,0 +1,51 @@
+---
+sidebar: sidebar 
+permalink: task_troubleshooting_general_problems.html 
+summary: Consejos generales para la solución de problemas de Cloud Insights. 
+keywords: troubleshooting, problems, browser, login, log in, accessing, access to 
+---
+= Solución de problemas generales de Cloud Insights
+:allow-uri-read: 
+
+
+[role="lead"]
+Aquí encontrará sugerencias para la solución de problemas de Cloud Insights.
+
+Consulte también link:task_troubleshooting_linux_acquisition_unit_problems.html["Solución de problemas de la unidad de adquisición de Linux"] y.. link:task_troubleshooting_windows_acquisition_unit_problems.html["Solución de problemas de la unidad de adquisición de Windows"].
+
+
+
+==== Problemas de inicio de sesión:
+
+|===
+
+
+| *Problema:* | *Pruebe esto:* 
+
+
+| Cloud Insights cierra sesión cada 5 minutos | Active la aceptación de cookies de terceros de _[*.]auth0.com_ en la configuración de su navegador. Por ejemplo, en el modo de incógnito de Chrome, la configuración predeterminada del navegador bloquea las cookies de terceros. Pruebe lo siguiente: Introduzca "Chrome://settings/cookies" en la URL del navegador. Seleccione la opción "permitir todas las cookies". 
+
+
+| Tengo una cuenta de Cloud Central pero no puedo iniciar sesión en Cloud Central. | Póngase en contacto con saas.support@netapp.com. Esto se refiere específicamente a problemas o preguntas de Cloud Central. Para cualquier otro problema relacionado con Cloud Insights, póngase en contacto con link:concept_requesting_support.html["Soporte de NetApp"]. 
+
+
+| Me invité a Cloud Insights pero tengo un mensaje "no autorizado". | Compruebe que se ha registrado en una cuenta de Cloud Central o que su organización utiliza el inicio de sesión SSO con Cloud Central. Compruebe que la dirección de correo electrónico del perfil de Cloud Central coincide con la dirección que se muestra en el correo de bienvenida de Cloud Insights. Si no coincide, solicite una nueva invitación con la dirección de correo electrónico correcta. 
+
+
+| He cerrado sesión en Cloud Central o Cloud Secure y se cerró automáticamente desde Cloud Insights. | El inicio de sesión único (SSO) en NetApp Cloud cierra sesión en todas las sesiones de Cloud Insights, Cloud Secure y elaboración de informes. Si tiene acceso a varias cuentas de Cloud Insights, cierre la sesión desde cualquier sesión cerrar todas las sesiones activas. Vuelva a iniciar sesión para acceder a su cuenta. 
+
+
+| Se cerró la sesión automáticamente después de varios días. | Las cuentas de cloud de NetApp requieren nueva autenticación cada pocos días (la configuración actual de Cloud Central es de 7 días). Vuelva a iniciar sesión para acceder a su cuenta. 
+
+
+| Recibo un mensaje de error que indica que no se ha autorizado el inicio de sesión. | Póngase en contacto con el administrador de su cuenta para comprobar el acceso a Cloud Insights. Compruebe que la dirección de correo electrónico del perfil de Cloud Central coincide con la dirección que se muestra en el correo de bienvenida de Cloud Insights 
+
+
+| Otros errores de inicio de sesión | Pruebe el modo Incognito en Chrome, o borre el historial del navegador, las cookies y la caché. Pruebe con un perfil de navegador diferente (por ejemplo, Chrome - add person). 
+|===
+Si dispone de una suscripción activa a Cloud Insights, puede utilizar estas opciones de soporte:
+
+link:https://www.netapp.com/us/contact-us/support.aspx["Teléfono"]
+link:https://mysupport.netapp.com/site/cases/mine/create?serialNumber=95001014387268156333["Ticket de soporte"]
+
+Para obtener más información, consulte https://docs.netapp.com/us-en/cloudinsights/concept_requesting_support.html["Documentación de soporte de Cloud Insights"].
