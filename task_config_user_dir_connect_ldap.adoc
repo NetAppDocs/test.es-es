@@ -125,7 +125,7 @@ Puede validar los permisos de usuario LDAP y las definiciones de atributos media
  ldapsearch -D "uid=john ,cn=users,cn=accounts,dc=dorp,dc=company,dc=com" -W -x -LLL -o ldif-wrap=no -b "cn=accounts,dc=dorp,dc=company,dc=com" -H ldap://vmwipaapp08.dorp.company.com
 * Utilice el Explorador de LDAP para desplazarse por una base de datos LDAP, ver propiedades y atributos de objeto, ver permisos, ver el esquema de un objeto, ejecutar sofisticadas búsquedas que puede guardar y volver a ejecutar.
 +
-** Instale el Explorador de LDAP (http://ldaptool.sourceforge.net/)[] O Explorador LDAP de Java (http://jxplorer.org/)[] En cualquier equipo Windows que pueda conectarse al servidor LDAP.
+** Instale el Explorador de LDAP  O Explorador LDAP de Java  En cualquier equipo Windows que pueda conectarse al servidor LDAP.
 ** Conéctese al servidor LDAP con el nombre de usuario/contraseña del servidor de directorio LDAP.
 
 
