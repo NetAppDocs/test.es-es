@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: task-change-route-tables.html 
+keywords: route tables, update route tables, modify route tables, change route table 
+summary: Puede modificar las tablas de rutas de AWS que incluyen rutas a las direcciones IP flotantes de un par de alta disponibilidad que se implementa en varias zonas de disponibilidad de AWS. Puede hacerlo si los nuevos clientes NFS o CIFS necesitan acceder a un par de alta disponibilidad en AWS. 
+---
+= Cambiar tablas de ruta para pares ha en varios AZs
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Puede modificar las tablas de rutas de AWS que incluyen rutas a las direcciones IP flotantes de un par de alta disponibilidad implementado en varias zonas de disponibilidad de AWS (AZs). Puede hacerlo si los nuevos clientes NFS o CIFS necesitan acceder a un par de alta disponibilidad en AWS.
+
+.Pasos
+. En la página Canvas, seleccione el entorno de trabajo.
+. En la ficha Descripción general, haga clic en el panel Características y, a continuación, en el icono lápiz situado junto a *tablas de ruta*.
++
+image:screenshot_features_route_tables.png["Captura de pantalla que muestra la configuración de tablas de rutas bajo el panel Características disponible en la parte superior derecha de la página Descripción general al visualizar un entorno de trabajo."]
+
+. Modifique la lista de tablas de rutas seleccionadas y, a continuación, haga clic en *Guardar*.
+
+
+.Resultado
+BlueXP envía una solicitud de AWS para modificar las tablas de rutas.

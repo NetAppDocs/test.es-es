@@ -1,0 +1,34 @@
+---
+sidebar: sidebar 
+permalink: concept-degraded-ha-pair.html 
+keywords: storage takeover, storage giveback, degraded, degraded status, degraded state, ha pair, ha takeover, takeover, giveback 
+summary: Cuando un nodo de una pareja de alta disponibilidad no está disponible, el otro nodo proporciona datos a su compañero para ofrecer un servicio continuado de datos. Esto se denomina toma de control del almacenamiento. Hay varias acciones no disponibles hasta que se completa la devolución del almacenamiento. 
+---
+= Acciones no disponibles durante la toma de control
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Cuando un nodo de una pareja de alta disponibilidad no está disponible, el otro nodo proporciona datos a su compañero para ofrecer un servicio continuado de datos. Esto se llama _Storage Takeover_. Hay varias acciones no disponibles hasta que se completa la devolución del almacenamiento.
+
+
+TIP: Cuando un nodo de un par ha no está disponible, el estado del entorno de trabajo en BlueXP es _degraded_.
+
+Las siguientes acciones no están disponibles para la toma de control del almacenamiento de BlueXP:
+
+* Registro de soporte
+* Cambios en la licencia
+* Cambios de instancia o de tipo de máquina virtual
+* Cambios en la velocidad de escritura
+* Configuración de CIFS
+* Cambio de la ubicación de los backups de configuración
+* Establecer la contraseña del clúster
+* Gestionar discos y agregados (asignación avanzada)
+
+
+Estas acciones vuelven a estar disponibles una vez que se completa la devolución del almacenamiento y el estado del entorno de trabajo cambia a normal.

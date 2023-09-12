@@ -1,0 +1,79 @@
+---
+indexpage:
+  lead: Cloud Volumes ONTAP le permite optimizar los costes y el rendimiento del almacenamiento
+    en cloud, a la vez que mejora la protección de datos, la seguridad y el cumplimiento
+    de normativas.
+  tiles:
+  - title: Manos a la obra
+    links:
+    - title: Más información sobre Cloud Volumes ONTAP
+      url: concept-overview-cvo.html
+    - title: Inicio rápido para AWS
+      url: task-getting-started-aws.html
+      flavor: aws
+    - title: Inicio rápido para Azure
+      url: task-getting-started-azure.html
+      flavor: azure
+    - title: Inicio rápido de Google Cloud
+      url: task-getting-started-gcp.html
+      flavor: gcp
+  - title: Licencia
+    links:
+    - title: Información general sobre las licencias
+      url: concept-licensing.html
+    - title: Gestione licencias basadas en capacidad
+      url: task-manage-capacity-licenses.html
+    - title: Licencias basadas en nodos sin asignar de Exchange
+      url: task-manage-node-licenses.html#exchange-unassigned-node-based-licenses
+    - title: Gestione suscripciones de Keystone
+      url: task-manage-keystone.html
+  - title: Gestión del almacenamiento
+    links:
+    - title: Cree volúmenes
+      url: task-create-volumes.html
+    - title: Organice en niveles los datos inactivos en el almacenamiento de objetos
+      url: task-tiering.html
+    - title: Acelere el acceso a los datos con FlexCache
+      url: task-accelerate-data-access.html
+    - title: Configuración de hosts SAN ONTAP
+      url: https://docs.netapp.com/us-en/ontap-sanhost
+  - title: Administración del sistema
+    links:
+    - title: Actualice Cloud Volumes ONTAP
+      url: task-updating-ontap-cloud.html
+    - title: Detener e iniciar Cloud Volumes ONTAP
+      url: task-managing-state.html
+  - title: Seguridad
+    links:
+    - title: Cifre los volúmenes con el cifrado de NetApp
+      url: task-encrypting-volumes.html
+    - title: Mejore la protección contra ransomware
+      url: task-protecting-ransomware.html
+  - title: API
+    links:
+    - title: Descripción general de la API de Cloud Volumes ONTAP
+      url: https://docs.netapp.com/us-en/bluexp-automation/cm/overview.html
+    - title: Prepare el uso de la API
+      url: https://docs.netapp.com/us-en/bluexp-automation/cm/prepare.html
+    - title: Referencia de API
+      url: https://docs.netapp.com/us-en/bluexp-automation/cm/api_ref_resources.html
+  - title: Resolución de problemas
+    links:
+    - title: Base de conocimientos de NetApp
+      url: https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services/Cloud_Volumes_ONTAP_(CVO)
+  - title: Referencia
+    links:
+    - title: Configuraciones admitidas
+      url: https://docs.netapp.com/us-en/cloud-volumes-ontap-relnotes/index.html
+    - title: Regiones de cloud admitidas
+      url: https://cloud.netapp.com/cloud-volumes-global-regions
+    - title: Calculadoras
+      url: https://cloud.netapp.com/calculator-hub
+  - title: Blogs y comunidad
+    links:
+    - title: Comunidad de NetApp
+      url: https://community.netapp.com/t5/Cloud-Volumes-ONTAP/bd-p/CloudVolumes
+    - title: Blog del sitio Web de BlueXP
+      url: https://cloud.netapp.com/blog/topic/cloud-volumes-ontap
+    - title: Seminarios web sobre el cloud
+      url: https://cloud.netapp.com/events

@@ -1,0 +1,152 @@
+---
+sidebar: sidebar 
+permalink: task-enabling-private-link.html 
+keywords: azure private link, private link connection, private link to storage, service endpoints, enable service endpoint, disable private link 
+summary: Cloud Volumes ONTAP utiliza un enlace privado de Azure para las conexiones a sus cuentas de almacenamiento asociadas. Si es necesario, puede deshabilitar los vínculos privados de Azure y usar extremos de servicio en su lugar. 
+---
+= Utilice un vínculo privado de Azure o extremos de servicio
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Cloud Volumes ONTAP utiliza un enlace privado de Azure para las conexiones a sus cuentas de almacenamiento asociadas. Si es necesario, puede deshabilitar los vínculos privados de Azure y usar extremos de servicio en su lugar.
+
+
+
+== Descripción general
+
+De forma predeterminada, BlueXP habilita una conexión privada de Azure para las conexiones entre Cloud Volumes ONTAP y sus cuentas de almacenamiento asociadas. Un vínculo privado de Azure protege las conexiones entre extremos en Azure y proporciona ventajas de rendimiento.
+
+Si es necesario, puede configurar Cloud Volumes ONTAP para que use extremos de servicio en lugar de un enlace privado de Azure.
+
+Con cualquiera de las configuraciones, BlueXP limita siempre el acceso a la red para las conexiones entre cuentas de almacenamiento y Cloud Volumes ONTAP. El acceso a la red está limitado al vnet donde se despliega Cloud Volumes ONTAP y al vnet donde se despliega el conector.
+
+
+
+== Deshabilite los vínculos privados de Azure y utilice extremos de servicio en su lugar
+
+Si así lo requiere su empresa, puede cambiar un valor de BlueXP para que configure Cloud Volumes ONTAP para que use extremos de servicio en lugar de un vínculo privado de Azure. El cambio de esta configuración se aplica a los nuevos sistemas Cloud Volumes ONTAP que cree. Solo se admiten los extremos de servicio en link:https://docs.microsoft.com/en-us/azure/availability-zones/cross-region-replication-azure#azure-cross-region-replication-pairings-for-all-geographies["Pares de regiones de Azure"^] Entre el conector y los Nets Cloud Volumes ONTAP.
+
+El conector debe ponerse en marcha en la misma región de Azure que los sistemas Cloud Volumes ONTAP que gestione o en https://docs.microsoft.com/en-us/azure/availability-zones/cross-region-replication-azure#azure-cross-region-replication-pairings-for-all-geographies["Par de regiones de Azure"^] Para los sistemas Cloud Volumes ONTAP.
+
+.Pasos
+. En la parte superior derecha de la consola de BlueXP, haga clic en el icono Configuración y seleccione *Configuración del conector*.
++
+image:screenshot_settings_icon.png["Captura de pantalla que muestra el icono Configuración en la parte superior derecha de la consola BlueXP."]
+
+. En *Azure*, haga clic en *usar enlace privado de Azure*.
+. Anule la selección de *Conexión de enlace privado entre cuentas Cloud Volumes ONTAP y de almacenamiento*.
+. Haga clic en *Guardar*.
+
+
+.Después de terminar
+Si ha deshabilitado vínculos privados de Azure y el conector utiliza un servidor proxy, debe habilitar el tráfico API directo.
+
+https://docs.netapp.com/us-en/bluexp-setup-admin/task-configuring-proxy.html#enable-a-proxy-on-a-connector["Aprenda a activar el tráfico API directo en el conector"^]
+
+
+
+== Trabajar con Azure Private Links
+
+En la mayoría de los casos, no es necesario hacer nada para configurar vínculos privados de Azure con Cloud Volumes ONTAP. BlueXP gestiona los enlaces privados de Azure para usted. Pero si utiliza una zona DNS privada de Azure existente, tendrá que editar un archivo de configuración.
+
+
+
+=== Requisito para DNS personalizado
+
+De manera opcional, si trabaja con DNS personalizado, necesita crear un reenviador condicional a la zona DNS privada de Azure desde sus servidores DNS personalizados. Para obtener más información, consulte link:https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns#on-premises-workloads-using-a-dns-forwarder["Documentación de Azure sobre el uso de un reenviador DNS"^].
+
+
+
+=== Cómo funcionan las conexiones de enlace privado
+
+Cuando BlueXP implementa Cloud Volumes ONTAP en Azure, crea un extremo privado en el grupo de recursos. El extremo privado está asociado con las cuentas de almacenamiento de Cloud Volumes ONTAP. Como resultado, el acceso al almacenamiento de Cloud Volumes ONTAP viaja a través de la red principal de Microsoft.
+
+El acceso al cliente pasa por el enlace privado cuando los clientes están dentro del mismo vnet que Cloud Volumes ONTAP, dentro de VNets de conexión entre iguales o en su red local cuando se usa una conexión privada VPN o ExpressRoute a vnet.
+
+A continuación se muestra un ejemplo que muestra el acceso de cliente a través de un vínculo privado desde el mismo vnet y desde una red local que tiene una conexión privada VPN o ExpressRoute.
+
+image:diagram_azure_private_link.png["Imagen conceptual que muestra el acceso a los datos desde Cloud Volumes ONTAP a través de un extremo privado y un enlace privado a la cuenta de almacenamiento."]
+
+
+NOTE: Si los sistemas Connector y Cloud Volumes ONTAP están implementados en distintos VNets, entonces debe configurar vnet peering entre el vnet donde se despliega el conector y el vnet donde se implementan los sistemas Cloud Volumes ONTAP.
+
+
+
+=== Proporcione a BlueXP detalles acerca de su DNS privado de Azure
+
+Si utiliza https://docs.microsoft.com/en-us/azure/dns/private-dns-overview["DNS privado de Azure"^], entonces necesita modificar un archivo de configuración en cada conector. De lo contrario, BlueXP no puede habilitar la conexión de Azure Private Link entre Cloud Volumes ONTAP y sus cuentas de almacenamiento asociadas.
+
+Tenga en cuenta que el nombre DNS debe coincidir con la nomenclatura de DNS de Azure requisitos https://docs.microsoft.com/en-us/azure/storage/common/storage-private-endpoints#dns-changes-for-private-endpoints["Como se muestra en la documentación de Azure"^].
+
+.Pasos
+. SSH en el host del conector e inicie sesión.
+. Desplácese hasta el siguiente directorio: /Opt/Application/netapp/cloudManager/docker_occm/data
+. Edite app.conf añadiendo el parámetro "user-private-dns-zone-settings" con los siguientes pares de palabra clave-valor:
++
+....
+"user-private-dns-zone-settings" : {
+   "resource-group" : "<resource group name of the DNS zone>",
+   "subscription" : "<subscription ID>",
+   "use-existing" : true,
+   "create-private-dns-zone-link" : true
+}
+....
++
+El parámetro debe introducirse al mismo nivel que "system-id", como se muestra a continuación:
+
++
+....
+"system-id" : "<system ID>",
+"user-private-dns-zone-settings" : {
+....
++
+Tenga en cuenta que la palabra clave subscription sólo es necesaria si la Zona DNS privada existe en una suscripción diferente a la del conector.
+
+. Guarde el archivo y cierre la sesión del conector.
++
+No es necesario reiniciar el sistema.
+
+
+
+
+
+=== Habilite la reversión en caso de fallos
+
+Si BlueXP no puede crear un vínculo privado de Azure como parte de acciones específicas, finaliza la acción sin la conexión del vínculo privado de Azure. Esto puede suceder cuando se crea un entorno de trabajo nuevo (nodo único o par de alta disponibilidad), o cuando se producen las siguientes acciones en un par de alta disponibilidad: Crear un nuevo agregado, añadir discos a un agregado existente o crear una nueva cuenta de almacenamiento cuando se supera los 32 TIB.
+
+Puede cambiar este comportamiento predeterminado habilitando la reversión si BlueXP no puede crear el vínculo privado de Azure. Esto puede ayudarle a garantizar que cumple plenamente las normativas de seguridad de su empresa.
+
+Si activa la reversión, BlueXP detiene la acción y revierte todos los recursos que se crearon como parte de la acción.
+
+Puede activar la reversión a través de la API o actualizando el archivo app.conf.
+
+*Active la reversión a través de la API*
+
+.Paso
+. Utilice la `PUT /occm/config` Llamada API con el siguiente cuerpo de la solicitud:
++
+[source, json]
+----
+{ "rollbackOnAzurePrivateLinkFailure": true }
+----
+
+
+*Activar la reversión actualizando app.conf*
+
+.Pasos
+. SSH en el host del conector e inicie sesión.
+. Desplácese hasta el siguiente directorio: /Opt/Application/netapp/cloudManager/docker_occm/data
+. Edite app.conf añadiendo los siguientes parámetros y valores:
++
+ "rollback-on-private-link-failure": true
+. Guarde el archivo y cierre la sesión del conector.
++
+No es necesario reiniciar el sistema.
+
+

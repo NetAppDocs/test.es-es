@@ -1,0 +1,65 @@
+---
+sidebar: sidebar 
+permalink: task-setting-up-gcp-encryption.html 
+keywords: encryption, gcp, encryption key, permissions, customer-managed, gcpencryption 
+summary: Aunque Google Cloud Storage siempre cifra los datos antes de que se escriban en el disco, puede utilizar las API de BlueXP para crear un sistema Cloud Volumes ONTAP que utilice claves de cifrado gestionadas por el cliente. Estas son claves que genera y gestiona en GCP mediante el servicio Cloud Key Management Service. 
+---
+= Utiliza claves de cifrado gestionadas por el cliente con Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Mientras Google Cloud Storage siempre cifra sus datos antes de que se escriban en el disco, puede utilizar la API de BlueXP para crear un sistema Cloud Volumes ONTAP que utilice _claves de cifrado gestionadas por el cliente_. Estas son claves que genera y gestiona en GCP mediante el servicio Cloud Key Management Service.
+
+.Pasos
+. Asegúrese de que la cuenta de servicio de BlueXP Connector tiene los permisos correctos en el nivel de proyecto, en el proyecto en el que se almacena la clave.
++
+Los permisos se proporcionan en la https://docs.netapp.com/us-en/bluexp-setup-admin/reference-permissions-gcp.html["Permisos de cuenta de servicio de conector de forma predeterminada"^], Pero no se puede aplicar si utiliza un proyecto alternativo para el Servicio de administración de claves en la nube.
+
++
+Los permisos son los siguientes:
+
++
+[source, yaml]
+----
+- cloudkms.cryptoKeyVersions.useToEncrypt
+- cloudkms.cryptoKeys.get
+- cloudkms.cryptoKeys.list
+- cloudkms.keyRings.list
+----
+. Asegúrese de que la cuenta de servicio de https://cloud.google.com/iam/docs/service-agents["Agente de servicio de Google Compute Engine"^] Tiene permisos cifrado/descifrado de Cloud KMS en la clave.
++
+El nombre de la cuenta de servicio utiliza el siguiente formato: "Service-[Service_Project_Number]@compute-system.iam.gserviceaccount.com".
+
++
+https://cloud.google.com/kms/docs/iam#granting_roles_on_a_resource["Documentación de Google Cloud: Uso de IAM con Cloud KMS: Concesión de roles en un recurso"]
+
+. Obtenga el "id" de la clave invocando el comando get para `/gcp/vsa/metadata/gcp-encryption-keys` Llame a la API o elija "Copy Resource Name" en la clave de la consola de GCP.
+. Si se utilizan claves de cifrado gestionadas por el cliente y los datos organizados en niveles en el almacenamiento de objetos, BlueXP intenta utilizar las mismas claves que se utilizan para cifrar los discos persistentes. Pero en primer lugar tendrá que habilitar las buckets de Google Cloud Storage para usar las claves:
++
+.. Busque el agente del servicio Google Cloud Storage en la siguiente https://cloud.google.com/storage/docs/getting-service-agent["Documentación de Google Cloud: Obtener el agente del servicio de almacenamiento en cloud"^].
+.. Desplácese hasta la clave de cifrado y asigne el agente del servicio Google Cloud Storage con permisos cifrado/descifrado de Cloud KMS.
+
+
++
+Para obtener más información, consulte https://cloud.google.com/storage/docs/encryption/using-customer-managed-keys["Documentación de Google Cloud: Uso de claves de cifrado gestionadas por el cliente"^]
+
+. Utilice el parámetro "GcpEncryption" con la solicitud de API al crear un entorno de trabajo.
++
+*ejemplo*
+
++
+[source, json]
+----
+"gcpEncryptionParameters": {
+    "key": "projects/project-1/locations/us-east4/keyRings/keyring-1/cryptoKeys/generatedkey1"
+  }
+----
+
+
+Consulte la https://docs.netapp.com/us-en/bluexp-automation/index.html["Documentos de automatización de BlueXP"^] Para obtener más detalles sobre el uso del parámetro "GcpEncryption".

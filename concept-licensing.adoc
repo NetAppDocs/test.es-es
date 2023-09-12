@@ -1,0 +1,439 @@
+---
+sidebar: sidebar 
+permalink: concept-licensing.html 
+keywords: freemium, professional, essentials, licensing, licenses, cloud volumes ontap charging, cloud volumes ontap licenses, cloud volumes ontap licensing, cvo licenses, cvo licensing, byol, bring your own license, paygo, pay as you go, keystone flex, keystone, cloud backup, digital wallet 
+summary: Hay varias opciones de licencia disponibles para Cloud Volumes ONTAP. Cada opción le permite elegir una configuración que cumpla sus necesidades. 
+---
+= Licencias de Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Hay varias opciones de licencia disponibles para Cloud Volumes ONTAP. Cada opción le permite elegir un modelo de consumo que cumpla sus necesidades.
+
+
+
+== Información general sobre las licencias
+
+Los nuevos clientes disponen de las siguientes opciones de licencia.
+
+Licencias basadas en capacidad:: Pague por los múltiples sistemas de Cloud Volumes ONTAP de su cuenta de NetApp mediante la capacidad aprovisionada. Incluye la capacidad de adquirir servicios de datos en cloud adicionales.
+Suscripción a Keystone:: Un servicio basado en suscripción de pago por crecimiento que proporciona una experiencia fluida de cloud híbrido para pares de alta disponibilidad.
+
+
+El modelo de licencias por nodos anterior sigue disponible para clientes existentes que ya han adquirido una licencia o que tienen una suscripción activa a Marketplace.
+
+En las siguientes secciones se ofrecen más detalles acerca de cada una de estas opciones.
+
+
+NOTE: No hay soporte disponible para el uso de funciones con licencia sin una licencia.
+
+
+
+== Licencias basadas en capacidad
+
+Los paquetes de licencias basados en la capacidad le permiten pagar por Cloud Volumes ONTAP por TIB de capacidad. La licencia está asociada con su cuenta de NetApp y le permite cargar varios sistemas con la licencia, siempre que haya suficiente capacidad disponible mediante la licencia.
+
+Por ejemplo, podría comprar una única licencia de 20 TIB, poner en marcha cuatro sistemas de Cloud Volumes ONTAP y luego asignar un volumen de 5 TIB a cada sistema, para un total de 20 TIB. La capacidad está disponible para los volúmenes en cada sistema Cloud Volumes ONTAP implementado en esa cuenta.
+
+La licencia basada en la capacidad está disponible en forma de un _package_. Al implementar un sistema Cloud Volumes ONTAP, puede elegir entre varios paquetes de licencias en función de las necesidades de su empresa.
+
+
+
+=== Paquetes
+
+Los siguientes paquetes basados en capacidad están disponibles para Cloud Volumes ONTAP.
+
+
+
+==== Freemium
+
+Ofrece todas las características de Cloud Volumes ONTAP de forma gratuita desde NetApp (todavía se aplican cargos de proveedores de cloud).
+
+* No se necesita licencia ni contrato.
+* No se incluye el soporte de NetApp.
+* Está limitado a 500 GIB de capacidad aprovisionada por sistema Cloud Volumes ONTAP.
+* Puede usar hasta 10 sistemas Cloud Volumes ONTAP con la oferta de Freemium por cuenta de NetApp en cualquier proveedor de cloud.
+* Si la capacidad aprovisionada para un sistema de Cloud Volumes ONTAP supera los 500 GIB, BlueXP convierte el sistema al paquete Essentials.
++
+En cuanto un sistema se convierte al paquete Essentials, el <<Notas sobre la carga,carga mínima>> aplicable.
+
++
+Cualquier otro sistema que tenga menos de 500 GIB de capacidad aprovisionada permanece en Freemium (siempre que se hayan desplegado utilizando la oferta Freemium).
+
+
+
+
+
+==== Optimizado
+
+Pague por separado la capacidad aprovisionada y las operaciones de I/o.
+
+* Nodo único de Cloud Volumes ONTAP o alta disponibilidad
+* La carga se basa en dos componentes de coste: Almacenamiento y uso (E/S)
++
+No tendrá que pagar por I/o relacionado con la replicación de datos (SnapMirror) o NDMP.
+
+
+
+ifdef::azure[]
+
+* Disponible en Azure Marketplace como oferta de pago por uso o como contrato anual
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+* Disponible en Google Cloud Marketplace como oferta de pago por uso o como contrato anual
+
+
+endif::gcp[]
+
+* Compatible con los tipos de máquina virtual seleccionados:
+
+
+ifdef::azure[]
+
+* Para Azure: E4s_v3, E4ds_v4, DS4_v2, DS13_v2, E8s_v3, Y E8ds_v4
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+* Para Google Cloud: n2-standard-4, n2-standard-8
+
+
+endif::gcp[]
+
+* Añada cualquiera de los servicios de datos en el cloud de NetApp por un coste adicional
+
+
+
+
+==== Aspectos básicos
+
+Pague por capacidad por Cloud Volumes ONTAP en diferentes configuraciones.
+
+* Elija la configuración de Cloud Volumes ONTAP:
++
+** Un sistema de alta disponibilidad o nodo único
+** Almacenamiento de archivos y bloques o datos secundarios para recuperación ante desastres (DR)
+
+
+* Añada cualquiera de los servicios de datos en el cloud de NetApp por un coste adicional
+
+
+
+
+==== Profesional
+
+Pague por capacidad por cualquier tipo de configuración de Cloud Volumes ONTAP con backups ilimitados.
+
+* Ofrece licencias para cualquier configuración de Cloud Volumes ONTAP
++
+Un solo nodo o ha con carga de capacidad para volúmenes principales y secundarios al mismo ritmo
+
+* Incluye backups de volúmenes ilimitados mediante backup y recuperación de BlueXP, pero solo para sistemas Cloud Volumes ONTAP que utilicen el paquete Professional
+* Añada cualquiera de los servicios de datos en el cloud de NetApp por un coste adicional
+
+
+
+
+==== Caché perimetral
+
+Proporciona licencias para Cloud Volumes Edge Cache.
+
+* Las mismas funciones que el paquete Professional, con continuidad del negocio y protección de datos para una empresa distribuida
+* Almacenamiento en caché de perímetro inteligente en una máquina virtual de Windows que ocupa poco espacio en cada ubicación
+* Un nodo perimetral con cada 3 TIBs de capacidad adquirida
+
+
+ifdef::azure[]
+
+* Disponible en Azure Marketplace como oferta de pago por uso o como contrato anual
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+* Disponible en Google Cloud Marketplace como oferta de pago por uso o como contrato anual
+
+
+endif::gcp[]
+
+https://cloud.netapp.com/cloud-volumes-edge-cache["Obtenga más información sobre cómo Cloud Volumes Edge Cache puede ayudar a su negocio"^]
+
+
+
+=== Modelos de consumo
+
+Hay disponibles paquetes de licencias basadas en capacidad con los siguientes modelos de consumo:
+
+* *BYOL*: Una licencia comprada a NetApp que se puede utilizar para poner en marcha Cloud Volumes ONTAP en cualquier proveedor de cloud.
+
+
+ifdef::azure[]
+
++
+Tenga en cuenta que los paquetes Optimized y Edge Cache no están disponibles con BYOL.
+
+endif::azure[]
+
+* *PAYGO*: Una suscripción por hora desde el mercado de su proveedor de la nube.
+* *Anual*: Un contrato anual del mercado de su proveedor de cloud.
+
+
+Tenga en cuenta lo siguiente:
+
+* Si adquiere una licencia de NetApp (BYOL), también tendrá que suscribirse a la oferta PAYGO del mercado de su proveedor de cloud.
++
+La licencia siempre se cargará primero, pero se cargará a partir de la tarifa por horas en el mercado en estos casos:
+
++
+** Si supera la capacidad de la licencia
+** Si el período de su licencia caduca
+
+
+* Si tiene un contrato anual de un mercado, _All_ los sistemas Cloud Volumes ONTAP que implemente se cobrarán en función de ese contrato. No se puede mezclar y combinar un contrato anual de mercado con su licencia BYOL.
+* En las regiones de China solo se admiten sistemas de un solo nodo con BYOL.
+
+
+
+
+=== Cambio de paquetes
+
+Después de la implementación, puede cambiar el paquete de un sistema Cloud Volumes ONTAP que usa licencias basadas en capacidad. Por ejemplo, si implementó un sistema Cloud Volumes ONTAP con el paquete Essentials, puede cambiarlo por el paquete profesional si se necesita cambiar su empresa.
+
+link:task-manage-capacity-licenses.html["Aprenda a cambiar los métodos de carga"].
+
+
+
+=== precios
+
+Para obtener más información sobre los precios, visite https://cloud.netapp.com/pricing?hsCtaTracking=4f8b7b77-8f63-4b73-b5af-ee09eab4fbd6%7C5fefbc99-396c-4084-99e6-f1e22dc8ffe7["Sitio web de NetApp BlueXP"^].
+
+
+
+=== Pruebas gratuitas
+
+En la suscripción de pago por uso de su proveedor de cloud, se encuentra disponible una prueba gratuita de 30 días. La prueba gratuita incluye backup y recuperación de datos de Cloud Volumes ONTAP y BlueXP. La prueba comienza cuando usted se suscribe a la oferta en el mercado.
+
+No hay limitaciones de capacidad ni instancia. Puede implementar tantos sistemas Cloud Volumes ONTAP como desee y asignar la misma capacidad que necesite, sin coste alguno durante 30 días. La versión de prueba gratuita se convierte automáticamente en una suscripción por hora pagada después de 30 días.
+
+Cloud Volumes ONTAP no se cobra por hora de licencia de software, pero sí se aplican los costes de infraestructura del proveedor de cloud.
+
+
+TIP: Recibirá una notificación en BlueXP cuando comience la prueba gratuita, cuando queden 7 días y cuando quede 1 día. Por ejemplo:
+image:screenshot-free-trial-notification.png["Una captura de pantalla de una notificación en la interfaz BlueXP que indica que sólo quedan 7 días en una prueba gratuita."]
+
+
+
+=== Configuraciones admitidas
+
+Los paquetes de licencia basados en capacidad están disponibles con Cloud Volumes ONTAP 9.7 y versiones posteriores.
+
+
+
+=== Límite de capacidad
+
+Con este modelo de licencia, cada sistema Cloud Volumes ONTAP individual admite hasta 2 PIB de capacidad mediante discos y segmentación en almacenamiento de objetos.
+
+No hay limitación máxima de capacidad cuando se trata de la propia licencia.
+
+
+
+=== Máximo número de sistemas
+
+Con las licencias basadas en capacidad, el número máximo de sistemas Cloud Volumes ONTAP se limita a 20 por cuenta de NetApp. Un _System_ es un par de alta disponibilidad de Cloud Volumes ONTAP, un sistema de nodo único de Cloud Volumes ONTAP o cualquier VM de almacenamiento adicional que cree. La máquina virtual de almacenamiento predeterminada no cuenta para el límite. Este límite se aplica a todos los modelos de licencias.
+
+Por ejemplo, digamos que tenemos tres entornos de trabajo:
+
+* Un sistema Cloud Volumes ONTAP de un solo nodo con una máquina virtual de almacenamiento (esta es la máquina virtual de almacenamiento predeterminada que se crea al implementar Cloud Volumes ONTAP)
++
+Este entorno de trabajo cuenta como un solo sistema.
+
+* Un sistema Cloud Volumes ONTAP de un solo nodo con dos máquinas virtuales de almacenamiento (la máquina virtual de almacenamiento predeterminada más una máquina virtual de almacenamiento adicional que creó)
++
+Este entorno de trabajo cuenta como dos sistemas: Uno para el sistema de nodo único y otro para el equipo virtual de almacenamiento adicional.
+
+* Un par de alta disponibilidad de Cloud Volumes ONTAP con tres máquinas virtuales de almacenamiento (la máquina virtual de almacenamiento predeterminada y dos máquinas virtuales de almacenamiento adicionales que creó)
++
+Este entorno de trabajo cuenta como tres sistemas: Uno para el par de alta disponibilidad y dos para los VM de almacenamiento adicionales.
+
+
+
+Esto supone seis sistemas en total. Después, tendrá espacio para 14 sistemas adicionales en su cuenta.
+
+Si tiene una gran puesta en marcha que requiera más de 20 sistemas, póngase en contacto con su representante de cuenta o con su equipo de ventas.
+
+https://docs.netapp.com/us-en/bluexp-setup-admin/concept-netapp-accounts.html["Obtenga más información acerca de las cuentas de NetApp"^].
+
+
+
+=== Notas sobre la carga
+
+Los siguientes detalles pueden ayudarle a comprender cómo funciona la carga con las licencias basadas en la capacidad.
+
+
+
+==== Carga mínima
+
+Hay una carga mínima de 4 TIB para cada máquina virtual de almacenamiento que sirve datos y tiene al menos un volumen primario (lectura y escritura). Si la suma de los volúmenes primarios es inferior a 4 TIB, entonces BlueXP aplica la carga mínima de 4 TIB a esa máquina virtual de almacenamiento.
+
+Si todavía no ha aprovisionado ningún volumen, no se aplicará ningún cargo mínimo.
+
+Para el paquete Essentials, el cargo por capacidad mínima de 4 TiB no se aplica a las VM de almacenamiento que únicamente contienen volúmenes secundarios (protección de datos). Por ejemplo, si tiene una máquina virtual de almacenamiento con 1 TIB de datos secundarios, entonces sólo estará cargado por ese 1 TIB de datos. Con el resto de tipos de paquetes que no sean Essentials (Optimized, Professional y Edge Cache), la carga de capacidad mínima de 4 TiB se aplica independientemente del tipo de volumen.
+
+
+
+==== Sobrerajes
+
+Si sobrepasa su capacidad de BYOL o si la licencia caduca, se le cobrará por exceso a la tarifa por horas en función de su suscripción al mercado.
+
+
+
+==== Paquete Essentials
+
+Con el paquete Essentials, se factura por el tipo de puesta en marcha (ha o nodo único) y el tipo de volumen (principal o secundario). Por ejemplo, _Essentials ha_ tiene precios diferentes que _Essentials Secondary ha_.
+
+Si compraste una licencia Essentials de NetApp (BYOL) y superas la capacidad con licencia para esa puesta en marcha y ese tipo de volumen, la cartera digital de BlueXP cobrará los aumentos frente a una licencia Essentials de mayor precio (si la tienes). Esto sucede porque primero utilizamos la capacidad disponible que ya ha adquirido como capacidad prepagada antes de cobrar por el mercado. Cobrar al mercado agregaría costos a su factura mensual.
+
+Veamos un ejemplo. Supongamos que tiene las siguientes licencias para el paquete Essentials:
+
+* Licencia de 500 TIB _Essentials Secondary ha_ que tiene 500 TIB de capacidad comprometida
+* Licencia de 500 TIB _Essentials Single Node_ que sólo tiene 100 TIB de capacidad comprometida
+
+
+Se aprovisionan otros 50 TIB en un par de alta disponibilidad con volúmenes secundarios. En lugar de cargar esos 50 TiB a PAYGO, la cartera digital de BlueXP carga el exceso de 50 TiB con respecto a la licencia _Essentials Single Node_. El precio de la licencia es superior al de _Essentials Secondary ha_, pero es más barato que la tasa de PAYGO.
+
+En la cartera digital de BlueXP, se mostrarán 50 TiB como cargados con la licencia _Essentials Single Node_.
+
+
+
+==== Máquinas virtuales de almacenamiento
+
+* No existen costes adicionales de licencia para máquinas virtuales de almacenamiento que sirven datos (SVM) adicionales, pero hay un cargo mínimo de 4 TIB por SVM que sirve datos.
+* Las SVM de recuperación ante desastres se cobran según la capacidad aprovisionada.
+
+
+
+
+==== Parejas de HA
+
+Para parejas de alta disponibilidad, solo paga por la capacidad aprovisionada en un nodo. No está cargado por datos que se reflejan de forma síncrona en el nodo del partner.
+
+
+
+==== Volúmenes FlexClone y FlexCache
+
+* No tendrá que pagar por la capacidad que utilizan los volúmenes FlexClone.
+* Los volúmenes de FlexCache de origen y destino se consideran datos principales y se cobran según el espacio aprovisionado.
+
+
+
+
+=== Cómo comenzar
+
+Descubra cómo empezar a utilizar las licencias basadas en capacidad:
+
+ifdef::aws[]
+
+* link:task-set-up-licensing-aws.html["Configure las licencias para Cloud Volumes ONTAP en AWS"]
+
+
+endif::aws[]
+
+ifdef::azure[]
+
+* link:task-set-up-licensing-azure.html["Configure las licencias para Cloud Volumes ONTAP en Azure"]
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+* link:task-set-up-licensing-google.html["Configure las licencias para Cloud Volumes ONTAP en Google Cloud"]
+
+
+endif::gcp[]
+
+
+
+== Suscripción a Keystone
+
+Un servicio basado en suscripción de pago por crecimiento que ofrece una experiencia fluida de cloud híbrido para aquellos que prefieran los modelos de consumo de gastos operativos como arrendamiento o gastos de capital iniciales.
+
+La carga se basa en el tamaño de la capacidad comprometida de una o varias parejas de alta disponibilidad de Cloud Volumes ONTAP en su suscripción Keystone.
+
+La capacidad aprovisionada para cada volumen se agrega y se compara con la capacidad comprometida de tu suscripción de Keystone periódicamente; los excesos se cobran como picos de potencia en tu suscripción de Keystone.
+
+link:https://docs.netapp.com/us-en/keystone-staas/index.html["Obtenga más información acerca de NetApp Keystone"^].
+
+
+
+=== Configuraciones admitidas
+
+Las suscripciones de Keystone son compatibles con parejas de alta disponibilidad. Esta opción de licencia no es compatible por el momento con los sistemas de un solo nodo.
+
+
+
+=== Límite de capacidad
+
+Cada sistema individual de Cloud Volumes ONTAP admite hasta 2 PIB de capacidad mediante discos y organización en niveles en el almacenamiento de objetos.
+
+
+
+=== Cómo comenzar
+
+Descubre cómo empezar a usar una suscripción a Keystone:
+
+ifdef::aws[]
+
+* link:task-set-up-licensing-aws.html["Configure las licencias para Cloud Volumes ONTAP en AWS"]
+
+
+endif::aws[]
+
+ifdef::azure[]
+
+* link:task-set-up-licensing-azure.html["Configure las licencias para Cloud Volumes ONTAP en Azure"]
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+* link:task-set-up-licensing-google.html["Configure las licencias para Cloud Volumes ONTAP en Google Cloud"]
+
+
+endif::gcp[]
+
+
+
+== Licenciamiento por nodos
+
+La licencia basada en nodos es el modelo de licencia de la generación anterior que le permitió obtener licencias de Cloud Volumes ONTAP por nodo. Este modelo de licencia no está disponible para nuevos clientes y no hay pruebas gratuitas disponibles. La carga por nodos se ha sustituido por los métodos de carga por capacidad descritos anteriormente.
+
+La licencia basada en nodos sigue estando disponible para los clientes existentes:
+
+* Si tiene una licencia activa, BYOL solo está disponible para renovaciones de licencias.
+* Si dispone de una suscripción activa a Marketplace, el cobro seguirá estando disponible a través de esa suscripción.
+
+
+
+
+== Conversiones de licencias
+
+No se admite la conversión de un sistema Cloud Volumes ONTAP existente a otro método de licencia. Los tres métodos de licencia actuales son la licencia basada en capacidad, las suscripciones de Keystone y las licencias basadas en nodos. Por ejemplo, no se puede convertir un sistema de licencias basadas en nodos a licencias basadas en capacidad (y viceversa).
+
+Si desea realizar la transición a otro método de licencia, puede adquirir una licencia, implementar un nuevo sistema Cloud Volumes ONTAP con esa licencia y, a continuación, replicar los datos en ese nuevo sistema.
+
+Tenga en cuenta que no se admite la conversión de un sistema de licencias de PAYGO a licencias de subnodo BYOL (y viceversa). Debe poner en marcha un nuevo sistema y replicar los datos en él. link:task-manage-node-licenses.html["Aprenda a cambiar entre PAYGO y BYOL"].

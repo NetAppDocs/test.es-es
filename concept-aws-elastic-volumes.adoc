@@ -1,0 +1,191 @@
+---
+sidebar: sidebar 
+permalink: concept-aws-elastic-volumes.html 
+keywords: elastic volumes, ev, ebs elastic volumes, ebs, amazon ebs, disk growth 
+summary: La compatibilidad con la función Elastic Volumes de Amazon EBS con un agregado de Cloud Volumes ONTAP proporciona un mejor rendimiento y capacidad adicional, a la vez que permite que BlueXP aumente automáticamente la capacidad subyacente del disco según sea necesario. 
+---
+= Volúmenes elásticos en AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La compatibilidad con la función Elastic Volumes de Amazon EBS con un agregado de Cloud Volumes ONTAP proporciona un mejor rendimiento y capacidad adicional, a la vez que permite que BlueXP aumente automáticamente la capacidad subyacente del disco según sea necesario.
+
+
+
+== Beneficios
+
+* Crecimiento dinámico de los discos
++
+BlueXP puede aumentar dinámicamente el tamaño de los discos mientras Cloud Volumes ONTAP está en ejecución y mientras los discos todavía están conectados.
+
+* Rendimiento mejorado
++
+Los agregados habilitados con volúmenes Elastic pueden tener hasta ocho discos que son utilizados por igual en dos grupos RAID. Esta configuración ofrece un mayor rendimiento y un rendimiento constante.
+
+* Agregados de mayor tamaño
++
+La compatibilidad con ocho discos proporciona una capacidad de agregado máxima de 128 TIB. Estos límites son superiores al límite de seis discos y al límite de 96 TIB para agregados que no están habilitados con la función de volúmenes de Elastic.
+
++
+Tenga en cuenta que los límites de capacidad total del sistema siguen siendo los mismos.
+
+
+
+https://aws.amazon.com/ebs/features/["Obtenga más información sobre Elastic Volumes de AWS"^]
+
+
+
+== Configuraciones admitidas
+
+La función Elastic Volumes de Amazon EBS es compatible con versiones de Cloud Volumes ONTAP específicas y tipos de disco EBS específicos.
+
+
+
+=== Versión de Cloud Volumes ONTAP
+
+La función Elastic Volumes es compatible con los sistemas _new_ Cloud Volumes ONTAP creados a partir de la versión 9.11.0 o posterior. La función es _not_ compatible con los sistemas Cloud Volumes ONTAP existentes que se implementaron antes de 9.11.0.
+
+Por ejemplo, la función Elastic Volumes no es compatible si creó un sistema Cloud Volumes ONTAP 9.9.0 y después actualizó ese sistema a la versión 9.11.0. Debe ser un nuevo sistema puesto en marcha utilizando la versión 9.11.0 o posterior.
+
+
+
+=== Tipos de disco de EBS
+
+La función Elastic Volumes se habilita automáticamente en el nivel de agregado cuando se utilizan SSD de uso general (gp3) o SSD de IOPS aprovisionados (io1). La función Elastic Volumes no es compatible con agregados que utilizan cualquier otro tipo de disco.
+
+
+
+== Permisos de AWS necesarios
+
+A partir del lanzamiento de la versión 3.9.19, el conector requiere los siguientes permisos para habilitar y gestionar la función Elastic Volumes en un agregado de Cloud Volumes ONTAP:
+
+* ec2:DescribVolumesModificaciones
+* ec2:ModifiyVolume
+
+
+Estos permisos se incluyen en https://docs.netapp.com/us-en/bluexp-setup-admin/reference-permissions-aws.html["Las políticas proporcionadas por NetApp"^]
+
+
+
+== Cómo funciona la compatibilidad con volúmenes de Elastic
+
+Un agregado que tiene habilitada la función de volúmenes de Elastic está compuesto por uno o dos grupos RAID. Cada grupo RAID tiene cuatro discos idénticos que tienen la misma capacidad. A continuación encontrará un ejemplo de un agregado de 10 TIB que tiene cuatro discos con 2.5 TIB cada uno:
+
+image:diagram-aws-elastic-volumes-one-raid-group.png["Imagen conceptual que muestra un agregado y un grupo RAID compuestos por cuatro discos de igual tamaño."]
+
+Cuando BlueXP crea un agregado, comienza por un grupo RAID. Si se necesita capacidad adicional, BlueXP amplía la agrupación aumentando la capacidad de todos los discos del grupo RAID en la misma cantidad. El aumento de la capacidad es un mínimo de 256 GIB o un 10 % del tamaño del agregado.
+
+Por ejemplo, si tiene un agregado de 1 TIB, cada disco es de 250 GIB. El 10% de la capacidad del agregado es de 100 GIB. Esto es inferior a 256 GIB, de modo que el tamaño del agregado se aumente por el mínimo de 256 GIB (o 64 GIB por cada disco).
+
+BlueXP aumenta el tamaño de los discos mientras el sistema Cloud Volumes ONTAP se ejecuta y mientras los discos todavía están conectados. El cambio no provoca interrupciones.
+
+Si un agregado alcanza 64 TIB (o 16 TIB en cada disco), BlueXP crea un segundo grupo RAID para obtener capacidad adicional. Este segundo grupo RAID funciona igual que el primero: Tiene cuatro discos con la misma capacidad y puede crecer hasta 64 TIB. Esto significa que un agregado puede tener una capacidad máxima de 128 TIB.
+
+A continuación se muestra un ejemplo de un agregado con dos grupos RAID. Se alcanzó el límite de capacidad en el primer grupo de RAID, mientras que los discos del segundo grupo de RAID tienen suficiente espacio libre.
+
+image:diagram-aws-elastic-volumes-two-raid-groups.png["Imagen conceptual que muestra un agregado y dos grupos RAID compuestos por cuatro discos de igual tamaño."]
+
+
+
+=== Qué sucede cuando se crea un volumen
+
+Si crea un volumen que usa discos gp3 o io1, BlueXP crea el volumen en un agregado de la siguiente manera:
+
+* Si existe un agregado gp3 o io1 con volúmenes Elastic habilitados, BlueXP crea el volumen en ese agregado.
+* Si hay varios agregados gp3 o io1 con volúmenes Elastic habilitados, BlueXP crea el volumen en el agregado que requiere la menor cantidad de recursos.
+* Si el sistema solo tiene agregados gp3 o io1 que no están habilitados para volúmenes de elasticidad, se crea el volumen en ese agregado.
++
+[NOTE]
+====
+Aunque es poco probable que esto suceda, es posible en dos casos:
+
+** Al crear un agregado desde la API, se deshabilitó explícitamente la función Elastic Volumes.
+** Creó un nuevo sistema Cloud Volumes ONTAP desde la interfaz de usuario de, en cuyo caso, la función Elastic Volumes está deshabilitada en el agregado inicial. Revisar <<Limitaciones>> a continuación para obtener más información.
+
+
+====
+* Si no hay agregados con suficiente capacidad, BlueXP crea el agregado con volúmenes Elastic habilitados y, a continuación, crea el volumen en ese nuevo agregado.
++
+El tamaño del agregado se basa en el tamaño del volumen solicitado más un 10 % de capacidad adicional.
+
+
+
+
+
+=== Modo de gestión de la capacidad
+
+El modo de gestión de capacidad de un conector funciona con volúmenes Elastic de forma parecida a su funcionamiento con otros tipos de agregados:
+
+* Cuando está activado el modo automático (esta es la configuración predeterminada), BlueXP aumenta automáticamente el tamaño de los agregados si se necesita capacidad adicional.
+* Si cambia el modo de administración de capacidad a Manual, BlueXP solicita su aprobación para adquirir capacidad adicional.
+
+
+link:concept-storage-management.html#capacity-management["Obtenga más información acerca del modo de administración de capacidad"].
+
+
+
+== Limitaciones
+
+Aumentar el tamaño de un agregado puede llevar hasta 6 horas. Durante ese tiempo, BlueXP no puede solicitar ninguna capacidad adicional para ese agregado.
+
+
+
+== Cómo trabajar con volúmenes de elasticidad
+
+Puede trabajar con volúmenes Elastic en BlueXP de la siguiente manera:
+
+* Cree un nuevo sistema con volúmenes Elastic habilitados en el agregado inicial al usar discos gp3 o io1
++
+link:task-deploying-otc-aws.html["Aprenda a crear un sistema Cloud Volumes ONTAP"]
+
+* Cree un nuevo volumen en un agregado con volúmenes Elastic habilitados
++
+Si crea un volumen que usa discos gp3 o io1, BlueXP crea automáticamente el volumen en un agregado que tiene volúmenes Elastic habilitados. Para obtener información detallada, consulte <<Qué sucede cuando se crea un volumen>>.
+
++
+link:task-create-volumes.html["Aprenda a crear volúmenes"].
+
+* Cree un nuevo agregado que tenga habilitados los volúmenes Elastic
++
+Los volúmenes elásticos se habilitan automáticamente en agregados nuevos que usan discos gp3 o io1, siempre que el sistema de Cloud Volumes ONTAP se haya creado a partir de la versión 9.11.0 o posterior.
+
++
+Cuando crea el agregado, BlueXP solicita el tamaño de la capacidad del agregado. Esto es diferente a otras configuraciones en las que se elige un tamaño de disco y el número de discos.
+
++
+La siguiente captura de pantalla muestra un ejemplo de un nuevo agregado compuesto por discos gp3.
+
++
+image:screenshot-aggregate-size-ev.png["Una captura de pantalla de la pantalla Aggregate Disks para un disco gp3 en el que se introduce el tamaño del agregado en TIB."]
+
++
+link:task-create-aggregates.html["Aprenda a crear agregados"].
+
+* Identifique los agregados con volúmenes Elastic habilitados
++
+Cuando vaya a la página Advanced Allocation, puede identificar si la función Elastic Volumes está habilitada en un agregado. En el ejemplo siguiente, aggr1 tiene volúmenes Elastic habilitados.
+
++
+image:screenshot_elastic_volume_enabled.png["Captura de pantalla que muestra dos agregados en los que uno tiene un campo con el texto volúmenes Elastic habilitados."]
+
+* Añada capacidad a un agregado
++
+Aunque BlueXP añade capacidad automáticamente a los agregados según sea necesario, puede aumentar la capacidad manualmente.
+
++
+link:task-manage-aggregates.html["Aprenda a aumentar la capacidad de los agregados"].
+
+* Replicar datos en un agregado con volúmenes Elastic habilitados
++
+Si el sistema Cloud Volumes ONTAP de destino admite volúmenes Elastic, se colocará un volumen de destino en un agregado que tenga habilitados los volúmenes de elasticidad (siempre que se elija un disco gp3 o io1).
+
++
+https://docs.netapp.com/us-en/bluexp-replication/task-replicating-data.html["Aprenda a configurar la replicación de datos"^]
+
+

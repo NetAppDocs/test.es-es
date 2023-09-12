@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: task-manage-svm-dr.html 
+keywords: storage virtual machine, vserver, svm, storage vm, svm dr, disaster recovery, svm disaster recovery, storage vm dr 
+summary: BlueXP no ofrece ninguna compatibilidad de configuración o orquestación para la recuperación ante desastres de equipos virtuales de almacenamiento. Se debe usar System Manager o la CLI. 
+---
+= Configure la recuperación ante desastres de SVM
+:toc: macro
+:hardbreaks:
+:allow-uri-read: 
+:toc: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:toc-position: content
+
+
+[role="lead"]
+BlueXP no ofrece compatibilidad con ninguna configuración u orquestación para la recuperación ante desastres de máquinas virtuales de almacenamiento (SVM). Se debe usar System Manager o la CLI.
+
+Si se configura la replicación de SVM de SnapMirror entre dos sistemas Cloud Volumes ONTAP, la replicación debe estar entre dos sistemas de parejas de alta disponibilidad o dos sistemas de nodo único. No se puede configurar la replicación de SVM de SnapMirror entre una pareja de alta disponibilidad y un sistema de un solo nodo.
+
+Consulte los siguientes documentos para ver las instrucciones de la CLI.
+
+* https://library.netapp.com/ecm/ecm_get_file/ECMLP2839856["Guía exprés de preparación para la recuperación de desastres de SVM"^]
+* https://library.netapp.com/ecm/ecm_get_file/ECMLP2839857["Guía exprés de recuperación ante desastres de SVM"^]
+

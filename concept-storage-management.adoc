@@ -1,0 +1,146 @@
+---
+sidebar: sidebar 
+permalink: concept-storage-management.html 
+keywords: provisioning, capacity management, storage provisioning, manual, automatic, advanced allocation, aggregates, thin provisioning, free space, mode, BlueXP, cloud manager 
+summary: BlueXP proporciona una gestión simplificada y avanzada del almacenamiento de Cloud Volumes ONTAP. 
+---
+= Gestión del almacenamiento
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+BlueXP proporciona una gestión simplificada y avanzada del almacenamiento de Cloud Volumes ONTAP.
+
+
+CAUTION: Todos los discos y agregados deben crearse y eliminarse directamente de BlueXP. No debe realizar estas acciones desde otra herramienta de gestión. De esta manera, se puede afectar a la estabilidad del sistema, se puede obstaculizar la capacidad de añadir discos en el futuro y generar potencialmente cuotas redundantes para proveedores de cloud.
+
+
+
+== Aprovisionamiento de almacenamiento
+
+BlueXP facilita el aprovisionamiento de almacenamiento para Cloud Volumes ONTAP al comprar discos y gestionar agregados. Solo tiene que crear volúmenes. Puede utilizar una opción de asignación avanzada para aprovisionar los agregados por sí mismo, si lo desea.
+
+
+
+=== Aprovisionamiento simplificado
+
+Los agregados proporcionan almacenamiento en cloud a volúmenes. BlueXP crea agregados para usted al iniciar una instancia y al aprovisionar volúmenes adicionales.
+
+Al crear un volumen, BlueXP hace una de estas tres cosas:
+
+* Coloca el volumen en un agregado existente que tiene suficiente espacio libre.
+* Coloca el volumen en una agrupación existente al comprar más discos para esa agrupación.
+
+
+ifdef::aws[]
+
++
+En el caso de un agregado en AWS que admita Elastic Volumes, BlueXP también aumenta el tamaño de los discos de un grupo RAID. link:concept-aws-elastic-volumes.html["Obtenga más información sobre el soporte para volúmenes Elastic"].
+
+endif::aws[]
+
+* Compra discos para un nuevo agregado y coloca el volumen en ese agregado.
+
+
+BlueXP determina dónde colocar un nuevo volumen examinando varios factores: El tamaño máximo de un agregado, si está activado el thin provisioning y los umbrales de espacio libre para los agregados.
+
+
+TIP: El administrador de cuentas puede modificar los umbrales de espacio libre desde la página *Configuración*.
+
+ifdef::aws[]
+
+
+
+==== Selección de tamaño de disco para agregados en AWS
+
+Cuando BlueXP crea nuevos agregados para Cloud Volumes ONTAP en AWS, aumenta gradualmente el tamaño del disco en un agregado, a medida que aumenta el número de agregados del sistema. BlueXP hace esto para garantizar que puede utilizar la capacidad máxima del sistema antes de que alcance el número máximo de discos de datos permitidos por AWS.
+
+Por ejemplo, BlueXP puede elegir los siguientes tamaños de disco:
+
+[cols="3*"]
+|===
+| Número de agregado | Tamaño de disco | Capacidad máxima de agregado 
+
+
+| 1 | 500 GiB | 3 TiB 
+
+
+| 4 | 1 TIB | 6 TiB 
+
+
+| 6 | 2 TiB | 12 TiB 
+|===
+
+NOTE: Este comportamiento no se aplica a los agregados que admiten la función de volúmenes Elastic de Amazon EBS. Los agregados que tienen volúmenes Elastic habilitados están compuestos por uno o dos grupos RAID. Cada grupo RAID tiene cuatro discos idénticos que tienen la misma capacidad. link:concept-aws-elastic-volumes.html["Obtenga más información sobre el soporte para volúmenes Elastic"].
+
+Puede elegir el tamaño del disco usted mismo utilizando la opción de asignación avanzada.
+
+endif::aws[]
+
+
+
+=== Asignación avanzada
+
+En lugar de dejar que BlueXP gestione los agregados, podrá hacerlo usted mismo. link:task-create-aggregates.html["Desde la página *asignación avanzada*"], puede crear nuevos agregados que incluyan un número específico de discos, agregar discos a un agregado existente y crear volúmenes en agregados específicos.
+
+
+
+== Gestión de la capacidad
+
+El administrador de cuentas puede elegir si BlueXP notifica las decisiones sobre la capacidad de almacenamiento o si BlueXP gestiona automáticamente los requisitos de capacidad.
+
+Este comportamiento está determinado por el _Capacity Management Mode_ de un conector. El modo de administración de la capacidad afecta a todos los sistemas Cloud Volumes ONTAP gestionados por ese conector. Si tiene otro conector, se puede configurar de forma diferente.
+
+
+
+=== Gestión de la capacidad automática
+
+El modo de gestión de la capacidad se establece como automático de manera predeterminada. En este modo, BlueXP adquiere automáticamente discos nuevos para instancias de Cloud Volumes ONTAP cuando se necesita más capacidad, elimina las colecciones de discos (agregados) sin utilizar, mueve volúmenes entre agregados cuando es necesario e intenta anular el fallo de los discos.
+
+A continuación se muestran ejemplos de cómo funciona este modo:
+
+* Si un agregado alcanza el umbral de capacidad y tiene espacio para más discos, BlueXP compra automáticamente discos nuevos para ese agregado de modo que los volúmenes puedan continuar creciendo.
++
+BlueXP comprueba la relación de espacio libre cada 15 minutos para determinar si necesita comprar discos adicionales.
+
+
+
+ifdef::aws[]
+
++
+En el caso de un agregado en AWS que admita Elastic Volumes, BlueXP también aumenta el tamaño de los discos de un grupo RAID. link:concept-aws-elastic-volumes.html["Obtenga más información sobre el soporte para volúmenes Elastic"].
+
+endif::aws[]
+
+* Si un agregado alcanza el umbral de capacidad y no puede admitir ningún disco adicional, BlueXP mueve automáticamente un volumen de ese agregado a un agregado con capacidad disponible o a un nuevo agregado.
++
+Si BlueXP crea un nuevo agregado para el volumen, elige un tamaño de disco que se adapta al tamaño de ese volumen.
+
++
+Tenga en cuenta que ahora hay espacio libre disponible en el agregado original. Los volúmenes existentes o los volúmenes nuevos pueden usar ese espacio. En este escenario, el espacio no se puede devolver al proveedor de cloud.
+
+* Si un agregado no contiene volúmenes durante más de 12 horas, BlueXP lo elimina.
+
+
+
+
+==== Gestión de LUN con gestión de la capacidad automática
+
+La gestión automática de capacidad de BlueXP no se aplica a las LUN. Cuando BlueXP crea una LUN, deshabilita la función de crecimiento automático.
+
+
+
+=== Gestión manual de la capacidad
+
+Si el administrador de cuentas establece el modo de administración de capacidad en manual, BlueXP muestra los mensajes Acción necesaria cuando se deben tomar decisiones de capacidad. Los mismos ejemplos descritos en el modo automático se aplican al modo manual, pero depende de usted aceptar las acciones.
+
+
+
+=== Leer más
+
+link:task-manage-capacity-settings.html["Aprenda a modificar el modo de gestión de la capacidad"].
