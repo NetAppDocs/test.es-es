@@ -1,0 +1,54 @@
+---
+sidebar: sidebar 
+permalink: task-manage-capacity-settings.html 
+keywords: aggregates, delete aggregates, add disks, view aggregates 
+summary: Gestione los agregados usted mismo añadiendo discos, visualizando información sobre los agregados y suprimiéndolos. 
+---
+= Gestione la configuración de capacidad en un conector
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Cada conector tiene una configuración que determina la forma en la que gestiona la capacidad agregada de Cloud Volumes ONTAP.
+
+Esta configuración afecta a todos los sistemas Cloud Volumes ONTAP gestionados por un conector. Si tiene otro conector, se puede configurar de forma diferente.
+
+.Permisos necesarios
+Se requieren privilegios de administrador de cuentas para modificar la configuración del conector.
+
+.Pasos
+. En la parte superior derecha de la consola de BlueXP, haga clic en el icono Configuración y seleccione *Configuración del conector*.
++
+image::screenshot_settings_connector_button.png[botón de conector de configuración de captura de pantalla]
+
+. En *capacidad*, modifique cualquiera de los siguientes ajustes:
++
+Modo de gestión de la capacidad:: Elija si BlueXP le notifica sobre las decisiones relacionadas con la capacidad de almacenamiento o si BlueXP gestiona automáticamente los requisitos de capacidad.
++
+--
+link:concept-storage-management.html#capacity-management["Conozca cómo funciona el modo de gestión de capacidad"].
+
+--
+Umbral de capacidad agregado: Ratio de espacio libre:: Activa una notificación cuando la relación de espacio libre en un agregado desciende por debajo del umbral especificado.
++
+--
+La relación entre el espacio libre se calcula de la siguiente forma:
+
+(capacidad de agregados: capacidad total utilizada en el agregado) / capacidad agregada
+
+--
+Umbrales de capacidad agregados: Ratio de espacio libre para la organización en niveles de datos:: Define cuánto espacio libre se requiere en el nivel de rendimiento (discos) al organizar los datos en niveles en un nivel de capacidad (almacenamiento de objetos).
++
+--
+La relación es importante para los escenarios de recuperación ante desastres. A medida que se leen datos del nivel de capacidad, Cloud Volumes ONTAP mueve datos al nivel de rendimiento para proporcionar mejor rendimiento. Si no hay espacio suficiente, Cloud Volumes ONTAP no puede mover los datos.
+
+--
+
+
+. Haga clic en *Guardar*.
+

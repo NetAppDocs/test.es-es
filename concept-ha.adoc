@@ -1,0 +1,198 @@
+---
+sidebar: sidebar 
+permalink: concept-ha.html 
+keywords: high availability, HA, mediator, concepts, understanding, overview, availability zones, AZs, takeover, giveback, rpo, rto, floating ip, nondisruptive, ha pairs, node, nodes, synchronous, resync, recovery point objective, recovery time objective, nas, nfs, cifs, floating ip address, route tables, iscsi, mpio, alua, failover, mount, remount, failure, data access, access, ip address, performance 
+summary: Una configuración de alta disponibilidad de Cloud Volumes ONTAP proporciona operaciones no disruptivas y tolerancia a fallos. En AWS, los datos se replican de forma síncrona entre los dos nodos. 
+---
+= Pares de alta disponibilidad en AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Una configuración de alta disponibilidad de Cloud Volumes ONTAP proporciona operaciones no disruptivas y tolerancia a fallos. En AWS, los datos se replican de forma síncrona entre los dos nodos.
+
+
+
+== Componentes DE ALTA DISPONIBILIDAD
+
+En AWS, las configuraciones de alta disponibilidad de Cloud Volumes ONTAP incluyen los siguientes componentes:
+
+* Dos nodos Cloud Volumes ONTAP cuyos datos se reflejan de forma síncrona entre sí.
+* Una instancia de mediador que proporciona un canal de comunicación entre los nodos para ayudar a tomar la toma de control y los procesos de devolución del almacenamiento.
+
+
+
+
+=== Mediador
+
+A continuación encontrará más información sobre el ejemplo del mediador en AWS:
+
+Tipo de instancia:: t2-micro
+Discos:: Un disco magnético de EBS que es aproximadamente 8 GIB.
+De NetApp:: Debian 11
++
+--
+
+NOTE: Para Cloud Volumes ONTAP 9.10.0 y anteriores, Debian 10 fue instalado en el mediador.
+
+--
+Actualizaciones:: Al actualizar Cloud Volumes ONTAP, BlueXP también actualiza la instancia del mediador según sea necesario.
+Acceso a la instancia:: Al crear un par de alta disponibilidad de Cloud Volumes ONTAP desde BlueXP, se le solicitará que proporcione un par de claves para la instancia del mediador. Puede usar esa pareja de claves para el acceso SSH mediante el `admin` usuario.
+Agentes de terceros:: No se admiten agentes de terceros ni extensiones de VM en la instancia de mediador.
+
+
+
+
+== Toma de control y retorno al nodo primario del almacenamiento
+
+Si un nodo se cae, el otro nodo puede proporcionar datos a su partner para proporcionar un servicio de datos continuado. Los clientes pueden acceder a los mismos datos desde el nodo del partner porque los datos se duplicaron de forma síncrona al partner.
+
+Cuando el nodo se haya reiniciado, el partner debe realizar una resincronización de los datos antes de que pueda devolver el almacenamiento. El tiempo que se tarda en resincronizar los datos depende de cuántos datos han cambiado con el nodo inactivo.
+
+La toma de control, resincronización y devolución del almacenamiento son automáticas de forma predeterminada. No se requiere ninguna acción del usuario.
+
+
+
+== RPO y RTO
+
+Una configuración de alta disponibilidad mantiene una alta disponibilidad de los datos de la siguiente manera:
+
+* El objetivo de punto de recuperación (RPO) es 0 segundos.
+Sus datos son coherentes transcionalmente sin pérdida de datos.
+* El objetivo de tiempo de recuperación (RTO) es 120 segundos.
+En caso de que se produzca un fallo, los datos deberán estar disponibles en 120 segundos o menos.
+
+
+
+
+== Modelos de puesta en marcha de ALTA DISPONIBILIDAD
+
+Puede garantizar la alta disponibilidad de sus datos mediante la implementación de una configuración de alta disponibilidad en varias zonas de disponibilidad (AZs) o en un único AZ. Debe consultar más detalles sobre cada configuración para elegir la que mejor se ajuste a sus necesidades.
+
+
+
+=== Múltiples zonas de disponibilidad
+
+La implementación de una configuración de alta disponibilidad en varias zonas de disponibilidad (AZs) garantiza una alta disponibilidad de los datos en caso de que se produzca un fallo con una zona de disponibilidad o una instancia que ejecute un nodo Cloud Volumes ONTAP. Debe comprender cómo las direcciones IP de NAS afectan al acceso a los datos y a la conmutación por error del almacenamiento.
+
+
+
+==== Acceso a datos NFS y CIFS
+
+Cuando una configuración de alta disponibilidad se distribuye por varias zonas de disponibilidad, _direcciones IP flotantes_ permiten el acceso de clientes NAS. Las direcciones IP flotantes, que deben estar fuera de los bloques CIDR para todas las VPC de la región, pueden migrar entre nodos cuando se producen fallos. A los clientes que no pertenecen al VPC, no les podrán acceder de forma nativa link:task-setting-up-transit-gateway.html["Configure una puerta de enlace de tránsito de AWS"].
+
+Si no puede configurar una puerta de enlace de tránsito, existen direcciones IP privadas disponibles para clientes NAS que se encuentran fuera del VPC. Sin embargo, estas direcciones IP son estáticas, no pueden realizar una conmutación por error entre nodos.
+
+Debe revisar los requisitos para direcciones IP flotantes y tablas de rutas antes de implementar una configuración de alta disponibilidad en varias zonas de disponibilidad. Es necesario especificar las direcciones IP flotantes al implementar la configuración. BlueXP crea automáticamente las direcciones IP privadas.
+
+Para obtener más información, consulte link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-ontap/reference-networking-aws.html#requirements-for-ha-pairs-in-multiple-azs["Requisitos de red de AWS para alta disponibilidad de Cloud Volumes ONTAP en múltiples AZS"^].
+
+
+
+==== Acceso a datos iSCSI
+
+La comunicación de datos entre VPC no es un problema, ya que iSCSI no utiliza direcciones IP flotantes.
+
+
+
+==== Toma de control y retorno al nodo primario de iSCSI
+
+Para iSCSI, Cloud Volumes ONTAP utiliza I/o multivía (MPIO) y ALUA (Asymmetric Logical Unit Access) para gestionar la conmutación por error de ruta entre las rutas activas y no optimizadas.
+
+
+NOTE: Para obtener información sobre qué configuraciones de host específicas admiten ALUA, consulte http://mysupport.netapp.com/matrix["Herramienta de matriz de interoperabilidad de NetApp"^] Y la guía de instalación y configuración de las utilidades de host para el sistema operativo host.
+
+
+
+==== Toma de control y retorno al nodo primario de NAS
+
+Cuando la toma de control se produce en una configuración NAS mediante IP flotantes, la dirección IP flotante del nodo que los clientes usan para acceder a datos se mueve al otro nodo. La siguiente imagen muestra la toma de control del almacenamiento en una configuración NAS mediante IP flotantes. Si el nodo 2 cae, la dirección IP flotante del nodo 2 se mueve al nodo 1.
+
+image:diagram_takeover_giveback.png["Imagen conceptual que muestra la toma de control del almacenamiento en un par de alta disponibilidad de Cloud Volumes ONTAP: Las direcciones IP flotantes desde el nodo 1 al nodo 2."]
+
+Las IP de datos NAS que se usan para el acceso al VPC externo no se pueden migrar de un nodo a otro en caso de que se produzcan fallos. Si un nodo se desconecta, debe volver a montar manualmente los volúmenes en clientes fuera del VPC mediante la dirección IP del otro nodo.
+
+Una vez que el nodo con errores vuelva a estar en línea, vuelva a montar los clientes en los volúmenes con la dirección IP original. Este paso es necesario para evitar la transferencia de datos innecesarios entre dos nodos de alta disponibilidad, lo que puede causar un impacto significativo en el rendimiento y la estabilidad.
+
+Puede identificar fácilmente la dirección IP correcta desde BlueXP seleccionando el volumen y haciendo clic en *comando de montaje*.
+
+
+
+=== Zona de disponibilidad única
+
+La implementación de una configuración de alta disponibilidad en una única zona de disponibilidad (AZ) puede garantizar una alta disponibilidad de los datos en caso de que falle una instancia que ejecute un nodo de Cloud Volumes ONTAP. Fuera del VPC, se puede acceder a todos los datos de forma nativa.
+
+
+NOTE: BlueXP crea una https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html["Grupo de colocación extendido de AWS"^] E inicia los dos nodos de alta disponibilidad en ese grupo de colocación. El grupo de colocación reduce el riesgo de fallos simultáneos al distribuir las instancias entre el hardware subyacente distinto. Esta función mejora la redundancia desde el punto de vista de la informática, no desde la perspectiva del fallo de disco.
+
+
+
+==== Acceso a los datos
+
+Debido a que esta configuración está en una sola unidad AZ, no requiere direcciones IP flotantes. Puede usar la misma dirección IP para el acceso a datos desde el VPC y desde fuera del VPC.
+
+En la siguiente imagen se muestra una configuración de alta disponibilidad en un único entorno de disponibilidad. Se puede acceder a los datos desde el VPC y desde fuera del VPC.
+
+image:diagram_single_az.png["Imagen conceptual que muestra una configuración de alta disponibilidad de ONTAP en una única zona de disponibilidad que permite el acceso a los datos desde fuera del VPC."]
+
+
+
+==== Toma de control y retorno al nodo primario
+
+Para iSCSI, Cloud Volumes ONTAP utiliza I/o multivía (MPIO) y ALUA (Asymmetric Logical Unit Access) para gestionar la conmutación por error de ruta entre las rutas activas y no optimizadas.
+
+
+NOTE: Para obtener información sobre qué configuraciones de host específicas admiten ALUA, consulte http://mysupport.netapp.com/matrix["Herramienta de matriz de interoperabilidad de NetApp"^] Y la guía de instalación y configuración de las utilidades de host para el sistema operativo host.
+
+En el caso de configuraciones NAS, las direcciones IP de datos pueden migrar entre nodos de alta disponibilidad si se produce un fallo. De este modo se garantiza el acceso del cliente al almacenamiento.
+
+
+
+== Cómo funciona el almacenamiento en una pareja de alta disponibilidad
+
+A diferencia de un clúster de ONTAP, el almacenamiento de un par de alta disponibilidad de Cloud Volumes ONTAP no se comparte entre los nodos. En su lugar, los datos se reflejan de forma síncrona entre los nodos, de modo que los datos estén disponibles en caso de fallo.
+
+
+
+=== La asignación de almacenamiento
+
+Al crear un nuevo volumen y se necesitan discos adicionales, BlueXP asigna el mismo número de discos a ambos nodos, crea un agregado reflejado y, a continuación, crea el nuevo volumen. Por ejemplo, si se necesitan dos discos para el volumen, BlueXP asigna dos discos por nodo para un total de cuatro discos.
+
+
+
+=== Configuraciones de almacenamiento
+
+Puede usar un par de alta disponibilidad como una configuración activo-activo en la que ambos nodos sirven datos a los clientes o como una configuración activo-pasivo, en la que el nodo pasivo responde a las solicitudes de datos solo si ha asumido el almacenamiento del nodo activo.
+
+
+NOTE: Sólo puede configurar una configuración activa-activa si utiliza BlueXP en la vista del sistema de almacenamiento.
+
+
+
+=== Expectativas de rendimiento
+
+Una configuración de alta disponibilidad de Cloud Volumes ONTAP replica de forma síncrona datos entre los nodos, lo que consume ancho de banda de red. Como resultado, se puede esperar el siguiente rendimiento en comparación con una configuración de Cloud Volumes ONTAP de un solo nodo:
+
+* En el caso de configuraciones de alta disponibilidad que solo proporcionan datos de un nodo, el rendimiento de lectura es comparable al rendimiento de lectura de una configuración con un solo nodo, mientras que el rendimiento de escritura es inferior.
+* En el caso de configuraciones de alta disponibilidad que sirven datos de ambos nodos, el rendimiento de lectura es superior al rendimiento de lectura de una configuración de un solo nodo, y el rendimiento de escritura es igual o superior.
+
+
+Para obtener más información sobre el rendimiento de Cloud Volumes ONTAP, consulte link:concept-performance.html["Rendimiento"].
+
+
+
+=== Acceso de clientes al almacenamiento
+
+Los clientes deben acceder a los volúmenes NFS y CIFS mediante la dirección IP de datos del nodo en el que reside el volumen. Si los clientes NAS acceden a un volumen utilizando la dirección IP del nodo del partner, el tráfico se dirige entre ambos nodos, lo que reduce el rendimiento.
+
+
+TIP: Si mueve un volumen entre nodos de una pareja de ha, debe volver a montar el volumen con la dirección IP del otro nodo. De lo contrario, puede experimentar un rendimiento reducido. Si los clientes admiten las referencias de NFSv4 o la redirección de carpetas para CIFS, puede activar estas funciones en los sistemas de Cloud Volumes ONTAP para evitar el remontaje del volumen. Para obtener más detalles, consulte la documentación de ONTAP.
+
+Puede identificar fácilmente la dirección IP correcta a través de la opción _Mount Command_ del panel Manage Volumes de BlueXP.
+
+image::screenshot_mount_option.png[400]

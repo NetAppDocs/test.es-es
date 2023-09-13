@@ -1,0 +1,89 @@
+---
+sidebar: sidebar 
+permalink: task-deploy-aws-shared-vpc.html 
+keywords: shared vpc, aws shared vpc, vpc sharing, shared subnet, deploy shared vpc, assume role 
+summary: A partir del lanzamiento de la versión 9.11.1, se admiten los pares de alta disponibilidad de Cloud Volumes ONTAP en AWS con el uso compartido de VPC. El uso compartido de VPC permite a la organización compartir subredes con otras cuentas de AWS. Para utilizar esta configuración, debe configurar su entorno AWS y después implementar el par de alta disponibilidad mediante la API. 
+---
+= Ponga en marcha un par de alta disponibilidad en una subred compartida
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+A partir del lanzamiento de la versión 9.11.1, se admiten los pares de alta disponibilidad de Cloud Volumes ONTAP en AWS con el uso compartido de VPC. El uso compartido de VPC permite a la organización compartir subredes con otras cuentas de AWS. Para utilizar esta configuración, debe configurar su entorno AWS y después implementar el par de alta disponibilidad mediante la API.
+
+Con https://aws.amazon.com/blogs/networking-and-content-delivery/vpc-sharing-a-new-approach-to-multiple-accounts-and-vpc-management/["Uso compartido de VPC"^], Una configuración de alta disponibilidad de Cloud Volumes ONTAP se distribuye entre dos cuentas:
+
+* La cuenta de propietario de VPC, que posee las redes (el VPC, subredes, tablas de rutas y grupo de seguridad Cloud Volumes ONTAP).
+* La cuenta de participante, donde las instancias de EC2 se ponen en marcha en subredes compartidas (esto incluye los dos nodos de alta disponibilidad y el mediador).
+
+
+En el caso de una configuración de alta disponibilidad de Cloud Volumes ONTAP que se ponga en marcha en varias zonas de disponibilidad, el mediador de alta disponibilidad necesita permisos específicos para escribir en las tablas de rutas de la cuenta de propietario de VPC. Debe proporcionar estos permisos configurando una función de IAM que el mediador puede asumir.
+
+La siguiente imagen muestra los componentes implicados en esta implementación:
+
+image:diagram-aws-vpc-sharing.png["Imagen conceptual de una implementación de alta disponibilidad de Cloud Volumes ONTAP en un VPC compartido. Muestra un VPC compartido que está disponible para la cuenta de propietario de VPC y la cuenta de participante. El VPC compartido incluye el rol IAM, la tabla de rutas, el grupo de seguridad y tres subredes compartidas. La cuenta del participante incluye la configuración de alta disponibilidad de Cloud Volumes ONTAP y el rol de IAM asociado al mediador."]
+
+Como se describe en los pasos siguientes, deberá compartir las subredes con la cuenta de participante y, a continuación, crear la función IAM y el grupo de seguridad en la cuenta de propietario de VPC.
+
+Al crear el entorno de trabajo de Cloud Volumes ONTAP, BlueXP crea y adjunta automáticamente una función de IAM al mediador. Este rol asume la función IAM que se creó en la cuenta de propietario de VPC con el fin de realizar cambios en las tablas de ruta asociadas con el par de alta disponibilidad.
+
+.Pasos
+. Comparta las subredes en la cuenta de propietario de VPC con la cuenta de participante.
++
+Este paso es necesario para poner en marcha el par de alta disponibilidad en subredes compartidas.
+
++
+https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html#vpc-sharing-share-subnet["Documentación de AWS: Comparta una subred"^]
+
+. En la cuenta de propietario de VPC, cree un grupo de seguridad para Cloud Volumes ONTAP.
++
+link:reference-security-groups.html["Consulte las reglas del grupo de seguridad para Cloud Volumes ONTAP"]. Tenga en cuenta que no tiene que crear un grupo de seguridad para el mediador de alta disponibilidad. BlueXP lo hace por ti.
+
+. En la cuenta de propietario de VPC, cree un rol de IAM que incluya los siguientes permisos:
++
+[source, json]
+----
+Action": [
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:CreateRoute",
+                "ec2:DeleteRoute",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeRouteTables",
+                "ec2:DescribeVpcs",
+                "ec2:ReplaceRoute",
+                "ec2:UnassignPrivateIpAddresses"
+----
+. Use la API de BlueXP para crear un nuevo entorno de trabajo de Cloud Volumes ONTAP.
++
+Tenga en cuenta que debe especificar los siguientes campos:
+
++
+** "SecurityGroupId"
++
+El campo "securityGroupId" debe especificar el grupo de seguridad que ha creado en la cuenta de propietario de VPC (consulte el paso 2 anterior).
+
+** "AssumeRoleArn" en el objeto "haParams"
++
+El campo "assumeRoleARN" debe incluir el ARN del rol de IAM que creó en la cuenta de propietario de VPC (consulte el paso 3 anterior).
+
++
+Por ejemplo:
+
++
+[source, json]
+----
+"haParams": {
+     "assumeRoleArn": "arn:aws:iam::642991768967:role/mediator_role_assume_fromdev"
+}
+----
++
+https://docs.netapp.com/us-en/bluexp-automation/cm/overview.html["Obtenga más información acerca de la API de Cloud Volumes ONTAP"^]
+
+
+
+

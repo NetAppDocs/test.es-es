@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: task-connecting-to-otc.html 
+keywords: connecting, cli, command, command line, connect, shell, interface 
+summary: La CLI de Cloud Volumes ONTAP le permite ejecutar todos los comandos administrativos y es una buena opción para las tareas avanzadas o si se siente más cómodo mediante la CLI. Puede conectarse a la CLI mediante SSH. 
+---
+= Administre Cloud Volumes ONTAP desde la interfaz de línea de comandos
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La CLI de Cloud Volumes ONTAP le permite ejecutar todos los comandos administrativos y es una buena opción para las tareas avanzadas o si se siente más cómodo mediante la CLI. Puede conectarse a la CLI mediante Secure Shell (SSH).
+
+.Antes de empezar
+El host desde el que se utiliza SSH para conectarse a Cloud Volumes ONTAP debe tener una conexión de red a Cloud Volumes ONTAP. Por ejemplo, es posible que necesite SSH desde un host auxiliar que esté en la red de su proveedor de cloud.
+
+ifdef::aws[]
+
+
+NOTE: Cuando se implementa en múltiples AZs, las configuraciones de alta disponibilidad de Cloud Volumes ONTAP utilizan una dirección IP flotante para la interfaz de gestión del clúster, lo que significa que el enrutamiento externo no está disponible. Debe conectarse desde un host que forme parte del mismo dominio de enrutamiento.
+
+endif::aws[]
+
+.Pasos
+. En BlueXP, identifique la dirección IP de la interfaz de gestión de clústeres:
++
+.. En el menú de navegación de la izquierda, selecciona *almacenamiento > Canvas*.
+.. En la página lienzo, seleccione el sistema Cloud Volumes ONTAP.
+.. Copie la dirección IP de gestión del clúster que aparece en el panel derecho.
+
+
+. Utilice SSH para conectarse a la dirección IP de la interfaz de gestión del clúster mediante la cuenta de administrador.
++
+*ejemplo*
+
++
+La siguiente imagen muestra un ejemplo con PuTTY:
+
++
+image:screenshot_cli2.gif["Captura de pantalla: Muestra el destino admin@192.168.11 en el puerto 22."]
+
+. En la solicitud de inicio de sesión de, introduzca la contraseña de la cuenta de administrador.
++
+*ejemplo*
+
++
+....
+Password: ********
+COT2::>
+....
+

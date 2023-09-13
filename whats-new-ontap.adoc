@@ -1,0 +1,19 @@
+---
+sidebar: sidebar 
+permalink: whats-new-ontap.html 
+keywords: 'what"s new, features, new, release notes, bugs, limitations, known issues, enhancements, fixes, cloud volumes ontap' 
+summary: Las notas de la versión de Cloud Volumes ONTAP proporcionan información específica de la versión. Novedades del lanzamiento, configuraciones compatibles, límites de almacenamiento y cualquier limitación o problema conocido que pueda afectar a la funcionalidad del producto. 
+---
+= Notas de la versión de Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Las notas de la versión de Cloud Volumes ONTAP proporcionan información específica de la versión. Novedades del lanzamiento, configuraciones compatibles, límites de almacenamiento y cualquier limitación o problema conocido que pueda afectar a la funcionalidad del producto.
+
+https://docs.netapp.com/us-en/cloud-volumes-ontap-relnotes/index.html["Vaya a las notas de la versión de Cloud Volumes ONTAP"^]

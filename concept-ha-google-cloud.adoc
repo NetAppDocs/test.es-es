@@ -1,0 +1,154 @@
+---
+sidebar: sidebar 
+permalink: concept-ha-google-cloud.html 
+keywords: high availability, HA, mediator, concepts, understanding, overview, takeover, giveback, rpo, rto, nondisruptive, ha pairs, node, nodes, synchronous, resync, recovery point objective, recovery time objective, failover, mount, remount, failure, data access, access, ip address, performance, gcp, gcp ha, google cloud ha, ha in google cloud 
+summary: Una configuración de alta disponibilidad de Cloud Volumes ONTAP proporciona operaciones no disruptivas y tolerancia a fallos. En Google Cloud, los datos se replican de forma síncrona entre los dos nodos. 
+---
+= Pares de alta disponibilidad en Google Cloud
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Una configuración de alta disponibilidad de Cloud Volumes ONTAP proporciona operaciones no disruptivas y tolerancia a fallos. En Google Cloud, los datos se replican de forma síncrona entre los dos nodos.
+
+
+
+== Componentes DE ALTA DISPONIBILIDAD
+
+Las configuraciones de alta disponibilidad de Cloud Volumes ONTAP en Google Cloud incluyen los siguientes componentes:
+
+* Dos nodos Cloud Volumes ONTAP cuyos datos se reflejan de forma síncrona entre sí.
+* Una instancia de mediador que proporciona un canal de comunicación entre los nodos para ayudar a tomar la toma de control y los procesos de devolución del almacenamiento.
+* Una o tres zonas (recomendado).
++
+Si elige tres zonas, los dos nodos y el mediador se encuentran en zonas separadas de Google Cloud.
+
+* Cuatro clouds privados virtuales (VPC).
++
+La configuración usa cuatro VPC, ya que GCP requiere que cada interfaz de red resida en una red VPC independiente.
+
+* Cuatro equilibradores de carga internos de Google Cloud (TCP/UDP) que gestionan el tráfico entrante para el par de alta disponibilidad de Cloud Volumes ONTAP.
+
+
+link:reference-networking-gcp.html["Obtenga información sobre los requisitos de red"], Incluidos más detalles sobre equilibradores de carga, VPC, direcciones IP internas, subredes y más.
+
+En la siguiente imagen conceptual se muestra un par de alta disponibilidad de Cloud Volumes ONTAP y sus componentes:
+
+image:diagram_gcp_ha.png["Una imagen conceptual de un par de alta disponibilidad de Cloud Volumes ONTAP y sus componentes."]
+
+
+
+=== Mediador
+
+A continuación encontrará algunos datos clave sobre el ejemplo del mediador en Google Cloud:
+
+Tipo de instancia:: e2-micro (se utilizaba previamente una instancia f1-micro)
+Discos:: Dos discos persistentes estándar que son de 10 GIB cada uno
+De NetApp:: Debian 11
++
+--
+
+NOTE: Para Cloud Volumes ONTAP 9.10.0 y anteriores, Debian 10 fue instalado en el mediador.
+
+--
+Actualizaciones:: Al actualizar Cloud Volumes ONTAP, BlueXP también actualiza la instancia del mediador según sea necesario.
+Acceso a la instancia:: Para Debian, el usuario predeterminado de la nube es `admin`. Google Cloud crea y añade certificados para el `admin` Usuario cuando se solicita acceso SSH a través de la consola de Google Cloud o la línea de comandos gcloud. Puede especificar `sudo` para obtener privilegios de root.
+Agentes de terceros:: No se admiten agentes de terceros ni extensiones de VM en la instancia de mediador.
+
+
+
+
+== Toma de control y retorno al nodo primario del almacenamiento
+
+Si un nodo se cae, el otro nodo puede proporcionar datos a su partner para proporcionar un servicio de datos continuado. Los clientes pueden acceder a los mismos datos desde el nodo del partner porque los datos se duplicaron de forma síncrona al partner.
+
+Cuando el nodo se haya reiniciado, el partner debe realizar una resincronización de los datos antes de que pueda devolver el almacenamiento. El tiempo que se tarda en resincronizar los datos depende de cuántos datos han cambiado con el nodo inactivo.
+
+La toma de control, resincronización y devolución del almacenamiento son automáticas de forma predeterminada. No se requiere ninguna acción del usuario.
+
+
+
+== RPO y RTO
+
+Una configuración de alta disponibilidad mantiene una alta disponibilidad de los datos de la siguiente manera:
+
+* El objetivo de punto de recuperación (RPO) es 0 segundos.
++
+Sus datos son coherentes transcionalmente sin pérdida de datos.
+
+* El objetivo de tiempo de recuperación (RTO) es 120 segundos.
++
+En caso de que se produzca un fallo, los datos deberán estar disponibles en 120 segundos o menos.
+
+
+
+
+
+== Modelos de puesta en marcha de ALTA DISPONIBILIDAD
+
+Puede garantizar la alta disponibilidad de los datos mediante la implementación de una configuración de alta disponibilidad en varias zonas o en una sola zona.
+
+Varias zonas (recomendado):: La implementación de una configuración de alta disponibilidad en tres zonas garantiza una disponibilidad continua de los datos en caso de que se produzca un fallo dentro de una zona. Tenga en cuenta que el rendimiento de escritura es ligeramente inferior al de una sola zona, pero es mínimo.
+Una sola zona:: Cuando se implementa en una sola zona, una configuración de alta disponibilidad de Cloud Volumes ONTAP utiliza una política de ubicación distribuida. Esta directiva garantiza que una configuración de alta disponibilidad esté protegida desde un único punto de error dentro de la zona, sin tener que utilizar zonas independientes para lograr el aislamiento de fallos.
++
+--
+Este modelo de puesta en marcha reduce sus costes, ya que no hay ningún coste por salida de datos entre zonas.
+
+--
+
+
+
+
+== Cómo funciona el almacenamiento en una pareja de alta disponibilidad
+
+A diferencia de un clúster de ONTAP, el almacenamiento de una pareja de alta disponibilidad de Cloud Volumes ONTAP en GCP no se comparte entre los nodos. En su lugar, los datos se reflejan de forma síncrona entre los nodos, de modo que los datos estén disponibles en caso de fallo.
+
+
+
+=== La asignación de almacenamiento
+
+Al crear un nuevo volumen y se necesitan discos adicionales, BlueXP asigna el mismo número de discos a ambos nodos, crea un agregado reflejado y, a continuación, crea el nuevo volumen. Por ejemplo, si se necesitan dos discos para el volumen, BlueXP asigna dos discos por nodo para un total de cuatro discos.
+
+
+
+=== Configuraciones de almacenamiento
+
+Puede utilizar un par de alta disponibilidad como configuración activo-activo, en el cual ambos nodos sirven datos a los clientes o como una configuración activo-pasivo, en la cual el nodo pasivo responde a las solicitudes de datos únicamente si ha tomado almacenamiento para el nodo activo.
+
+
+
+=== Expectativas de rendimiento para una configuración de alta disponibilidad
+
+Una configuración de alta disponibilidad de Cloud Volumes ONTAP replica de forma síncrona datos entre los nodos, lo que consume ancho de banda de red. Como resultado, se puede esperar el siguiente rendimiento en comparación con una configuración de Cloud Volumes ONTAP de un solo nodo:
+
+* En el caso de configuraciones de alta disponibilidad que solo proporcionan datos de un nodo, el rendimiento de lectura es comparable al rendimiento de lectura de una configuración con un solo nodo, mientras que el rendimiento de escritura es inferior.
+* En el caso de configuraciones de alta disponibilidad que sirven datos de ambos nodos, el rendimiento de lectura es superior al rendimiento de lectura de una configuración de un solo nodo, y el rendimiento de escritura es igual o superior.
+
+
+Para obtener más información sobre el rendimiento de Cloud Volumes ONTAP, consulte link:concept-performance.html["Rendimiento"].
+
+
+
+=== Acceso de clientes al almacenamiento
+
+Los clientes deben acceder a los volúmenes NFS y CIFS mediante la dirección IP de datos del nodo en el que reside el volumen. Si los clientes NAS acceden a un volumen utilizando la dirección IP del nodo del partner, el tráfico se dirige entre ambos nodos, lo que reduce el rendimiento.
+
+
+TIP: Si mueve un volumen entre nodos de una pareja de ha, debe volver a montar el volumen con la dirección IP del otro nodo. De lo contrario, puede experimentar un rendimiento reducido. Si los clientes admiten las referencias de NFSv4 o la redirección de carpetas para CIFS, puede activar estas funciones en los sistemas de Cloud Volumes ONTAP para evitar el remontaje del volumen. Para obtener más detalles, consulte la documentación de ONTAP.
+
+Puede identificar fácilmente la dirección IP correcta a través de la opción _Mount Command_ del panel Manage Volumes de BlueXP.
+
+image::screenshot_mount_option.png[400]
+
+
+
+=== Enlaces relacionados
+
+* link:reference-networking-gcp.html["Obtenga información sobre los requisitos de red"]
+* link:task-getting-started-gcp.html["Aprenda a empezar en GCP"]
+

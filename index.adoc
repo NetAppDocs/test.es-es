@@ -1,0 +1,15 @@
+---
+layout: astra 
+sidebar: sidebar 
+permalink: index.html 
+summary: Cloud Volumes ONTAP le permite optimizar los costes y el rendimiento del almacenamiento en cloud, a la vez que mejora la protección de datos, la seguridad y el cumplimiento de normativas. 
+---
+= Documentación de Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+

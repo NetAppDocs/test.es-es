@@ -1,0 +1,257 @@
+---
+sidebar: sidebar 
+permalink: task-set-up-azure-encryption.html 
+keywords: customer-managed key, customer key, azure storage service encryption, azure encryption, encryption key, azure encryption key 
+summary: Los datos se cifran automáticamente en Cloud Volumes ONTAP de Azure mediante el cifrado del servicio de almacenamiento de Azure con una clave gestionada por Microsoft. Pero puede utilizar su propia clave de cifrado siguiendo los pasos de esta página. 
+---
+= Configure Cloud Volumes ONTAP para utilizar una clave gestionada por el cliente en Azure
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Los datos se cifran automáticamente en Cloud Volumes ONTAP, en Azure mediante https://azure.microsoft.com/en-us/documentation/articles/storage-service-encryption/["Cifrado del servicio de almacenamiento de Azure"] Con una clave gestionada por Microsoft. Pero puede utilizar su propia clave de cifrado siguiendo los pasos de esta página.
+
+
+
+== Información general de cifrado de datos
+
+Los datos de Cloud Volumes ONTAP se cifran automáticamente en Azure mediante https://azure.microsoft.com/en-us/documentation/articles/storage-service-encryption/["Cifrado del servicio de almacenamiento de Azure"^]. La implementación predeterminada utiliza una clave administrada por Microsoft. No se requiere configuración.
+
+Si desea utilizar una clave gestionada por el cliente con Cloud Volumes ONTAP, debe realizar los siguientes pasos:
+
+. Desde Azure, cree un almacén de claves y, a continuación, genere una clave en ese almacén
+. Desde BlueXP, utilice la API para crear un entorno de trabajo de Cloud Volumes ONTAP que utilice la clave
+
+
+
+
+=== Rotación de la clave
+
+Si crea una nueva versión de la clave, Cloud Volumes ONTAP utiliza automáticamente la última versión de la clave.
+
+
+
+=== Cómo se cifran los datos
+
+Después de crear un entorno de trabajo de Cloud Volumes ONTAP configurado para utilizar una clave gestionada por el cliente, los datos de Cloud Volumes ONTAP se cifran de la siguiente manera.
+
+Azure ha zona de disponibilidad múltiple::
++
+--
+* Todas las cuentas de almacenamiento de Azure de Cloud Volumes ONTAP se cifran utilizando una clave gestionada por el cliente
+* Para los discos raíz, de arranque, NVRAM, de núcleo y de datos, BlueXP utiliza un conjunto de cifrado de disco, que permite la gestión de claves de cifrado con discos administrados.
+* Todos los discos de datos nuevos también utilizan el mismo conjunto de cifrado de disco.
+
+
+--
+Zona de disponibilidad única de Azure ha::
++
+--
+* Todas las cuentas de almacenamiento de Azure de Cloud Volumes ONTAP se cifran utilizando una clave gestionada por el cliente
+* Cualquier nueva cuenta de almacenamiento (por ejemplo, al agregar discos o agrupaciones) utiliza también la misma clave
+* Desde ONTAP 9.10.1P3, para NVRAM y el disco principal, BlueXP utiliza un https://docs.microsoft.com/en-us/azure/virtual-machines/disk-encryption["conjunto de cifrado de disco"^], que permite la administración de claves de cifrado con discos administrados. Las versiones inferiores utilizarán la clave gestionada por Microsoft en lugar de la clave gestionada por el cliente.
+
+
+--
+Un solo nodo::
++
+--
+* Todas las cuentas de almacenamiento de Azure para Cloud Volumes ONTAP se cifran con una clave gestionada por los clientes. 1
+* Para los discos raíz, de arranque y de datos, BlueXP utiliza un https://docs.microsoft.com/en-us/azure/virtual-machines/disk-encryption["conjunto de cifrado de disco"^], que permite la administración de claves de cifrado con discos administrados.
+* Todos los discos de datos nuevos también utilizan el mismo conjunto de cifrado de disco.
+* Desde ONTAP 9.9.1P7, para NVRAM y el disco principal, BlueXP utiliza un conjunto de cifrado de disco, que permite la gestión de claves de cifrado con discos administrados. Las versiones inferiores utilizarán la clave gestionada por Microsoft en lugar de la clave gestionada por el cliente.
+
+
+--
+
+
+.Pie de página
+. Si desea cifrar sus cuentas de almacenamiento durante su creación, debe crear y proporcionar el ID del recurso en la solicitud de creación de CVO. Esto se aplica a todo tipo de puesta en marcha. Si no lo proporciona, las cuentas de almacenamiento seguirán estando cifradas, pero BlueXP creará primero las cuentas de almacenamiento con el cifrado de claves gestionado por Microsoft y, a continuación, actualizará las cuentas de almacenamiento para que utilicen la clave gestionada por el cliente.
+
+
+
+
+== Crear una identidad gestionada asignada por el usuario
+
+Tiene la opción de crear un recurso denominado identidad gestionada asignada por el usuario. Esto le permite cifrar sus cuentas de almacenamiento cuando crea un entorno de trabajo de Cloud Volumes ONTAP. Recomendamos crear este recurso antes de crear un almacén de claves y generar una clave.
+
+El recurso tiene el siguiente identificador: `userassignedidentity`.
+
+.Pasos
+. En Azure, vaya a Servicios de Azure y seleccione *Identidades administradas*.
+. Haga clic en *Crear*.
+. Proporcione los siguientes detalles:
++
+** *Suscripción*: Elige una suscripción. Recomendamos elegir la misma suscripción que la suscripción a Connector.
+** *Grupo de recursos*: Usa un grupo de recursos existente o crea uno nuevo.
+** *Región*: Opcionalmente, seleccione la misma región que el Conector.
+** *Nombre*: Introduzca un nombre para el recurso.
+
+
+. Opcionalmente, agregue etiquetas.
+. Haga clic en *Crear*.
+
+
+
+
+== Cree un almacén de claves y genere una clave
+
+El almacén de claves debe residir en la misma suscripción a Azure y la misma región en la que esté previsto crear el sistema Cloud Volumes ONTAP.
+
+Si usted <<Crear una identidad gestionada asignada por el usuario,se ha creado una identidad gestionada asignada por el usuario>>, al crear el almacén de claves, también debe crear una política de acceso para el almacén de claves.
+
+.Pasos
+. https://docs.microsoft.com/en-us/azure/key-vault/general/quick-create-portal["Cree un almacén de claves en su suscripción a Azure"^].
++
+Tenga en cuenta los siguientes requisitos para el almacén de claves:
+
++
+** El almacén de claves debe residir en la misma región que el sistema Cloud Volumes ONTAP.
+** Deben habilitarse las siguientes opciones:
++
+*** *Borrado suave* (esta opción está activada de forma predeterminada, pero debe _no_ estar desactivada)
+*** *Protección de purga*
+*** *Cifrado de disco de Azure para cifrado de volúmenes* (para sistemas de un solo nodo o pares de alta disponibilidad en varias zonas)
+
+
+** Se debe activar la siguiente opción si ha creado una identidad gestionada asignada por el usuario:
++
+*** *Política de acceso a Vault*
+
+
+
+
+. Si seleccionó Política de acceso al almacén, haga clic en Crear para crear una política de acceso para el almacén de claves. Si no es así, vaya al paso 3.
++
+.. Seleccione los siguientes permisos:
++
+*** obtenga
+*** lista
+*** descifrar
+*** cifrar
+*** tecla desajustar
+*** tecla ajustar
+*** verificación
+*** firma
+
+
+.. Seleccione la identidad administrada (recurso) asignada por el usuario como principal.
+.. Revise y cree la política de acceso.
+
+
+. https://docs.microsoft.com/en-us/azure/key-vault/keys/quick-create-portal#add-a-key-to-key-vault["Genere una clave en el almacén de claves"^].
++
+Tenga en cuenta los siguientes requisitos para la clave:
+
++
+** El tipo de clave debe ser *RSA*.
+** El tamaño de clave RSA recomendado es *2048*, pero se admiten otros tamaños.
+
+
+
+
+
+
+== Cree un entorno de trabajo que utilice la clave de cifrado
+
+Después de crear el almacén de claves y generar una clave de cifrado, puede crear un nuevo sistema Cloud Volumes ONTAP configurado para utilizar la clave. Estos pasos son compatibles con la API de BlueXP.
+
+.Permisos necesarios
+Si desea utilizar una clave gestionada por el cliente con un sistema Cloud Volumes ONTAP de un solo nodo, asegúrese de que el conector BlueXP tiene los siguientes permisos:
+
+[source, json]
+----
+"Microsoft.Compute/diskEncryptionSets/read",
+"Microsoft.Compute/diskEncryptionSets/write",
+"Microsoft.Compute/diskEncryptionSets/delete"
+"Microsoft.KeyVault/vaults/deploy/action",
+"Microsoft.KeyVault/vaults/read",
+"Microsoft.KeyVault/vaults/accessPolicies/write",
+"Microsoft.ManagedIdentity/userAssignedIdentities/assign/action"
+----
+https://docs.netapp.com/us-en/bluexp-setup-admin/reference-permissions-azure.html["Consulte la lista más reciente de permisos"^]
+
+.Pasos
+. Obtenga la lista de almacenes de claves de su suscripción a Azure mediante la siguiente llamada a la API de BlueXP.
++
+En el caso de un par de alta disponibilidad: `GET /azure/ha/metadata/vaults`
+
++
+Para un solo nodo: `GET /azure/vsa/metadata/vaults`
+
++
+Tome nota de los *nombre* y *ResourceGroup*. Tendrá que especificar esos valores en el paso siguiente.
+
++
+https://docs.netapp.com/us-en/bluexp-automation/cm/api_ref_resources.html#azure-hametadata["Obtenga más información acerca de esta llamada API"^].
+
+. Obtenga la lista de claves dentro del almacén mediante la siguiente llamada a la API de BlueXP.
++
+En el caso de un par de alta disponibilidad: `GET /azure/ha/metadata/keys-vault`
+
++
+Para un solo nodo: `GET /azure/vsa/metadata/keys-vault`
+
++
+Tome nota del *KeyName*. Tendrá que especificar ese valor (junto con el nombre del almacén) en el siguiente paso.
+
++
+https://docs.netapp.com/us-en/bluexp-automation/cm/api_ref_resources.html#azure-hametadata["Obtenga más información acerca de esta llamada API"^].
+
+. Cree un sistema Cloud Volumes ONTAP mediante la siguiente llamada a la API de BlueXP.
++
+.. En el caso de un par de alta disponibilidad:
++
+`POST /azure/ha/working-environments`
+
++
+El cuerpo de la solicitud debe incluir los siguientes campos:
+
++
+[source, json]
+----
+"azureEncryptionParameters": {
+              "key": "keyName",
+              "vaultName": "vaultName"
+}
+----
++
+
+NOTE: Incluya el `"userAssignedIdentity": " userAssignedIdentityId"` si ha creado este recurso para utilizarlo para el cifrado de cuentas de almacenamiento.
+
++
+https://docs.netapp.com/us-en/bluexp-automation/cm/api_ref_resources.html#azure-haworking-environments["Obtenga más información acerca de esta llamada API"^].
+
+.. Para un sistema de un solo nodo:
++
+`POST /azure/vsa/working-environments`
+
++
+El cuerpo de la solicitud debe incluir los siguientes campos:
+
++
+[source, json]
+----
+"azureEncryptionParameters": {
+              "key": "keyName",
+              "vaultName": "vaultName"
+}
+----
++
+
+NOTE: Incluya el `"userAssignedIdentity": " userAssignedIdentityId"` si ha creado este recurso para utilizarlo para el cifrado de cuentas de almacenamiento.
+
++
+https://docs.netapp.com/us-en/bluexp-automation/cm/api_ref_resources.html#azure-vsaworking-environments["Obtenga más información acerca de esta llamada API"^].
+
+
+
+
+
+.Resultado
+Tiene un nuevo sistema Cloud Volumes ONTAP configurado para usar su clave gestionada por el cliente para el cifrado de datos.

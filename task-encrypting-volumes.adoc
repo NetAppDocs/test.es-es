@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: task-encrypting-volumes.html 
+keywords: encrypt, encryption, data, volumes, netapp volume encryption, volume encryption, nve, key managers, kmip, key management servers, license, ssl certificates, nae, netapp aggregate encryption 
+summary: 'Cloud Volumes ONTAP es compatible tanto con el cifrado de volúmenes de NetApp (NVE) como con el cifrado de agregados de NetApp (NAE) con un gestor de claves externo. NVE y NAE se habilitan de forma predeterminada si configura un gestor de claves externo.' 
+---
+= Cifrar volúmenes con soluciones de cifrado de NetApp
+:toc: macro
+:hardbreaks:
+:allow-uri-read: 
+:toc: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:toc-position: content
+
+
+[role="lead"]
+Cloud Volumes ONTAP admite el cifrado de volúmenes de NetApp (NVE) y el cifrado de agregados de NetApp (NAE). NVE y NAE son soluciones basadas en software que permiten el cifrado de volúmenes para datos en reposo conforme a la normativa FIPS 140-2. link:concept-security.html["Obtenga más información sobre estas soluciones de cifrado"].
+
+Tanto NVE como NAE son compatibles con un gestor de claves externo.
+
+ifdef::aws[]
+
+endif::aws[]
+
+ifdef::azure[]
+
+endif::azure[]
+
+ifdef::gcp[]
+
+endif::gcp[]
+
+ifdef::aws[]
+
+endif::aws[]
+
+ifdef::azure[]
+
+endif::azure[]
+
+ifdef::gcp[]
+
+endif::gcp[]

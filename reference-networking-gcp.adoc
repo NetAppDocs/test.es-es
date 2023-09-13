@@ -1,0 +1,516 @@
+---
+sidebar: sidebar 
+permalink: reference-networking-gcp.html 
+keywords: networking, network, requirements, connection, connections, subnet, vpn, internet, proxy, HTTP, private, proxy server, routing, firewall, autosupport, connection, jump host, outbound, ports, tiering, data tiering, bucket, private google access, set up data tiering, data tiering requirement, gcp networking, google networking, shared vpc, host project, service project 
+summary: Configure sus redes de Google Cloud para que los sistemas Cloud Volumes ONTAP funcionen correctamente. 
+---
+= Requisitos de red para Cloud Volumes ONTAP en Google Cloud
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Configure sus redes de Google Cloud para que los sistemas Cloud Volumes ONTAP funcionen correctamente.
+
+Si desea poner en marcha un par de alta disponibilidad, debería hacerlo link:concept-ha-google-cloud.html["Descubra cómo funcionan los pares de alta disponibilidad en Google Cloud"].
+
+
+
+== Requisitos para Cloud Volumes ONTAP
+
+Los siguientes requisitos deben cumplirse en Google Cloud.
+
+
+
+=== Requisitos específicos de los sistemas de un solo nodo
+
+Si desea implementar un sistema de un solo nodo, asegúrese de que la red cumpla los siguientes requisitos.
+
+
+
+==== Un VPC
+
+Se requiere una nube privada virtual (VPC) para un único sistema de nodo.
+
+
+
+==== Direcciones IP privadas
+
+BlueXP asigna direcciones IP privadas 3 o 4 a un sistema de un solo nodo en Google Cloud.
+
+Puede omitir la creación de la LIF de gestión de máquinas virtuales de almacenamiento (SVM) si implementa Cloud Volumes ONTAP mediante la API y especifica el siguiente indicador:
+
+`skipSvmManagementLif: true`
+
+
+NOTE: Una LIF es una dirección IP asociada con un puerto físico. Se necesita un LIF de gestión de máquinas virtuales de almacenamiento (SVM) para herramientas de gestión como SnapCenter.
+
+
+
+=== Requisitos específicos de los pares de alta disponibilidad
+
+Si desea implementar un par de alta disponibilidad, asegúrese de que la red cumpla los siguientes requisitos.
+
+
+
+==== Una o varias zonas
+
+Puede garantizar la alta disponibilidad de sus datos mediante la implementación de una configuración de alta disponibilidad en varias o en una sola zona. BlueXP le solicitará que elija varias zonas o una sola zona cuando cree el par ha.
+
+* Varias zonas (recomendado)
++
+La implementación de una configuración de alta disponibilidad en tres zonas garantiza una disponibilidad continua de los datos en caso de que se produzca un fallo dentro de una zona. Tenga en cuenta que el rendimiento de escritura es ligeramente inferior al de una sola zona, pero es mínimo.
+
+* Una sola zona
++
+Cuando se implementa en una sola zona, una configuración de alta disponibilidad de Cloud Volumes ONTAP utiliza una política de ubicación distribuida. Esta directiva garantiza que una configuración de alta disponibilidad esté protegida desde un único punto de error dentro de la zona, sin tener que utilizar zonas independientes para lograr el aislamiento de fallos.
+
++
+Este modelo de puesta en marcha reduce sus costes, ya que no hay ningún coste por salida de datos entre zonas.
+
+
+
+
+
+==== Cuatro clouds privados virtuales
+
+Se necesitan cuatro clouds privados virtuales (VPC) para una configuración de alta disponibilidad. Se necesitan cuatro VPC, ya que Google Cloud requiere que cada interfaz de red resida en una red VPC independiente.
+
+BlueXP le solicitará que elija cuatro VPC al crear el par ha:
+
+* VPC-0 para conexiones entrantes a los datos y los nodos
+* VPC-1, VPC-2 y VPC-3 para la comunicación interna entre los nodos y el mediador de alta disponibilidad
+
+
+image:diagram_gcp_ha.png["Imagen conceptual que muestra un par de alta disponibilidad de Cloud Volume y los cuatro VPC necesarios para la configuración."]
+
+
+
+==== Subredes
+
+Se requiere una subred privada para cada VPC.
+
+Si coloca el conector en VPC-0, deberá habilitar el acceso privado de Google en la subred para acceder a las API y habilitar la organización en niveles de datos.
+
+Las subredes de estas VPC deben tener distintos rangos CIDR. No pueden tener rangos CIDR superpuestos.
+
+
+
+==== Direcciones IP privadas
+
+BlueXP asigna automáticamente el número requerido de direcciones IP privadas a Cloud Volumes ONTAP en Google Cloud. Debe asegurarse de que su red tiene suficientes direcciones privadas disponibles.
+
+El número de LIF que BlueXP asigna a Cloud Volumes ONTAP depende de si pone en marcha un sistema de nodo único o un par de alta disponibilidad. Una LIF es una dirección IP asociada con un puerto físico. Se requiere una LIF de gestión de SVM para herramientas de gestión como SnapCenter.
+
+* *Un solo nodo*
+BlueXP asigna 4 direcciones IP a un único sistema de nodos:
++
+** LIF de gestión de nodos
+** LIF de gestión de clústeres
+** LIF de datos iSCSI
++
+
+NOTE: Un LIF iSCSI proporciona acceso a los clientes a través del protocolo iSCSI y el sistema lo utiliza para otros flujos de trabajo de red importantes. Estos LIF son necesarios y no deben eliminarse.
+
+** LIF NAS
++
+Puede omitir la creación de la LIF de gestión de máquinas virtuales de almacenamiento (SVM) si implementa Cloud Volumes ONTAP mediante la API y especifica el siguiente indicador:
+
++
+`skipSvmManagementLif: true`
+
+
+
+* *Par de alta disponibilidad*
+BlueXP asigna 12-13 direcciones IP a un par de alta disponibilidad:
++
+** 2 LIF de gestión de nodos (e0a)
+** 1 LIF de administración de clúster (e0a)
+** 2 LIF iSCSI (e0a)
++
+
+NOTE: Un LIF iSCSI proporciona acceso a los clientes a través del protocolo iSCSI y el sistema lo utiliza para otros flujos de trabajo de red importantes. Estos LIF son necesarios y no deben eliminarse.
+
+** 1 o 2 LIF NAS (e0a)
+** 2 LIF de clúster (e0b)
+** 2 direcciones IP de interconexión de alta disponibilidad (e0c)
+** 2 direcciones IP iSCSI RSM (e0d)
++
+Puede omitir la creación de la LIF de gestión de máquinas virtuales de almacenamiento (SVM) si implementa Cloud Volumes ONTAP mediante la API y especifica el siguiente indicador:
+
++
+`skipSvmManagementLif: true`
+
+
+
+
+
+
+
+==== Equilibradores de carga internos
+
+BlueXP crea automáticamente cuatro equilibradores de carga internos de Google Cloud (TCP/UDP) que gestionan el tráfico entrante para el par de alta disponibilidad de Cloud Volumes ONTAP. No es necesario configurar nada Hemos incluido esto como requisito simplemente para informarle del tráfico de red y para mitigar cualquier problema de seguridad.
+
+Un equilibrador de carga se utiliza para la gestión del clúster, uno para la gestión de máquinas virtuales de almacenamiento (SVM), otro para el tráfico NAS al nodo 1 y, por último, para el tráfico NAS al nodo 2.
+
+La configuración para cada equilibrador de carga es la siguiente:
+
+* Una dirección IP privada compartida
+* Una comprobación de estado global
++
+De manera predeterminada, los puertos que utiliza la comprobación del estado son 63001, 63002 y 63003.
+
+* Un servicio de fondo TCP regional
+* Un servicio de backend UDP regional
+* Una regla de reenvío TCP
+* Una regla de reenvío UDP
+* El acceso global está desactivado
++
+Aunque el acceso global esté deshabilitado de forma predeterminada, se admite la habilitación de la tecnología posterior a la implementación. Lo hemos desactivado porque el tráfico de diferentes regiones tendrá latencias mucho más altas. Queríamos asegurarnos de que no disponías de una experiencia negativa debido a los montajes accidentales en varias regiones. Habilitar esta opción es específica para las necesidades de su negocio.
+
+
+
+
+
+=== VPC compartidos
+
+Cloud Volumes ONTAP y el conector son compatibles con un VPC compartido de Google Cloud y también en las VPC independientes.
+
+Para un sistema de un solo nodo, el VPC puede ser un VPC compartido o un VPC independiente.
+
+Para un par de alta disponibilidad, se necesitan cuatro VPC. Cada una de esas VPC puede ser compartida o independiente. Por ejemplo, VPC-0 podría ser un VPC compartido, mientras que VPC-1, VPC-2 y VPC-3 serían equipos virtuales independientes.
+
+Un VPC compartido permite configurar y gestionar de forma centralizada las redes virtuales de varios proyectos. Puede configurar redes VPC compartidas en el _proyecto host_ e implementar las instancias de máquina virtual de conector y Cloud Volumes ONTAP en un _proyecto de servicio_. https://cloud.google.com/vpc/docs/shared-vpc["Documentación de Google Cloud: Información general sobre VPC compartido"^].
+
+https://docs.netapp.com/us-en/bluexp-setup-admin/task-quick-start-connector-google.html["Revisar los permisos de VPC compartido requeridos que se cubren en la implementación del conector"^]
+
+
+
+=== Duplicación de paquetes en VPC
+
+https://cloud.google.com/vpc/docs/packet-mirroring["Mirroring de paquetes"^] Debe deshabilitarse en el Google Cloud VPC en que pone en marcha Cloud Volumes ONTAP. Cloud Volumes ONTAP no puede funcionar correctamente si está habilitado el mirroring de paquetes.
+
+
+
+=== Acceso a Internet de salida
+
+Cloud Volumes ONTAP requiere acceso saliente a Internet para AutoSupport de NetApp, que supervisa proactivamente el estado de su sistema y envía mensajes al soporte técnico de NetApp.
+
+Las políticas de enrutamiento y firewall deben permitir el tráfico HTTP/HTTPS a los siguientes extremos para que Cloud Volumes ONTAP pueda enviar mensajes de AutoSupport:
+
+* \https://support.netapp.com/aods/asupmessage
+* \https://support.netapp.com/asupprod/post/1.0/postAsup
+
+
+Si una conexión a Internet saliente no está disponible para enviar mensajes AutoSupport, BlueXP configura automáticamente sus sistemas Cloud Volumes ONTAP para utilizar el conector como servidor proxy. El único requisito es asegurarse de que el firewall del conector permite conexiones _entrante_ a través del puerto 3128. Tendrá que abrir este puerto después de desplegar el conector.
+
+Si ha definido reglas de salida estrictas para Cloud Volumes ONTAP, también tendrá que asegurarse de que el firewall de Cloud Volumes ONTAP permita conexiones _saliente_ a través del puerto 3128.
+
+Una vez que haya comprobado que el acceso saliente a Internet está disponible, puede probar AutoSupport para asegurarse de que puede enviar mensajes. Para obtener instrucciones, consulte https://docs.netapp.com/us-en/ontap/system-admin/setup-autosupport-task.html["Documentos de ONTAP: Configure AutoSupport"^].
+
+
+TIP: Si utiliza un par de alta disponibilidad, el mediador de alta disponibilidad no requiere acceso saliente a Internet.
+
+Si BlueXP notifica que los mensajes de AutoSupport no se pueden enviar, link:task-verify-autosupport.html#troubleshoot-your-autosupport-configuration["Solucione problemas de configuración de AutoSupport"].
+
+Reglas del firewall:: No necesita crear reglas de firewall porque BlueXP lo hace por usted. Si necesita utilizar el suyo propio, consulte las reglas de firewall que se enumeran a continuación.
++
+--
+Tenga en cuenta que se necesitan dos conjuntos de reglas de firewall para una configuración de alta disponibilidad:
+
+* Un conjunto de reglas para los componentes de alta disponibilidad en VPC-0. Estas reglas permiten el acceso a Cloud Volumes ONTAP a los datos. <<Reglas del firewall,Leer más>>.
+* Otro conjunto de reglas para los componentes de alta disponibilidad en VPC-1, VPC-2 y VPC-3. Estas reglas están abiertas para la comunicación entrante y saliente entre los componentes ha. <<Reglas del firewall,Leer más>>.
+
+
+--
+
+
+Si desea organizar en niveles datos inactivos en un bloque de Google Cloud Storage, debe configurarse la subred en la que resida Cloud Volumes ONTAP para Private Google Access (si utiliza una pareja de alta disponibilidad, esta es la subred en VPC-0). Para obtener instrucciones, consulte https://cloud.google.com/vpc/docs/configure-private-google-access["Documentación de Google Cloud: Configuración de Private Google Access"^].
+
+Para conocer los pasos adicionales necesarios para configurar la organización en niveles de datos en BlueXP, consulte link:task-tiering.html["Organización en niveles de los datos inactivos en almacenamiento de objetos de bajo coste"].
+
+
+
+=== Conexiones a sistemas ONTAP en otras redes
+
+Para replicar datos entre un sistema Cloud Volumes ONTAP en Google Cloud y sistemas ONTAP en otras redes, debe tener una conexión VPN entre el VPC y la otra red, por ejemplo, su red corporativa.
+
+Para obtener instrucciones, consulte https://cloud.google.com/vpn/docs/concepts/overview["Documentación de Google Cloud: Información general sobre Cloud VPN"^].
+
+
+
+=== Reglas del firewall
+
+BlueXP crea reglas de firewall de Google Cloud que incluyen las reglas entrantes y salientes que Cloud Volumes ONTAP necesita para funcionar correctamente. Puede que desee hacer referencia a los puertos para fines de prueba o si prefiere que utilice sus propias reglas de firewall.
+
+Las reglas de firewall para Cloud Volumes ONTAP requieren reglas tanto entrantes como salientes. Si va a implementar una configuración de alta disponibilidad, estas son las reglas del firewall para Cloud Volumes ONTAP en VPC-0.
+
+Tenga en cuenta que se necesitan dos conjuntos de reglas de firewall para una configuración de alta disponibilidad:
+
+* Un conjunto de reglas para los componentes de alta disponibilidad en VPC-0. Estas reglas permiten el acceso a Cloud Volumes ONTAP a los datos.
+* Otro conjunto de reglas para los componentes de alta disponibilidad en VPC-1, VPC-2 y VPC-3. Estas reglas están abiertas para la comunicación entrante y saliente entre los componentes ha. <<rules-for-vpc,Leer más>>.
+
+
+
+TIP: ¿Busca información sobre el conector? https://docs.netapp.com/us-en/bluexp-setup-admin/reference-ports-gcp.html["Ver reglas de firewall para el conector"^]
+
+
+
+==== Reglas de entrada
+
+Al crear un entorno de trabajo, puede elegir el filtro de origen para la directiva de firewall predefinida durante la implementación:
+
+* *VPC seleccionado sólo*: El filtro de origen para el tráfico entrante es el rango de subred del VPC para el sistema Cloud Volumes ONTAP y el rango de subred del VPC donde reside el conector. Esta es la opción recomendada.
+* *Todos los VPC*: El filtro de fuente para el tráfico entrante es el rango IP 0.0.0.0/0.
+
+
+Si utiliza su propia política de firewall, asegúrese de añadir todas las redes que necesitan comunicarse con Cloud Volumes ONTAP, pero también de agregar ambos rangos de direcciones para permitir que el equilibrador de carga de Google interno funcione correctamente. Estas direcciones son 130.211.0.0/22 y 35.191.0.0/16. Para obtener más información, consulte https://cloud.google.com/load-balancing/docs/tcp#firewall_rules["Documentación de Google Cloud: Reglas de firewall de equilibrio de carga"^].
+
+[cols="10,10,80"]
+|===
+| Protocolo | Puerto | Específico 
+
+
+| Todos los ICMP | Todo | Hacer ping a la instancia 
+
+
+| HTTP | 80 | Acceso HTTP a la consola web de System Manager mediante el La dirección IP de la LIF de gestión del clúster 
+
+
+| HTTPS | 443 | Conectividad con el acceso HTTPS y el conector a la consola web de System Manager mediante la dirección IP de la LIF de gestión del clúster 
+
+
+| SSH | 22 | Acceso SSH a la dirección IP de administración del clúster LIF o una LIF de gestión de nodos 
+
+
+| TCP | 111 | Llamada a procedimiento remoto para NFS 
+
+
+| TCP | 139 | Sesión de servicio NetBIOS para CIFS 
+
+
+| TCP | 161-162 | Protocolo simple de gestión de red 
+
+
+| TCP | 445 | Microsoft SMB/CIFS sobre TCP con trama NetBIOS 
+
+
+| TCP | 635 | Montaje NFS 
+
+
+| TCP | 749 | Kerberos 
+
+
+| TCP | 2049 | Daemon del servidor NFS 
+
+
+| TCP | 3260 | Acceso iSCSI mediante la LIF de datos iSCSI 
+
+
+| TCP | 4045 | Daemon de bloqueo NFS 
+
+
+| TCP | 4046 | Supervisor de estado de red para NFS 
+
+
+| TCP | 10000 | Backup con NDMP 
+
+
+| TCP | 11104 | Gestión de sesiones de comunicación de interconexión de clústeres para SnapMirror 
+
+
+| TCP | 11105 | Transferencia de datos de SnapMirror mediante LIF de interconexión de clústeres 
+
+
+| TCP | 63001-63050 | Puertos de sonda de equilibrio de carga para determinar qué nodo está en buen estado (Solo para pares de alta disponibilidad) 
+
+
+| UDP | 111 | Llamada a procedimiento remoto para NFS 
+
+
+| UDP | 161-162 | Protocolo simple de gestión de red 
+
+
+| UDP | 635 | Montaje NFS 
+
+
+| UDP | 2049 | Daemon del servidor NFS 
+
+
+| UDP | 4045 | Daemon de bloqueo NFS 
+
+
+| UDP | 4046 | Supervisor de estado de red para NFS 
+
+
+| UDP | 4049 | Protocolo rquotad NFS 
+|===
+
+
+==== Reglas de salida
+
+El grupo de seguridad predefinido para Cloud Volumes ONTAP abre todo el tráfico saliente. Si eso es aceptable, siga las reglas básicas de la salida. Si necesita más reglas rígidas, utilice las reglas avanzadas de salida.
+
+
+
+===== Reglas de salida básicas
+
+El grupo de seguridad predefinido para Cloud Volumes ONTAP incluye las siguientes reglas de salida.
+
+[cols="20,20,60"]
+|===
+| Protocolo | Puerto | Específico 
+
+
+| Todos los ICMP | Todo | Todo el tráfico saliente 
+
+
+| Todos los TCP | Todo | Todo el tráfico saliente 
+
+
+| Todas las UDP | Todo | Todo el tráfico saliente 
+|===
+
+
+===== Reglas salientes avanzadas
+
+Si necesita reglas rígidas para el tráfico saliente, puede utilizar la siguiente información para abrir sólo los puertos necesarios para la comunicación saliente por Cloud Volumes ONTAP.
+
+
+NOTE: El origen es la interfaz (dirección IP) en el sistema Cloud Volumes ONTAP.
+
+[cols="10,10,6,20,20,34"]
+|===
+| Servicio | Protocolo | Puerto | Origen | Destino | Específico 
+
+
+.18+| Active Directory | TCP | 88 | LIF de gestión de nodos | Bosque de Active Directory | Autenticación Kerberos V. 
+
+
+| UDP | 137 | LIF de gestión de nodos | Bosque de Active Directory | Servicio de nombres NetBIOS 
+
+
+| UDP | 138 | LIF de gestión de nodos | Bosque de Active Directory | Servicio de datagramas NetBIOS 
+
+
+| TCP | 139 | LIF de gestión de nodos | Bosque de Active Directory | Sesión de servicio NetBIOS 
+
+
+| TCP Y UDP | 389 | LIF de gestión de nodos | Bosque de Active Directory | LDAP 
+
+
+| TCP | 445 | LIF de gestión de nodos | Bosque de Active Directory | Microsoft SMB/CIFS sobre TCP con trama NetBIOS 
+
+
+| TCP | 464 | LIF de gestión de nodos | Bosque de Active Directory | Kerberos V cambiar y establecer contraseña (SET_CHANGE) 
+
+
+| UDP | 464 | LIF de gestión de nodos | Bosque de Active Directory | Administración de claves Kerberos 
+
+
+| TCP | 749 | LIF de gestión de nodos | Bosque de Active Directory | Contraseña de Kerberos V Change & Set (RPCSEC_GSS) 
+
+
+| TCP | 88 | LIF de datos (NFS, CIFS e iSCSI) | Bosque de Active Directory | Autenticación Kerberos V. 
+
+
+| UDP | 137 | LIF DE DATOS (NFS, CIFS) | Bosque de Active Directory | Servicio de nombres NetBIOS 
+
+
+| UDP | 138 | LIF DE DATOS (NFS, CIFS) | Bosque de Active Directory | Servicio de datagramas NetBIOS 
+
+
+| TCP | 139 | LIF DE DATOS (NFS, CIFS) | Bosque de Active Directory | Sesión de servicio NetBIOS 
+
+
+| TCP Y UDP | 389 | LIF DE DATOS (NFS, CIFS) | Bosque de Active Directory | LDAP 
+
+
+| TCP | 445 | LIF DE DATOS (NFS, CIFS) | Bosque de Active Directory | Microsoft SMB/CIFS sobre TCP con trama NetBIOS 
+
+
+| TCP | 464 | LIF DE DATOS (NFS, CIFS) | Bosque de Active Directory | Kerberos V cambiar y establecer contraseña (SET_CHANGE) 
+
+
+| UDP | 464 | LIF DE DATOS (NFS, CIFS) | Bosque de Active Directory | Administración de claves Kerberos 
+
+
+| TCP | 749 | LIF DE DATOS (NFS, CIFS) | Bosque de Active Directory | Contraseña de Kerberos V change & set (RPCSEC_GSS) 
+
+
+.3+| AutoSupport | HTTPS | 443 | LIF de gestión de nodos | support.netapp.com | AutoSupport (HTTPS es la predeterminada) 
+
+
+| HTTP | 80 | LIF de gestión de nodos | support.netapp.com | AutoSupport (solo si el protocolo de transporte cambia de HTTPS a HTTP) 
+
+
+| TCP | 3128 | LIF de gestión de nodos | Conector | Envío de mensajes AutoSupport a través de un servidor proxy en el conector, si no hay disponible una conexión a Internet saliente 
+
+
+| Clúster | Todo el tráfico | Todo el tráfico | Todos los LIF de un nodo | Todas las LIF del otro nodo | Comunicaciones de interconexión de clústeres (solo Cloud Volumes ONTAP de alta disponibilidad) 
+
+
+| Backups de configuración | HTTP | 80 | LIF de gestión de nodos | \Http://<connector-IP-address>/occm/offboxconfig | Enviar copias de seguridad de configuración al conector. link:https://docs.netapp.com/us-en/ontap/system-admin/node-cluster-config-backed-up-automatically-concept.html["Obtener información acerca de los archivos de copia de seguridad de configuración"^]. 
+
+
+| DHCP | UDP | 68 | LIF de gestión de nodos | DHCP | Cliente DHCP para la configuración inicial 
+
+
+| DHCPS | UDP | 67 | LIF de gestión de nodos | DHCP | Servidor DHCP 
+
+
+| DNS | UDP | 53 | LIF de gestión de nodos y LIF de datos (NFS, CIFS) | DNS | DNS 
+
+
+| NDMP | TCP | 18600–18699 | LIF de gestión de nodos | Servidores de destino | Copia NDMP 
+
+
+| SMTP | TCP | 25 | LIF de gestión de nodos | Servidor de correo | Alertas SMTP, que se pueden utilizar para AutoSupport 
+
+
+.4+| SNMP | TCP | 161 | LIF de gestión de nodos | Servidor de supervisión | Supervisión mediante capturas SNMP 
+
+
+| UDP | 161 | LIF de gestión de nodos | Servidor de supervisión | Supervisión mediante capturas SNMP 
+
+
+| TCP | 162 | LIF de gestión de nodos | Servidor de supervisión | Supervisión mediante capturas SNMP 
+
+
+| UDP | 162 | LIF de gestión de nodos | Servidor de supervisión | Supervisión mediante capturas SNMP 
+
+
+.2+| SnapMirror | TCP | 11104 | LIF entre clústeres | LIF de interconexión de clústeres de ONTAP | Gestión de sesiones de comunicación de interconexión de clústeres para SnapMirror 
+
+
+| TCP | 11105 | LIF entre clústeres | LIF de interconexión de clústeres de ONTAP | Transferencia de datos de SnapMirror 
+
+
+| Syslog | UDP | 514 | LIF de gestión de nodos | Servidor de syslog | Mensajes de syslog Reenviar 
+|===
+
+
+==== Reglas para VPC-1, VPC-2 y VPC-3
+
+En Google Cloud, se pone en marcha una configuración de alta disponibilidad en cuatro PCs. Las reglas de firewall necesarias para la configuración de alta disponibilidad en VPC-0 son <<Reglas del firewall,Anteriormente indicado para Cloud Volumes ONTAP>>.
+
+Mientras tanto, las reglas de firewall predefinidas que BlueXP crea para instancias en VPC-1, VPC-2 y VPC-3 permiten la entrada de comunicación a través de protocolos y puertos _all_. Estas reglas permiten la comunicación entre los nodos de alta disponibilidad.
+
+La comunicación de los nodos de alta disponibilidad al mediador de alta disponibilidad se realiza a través del puerto 3260 (iSCSI).
+
+
+NOTE: Para permitir una alta velocidad de escritura para las nuevas puestas en marcha de parejas de alta disponibilidad de Google Cloud, se requiere una unidad de transmisión máxima (MTU) de al menos 8,896 bytes para VPC-1, VPC-2 y VPC-3. Si decide actualizar VPC-1, VPC-2 y VPC-3 existentes a un MTU de 8,896 bytes, deberá apagar todos los sistemas de alta disponibilidad existentes con estos VPC durante el proceso de configuración.
+
+
+
+== Requisitos para el conector
+
+Si aún no ha creado un conector, debe revisar los requisitos de red para el conector también.
+
+* https://docs.netapp.com/us-en/bluexp-setup-admin/task-quick-start-connector-google.html["Ver los requisitos de red del conector"^]
+* https://docs.netapp.com/us-en/bluexp-setup-admin/reference-ports-gcp.html["Reglas de firewall en Google Cloud"^]
+
