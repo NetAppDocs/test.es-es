@@ -11,7 +11,14 @@ summary: Antes de poder abrir un caso de soporte con el soporte técnico de NetA
 
 
 [role="lead"]
-Es necesario registrarse en soporte para tu cuenta de BlueXP y para sistemas de Cloud Volumes ONTAP individuales.
+Es necesario registrarse en soporte para recibir soporte técnico específico para BlueXP y sus servicios y soluciones de almacenamiento. También es necesario registrar soporte para habilitar flujos de trabajo clave para los sistemas Cloud Volumes ONTAP.
+
+Al registrarse para recibir soporte, no se habilita el soporte de NetApp para un servicio de archivos de proveedor de cloud. Para obtener soporte técnico relacionado con un servicio de archivos del proveedor de cloud, su infraestructura o cualquier solución que utilice el servicio, consulte «Obtener ayuda» en la documentación de BlueXP para ese producto.
+
+* link:https://docs.netapp.com/us-en/bluexp-fsx-ontap/start/concept-fsx-aws.html#getting-help["Amazon FSX para ONTAP"^]
+* link:https://docs.netapp.com/us-en/bluexp-azure-netapp-files/concept-azure-netapp-files.html#getting-help["Azure NetApp Files"^]
+* link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-service-gcp/concept-cvs-gcp.html#getting-help["Cloud Volumes Service para Google Cloud"^]
+
 
 
 
@@ -30,17 +37,6 @@ Estos números de serie se denominan comúnmente _PAYGO serial Numbers_ y son ge
 
 
 El registro de ambos tipos de números de serie permite funcionalidades, como abrir tickets de soporte y la generación automática de casos. Para completar el registro, añade cuentas del sitio de soporte de NetApp (NSS) a BlueXP, como se describe a continuación.
-
-
-
-== Soporte para soluciones de proveedores cloud
-
-Para obtener soporte técnico para las siguientes soluciones de proveedores de nube, consulte «Obtener ayuda» en la documentación de BlueXP para ese producto.
-
-* link:https://docs.netapp.com/us-en/bluexp-fsx-ontap/start/concept-fsx-aws.html#getting-help["Amazon FSX para ONTAP"^]
-* link:https://docs.netapp.com/us-en/bluexp-azure-netapp-files/concept-azure-netapp-files.html#getting-help["Azure NetApp Files"^]
-* link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-service-gcp/concept-cvs-gcp.html#getting-help["Cloud Volumes Service para Google Cloud"^]
-
 
 
 
