@@ -4076,8 +4076,6 @@ Para crear un permiso, consulte <block ref="2e58dbc76dde8987ce87452533881aab" ca
   <block id="9a3db1abe5491d0eb9bb5d125981356c" category="paragraph">Busque en la base de conocimientos de BlueXP para encontrar artículos útiles para resolver problemas.</block>
   <block id="410fdb9caa9c64da2ff3f88f4836960d" category="list-text"><block ref="410fdb9caa9c64da2ff3f88f4836960d" category="inline-link-rx"></block></block>
   <block id="00c5fef3bb9d593ae96bf5d2ee60354a" category="paragraph">Únase a la comunidad de BlueXP para seguir los debates en curso o crear otros nuevos.</block>
-  <block id="80b1b0d2b1ebf2b3cba2d25759801afd" category="list-text">Correo:ng-cloudmanager-feedback@netapp.com[correo electrónico de comentarios]</block>
-  <block id="6702efec14563f45f1ee2f8c613b8ad8" category="paragraph">Apreciamos sus opiniones. Envíe sus comentarios para ayudarnos a mejorar BlueXP.</block>
   <block id="d88bacf2a9fdcbbc844edcba97c34e30" category="section-title">Cree un caso con el soporte de NetApp</block>
   <block id="82812db645b6ff5e9c2a24ddfb66c8d6" category="paragraph">Además de las opciones de autosoporte anteriores, puede trabajar con un especialista de soporte de NetApp para resolver cualquier problema después de activar el soporte de.</block>
   <block id="920fe1428c19533eda6222fe7e58efbe" category="inline-link">Descubre cómo gestionar las credenciales asociadas con tu inicio de sesión de BlueXP</block>
@@ -5155,4 +5153,35 @@ En el caso de un agregado en AWS que admita Elastic Volumes, BlueXP también aum
   <block id="3880ae5df9fdc4d0fc4a6d00a2239530" category="paragraph">Para recibir soporte técnico específico sobre BlueXP y sus soluciones y servicios de almacenamiento, use las opciones de soporte descritas a continuación.</block>
   <block id="85a772bebde3e95966723beb7a641685" category="paragraph">Algunas configuraciones de Cloud Volumes ONTAP incluyen almacenamiento NVMe local, que Cloud Volumes ONTAP utiliza como _Flash Cache_ para obtener un mejor rendimiento. Agregando línea para la prueba de actualización de token.</block>
   <block id="f1186c9ba34a61c2fa682874b26fd08d" category="paragraph">Cloud Volumes ONTAP es un dispositivo de almacenamiento exclusivamente de software que ejecuta el software de gestión de datos ONTAP en el cloud. Proporciona almacenamiento de clase empresarial con las siguientes funciones clave para la próxima prueba:</block>
+  <block id="db19a2aeddd86c6afbd5d3983a9579d2" category="section-title">Prueba de reemplazo de caracteres AsciiDoc y atributos intrínsecos</block>
+  <block id="6d8c8e2d0adf3332b744316a6ebdbf75" category="paragraph">Realización de pruebas de extremo a extremo mediante la localización y publicación de todos los idiomas.</block>
+  <block id="9c8ae0945940e5baec5a93c4c8ec869e" category="paragraph-title">Asterisco</block>
+  <block id="019791a796a02f18a46a3dcb39b816e7" category="paragraph">{asterisco}
+Texto{asterisco}
+Texto {asterisco}
+Texto {asterisco}</block>
+  <block id="22ed5e498bf77d3a1534c7e861ebb5a4" category="paragraph-title">Dos puntos</block>
+  <block id="c864eac8459131738baec5694d99d481" category="paragraph">{dos puntos y comas}
+Texto {dos puntos y comas}
+Texto {dos puntos y comas}
+Texto {dos puntos y comas}</block>
+  <block id="2349b5a4555c8daaba967bb9d648e02a" category="paragraph-title">Barra vertical</block>
+  <block id="a92de313c578d9511ef232e68df3ecac" category="paragraph">{vbar}
+Texto{vbar}
+Texto {vbar}
+Texto {vbar}</block>
+  <block id="32ba78fe43257d3e7f88e3935a8ea0d4" category="paragraph-title">Más</block>
+  <block id="058acd890f3615536573cc493a22c8c6" category="paragraph">{más}
+Texto{plus}
+Texto {plus}
+Texto {plus} texto</block>
+  <block id="52d20dd6a39397247940a5255508a9eb" category="paragraph-title">Corchetes</block>
+  <block id="688d8707adb64eca76570a9f9f4fccab" category="paragraph">{startsb} y {endsb}
+Text{startsb} y text{endsb}
+Texto {startsb} y texto {endsb}
+Texto {startsb} y texto {endsb}</block>
+  <block id="077918e5e759dea8ebe9b14af40f6a8c" category="paragraph-title">Espacio sin romper</block>
+  <block id="f606f03b9471e3c22a0e9412852320bd" category="paragraph">Antes de{nbsp}después</block>
+  <block id="64e9073b4fb50b91766ce8b5e61945c1" category="paragraph-title">Espacio de anchura cero</block>
+  <block id="589a92e5ac7fd2654f5ce5d9594f5e7c" category="paragraph">Antes de{zwsp}después</block>
 </blocks>

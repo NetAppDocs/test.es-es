@@ -42,3 +42,45 @@ link:concept-client-protocols.html["Obtenga más información sobre la compatibi
 BlueXP no ofrece compatibilidad con ninguna configuración u orquestación para la recuperación ante desastres de máquinas virtuales de almacenamiento (SVM). Se debe usar System Manager o la CLI.
 
 link:task-manage-svm-dr.html["Obtenga más información sobre la recuperación ante desastres de SVM"].
+
+
+
+== Prueba de reemplazo de caracteres AsciiDoc y atributos intrínsecos
+
+Realización de pruebas de extremo a extremo mediante la localización y publicación de todos los idiomas.
+
+.Asterisco
+{asterisco}
+Texto{asterisco}
+Texto {asterisco}
+Texto {asterisco}
+
+.Dos puntos
+{dos puntos y comas}
+Texto {dos puntos y comas}
+Texto {dos puntos y comas}
+Texto {dos puntos y comas}
+
+.Barra vertical
+{vbar}
+Texto{vbar}
+Texto {vbar}
+Texto {vbar}
+
+.Más
+{más}
+Texto{plus}
+Texto {plus}
+Texto {plus} texto
+
+.Corchetes
+{startsb} y {endsb}
+Text{startsb} y text{endsb}
+Texto {startsb} y texto {endsb}
+Texto {startsb} y texto {endsb}
+
+.Espacio sin romper
+Antes de{nbsp}después
+
+.Espacio de anchura cero
+Antes de{zwsp}después
