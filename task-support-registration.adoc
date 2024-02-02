@@ -154,7 +154,7 @@ image:https://raw.githubusercontent.com/NetAppDocs/bluexp-family/main/media/scre
 . Seleccione *Administración de NSS > Agregar cuenta de NSS*.
 . Cuando se le solicite, seleccione *continuar* para que se le redirija a una página de inicio de sesión de Microsoft.
 +
-NetApp utiliza Microsoft Azure Active Directory como proveedor de identidades para servicios de autenticación específicos para soporte y licencias.
+NetApp utiliza Microsoft Entra ID como proveedor de identidad para los servicios de autenticación específicos de soporte y licencias.
 
 . En la página de inicio de sesión, proporcione su dirección de correo electrónico registrada en el sitio de soporte de NetApp y contraseña para realizar el proceso de autenticación.
 +
