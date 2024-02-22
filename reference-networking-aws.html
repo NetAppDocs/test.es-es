@@ -1,0 +1,3441 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head class="at-element-marker">
+  <title>Requisitos de red para Cloud Volumes ONTAP en AWS | NetApp Documentation</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+  <meta http-equiv="language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="Requisitos de red para Cloud Volumes ONTAP en AWS | NetApp Documentation" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://docs.netapp.com/es-es/test/reference-networking-aws.html" />
+	<meta property="og:description" content="BlueXP gestiona la configuración de componentes de red para Cloud Volumes ONTAP, como direcciones IP, máscaras de red y rutas. Debe asegurarse de que el acce..." />
+  <meta property="og:image" content="https://docs.netapp.com/es-es/test/images/logo-tophat-social.png" />
+  <meta property="og:image:alt" content="NetApp Logo" />
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="encoding" content="utf-8">
+  <meta http-equiv="nss-type" content="Product Documentation"/>
+  <meta http-equiv="nss-subtype" content="User Guide"/><meta name="description" content="BlueXP gestiona la configuración de componentes de red para Cloud Volumes ONTAP, como direcciones IP, máscaras de red y rutas. Debe asegurarse de que el acce...">
+  <meta name="keywords" content=" networking, network, requirements, connection, connections, vpc, security group, security groups, subnets, vpn, internet, nat, s3, dns, ad, active directory, az, availability zone, floating IP, floating, SVM, management LIF, route, route tables, proxy, HTTP, private, tier, s3 endpoint, tiering, storage tier, storage tiering, proxy server, nat device, vpn, snapmanager, snapcenter, iscsi, nfs, cifs, nas, san, outbound, inbound, connections, autosupport, ha, ha pair, high availability"><!-- Icons -->
+  <link rel="icon" href="/es-es/test/images/favicon.ico" type="image/x-icon">
+
+  <!-- RSS Feed --><link rel="alternate" type="application/rss+xml" title="NetApp Documentation" href="/es-es/test/feed.xml"><!-- CSS Definitions: NetApp CSS should be defined after generic css -->
+
+
+  <!-- Combined CSS -->
+  <link rel="stylesheet" type="text/css" href="/es-es/test/css/ie-netappdocs.css">
+
+  
+  <link rel="stylesheet" href="/es-es/test/css/ie-landing-page.css" type="text/css">
+  <link rel="stylesheet" href="/es-es/test/css/ie-tabbed-blocks.css" type="text/css">
+  <!-- Canonical url -->
+  <link rel="canonical" href="https://docs.netapp.com/es-es/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="x-default" href="https://docs.netapp.com/us-en/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="es" href="https://docs.netapp.com/es-es/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="en" href="https://docs.netapp.com/us-en/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="ja" href="https://docs.netapp.com/ja-jp/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="ko" href="https://docs.netapp.com/ko-kr/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://docs.netapp.com/zh-cn/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://docs.netapp.com/zh-tw/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="de" href="https://docs.netapp.com/de-de/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="fr" href="https://docs.netapp.com/fr-fr/test/reference-networking-aws.html" />
+  <link rel="alternate" hreflang="it" href="https://docs.netapp.com/it-it/test/reference-networking-aws.html" />
+  <!-- Top level site integrations -->
+<script type="text/javascript" src="https://cdn.cookielaw.org/consent/72570c5c-fe30-465f-b0e0-b77f7fb4ae34/OtAutoBlock.js"></script>
+    <script type="text/javascript" src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" charset="UTF-8" data-document-language="true" data-domain-script="72570c5c-fe30-465f-b0e0-b77f7fb4ae34"></script>
+    <script type="text/javascript">function OptanonWrapper() { }</script>
+    <script type="text/plain" class="optanon-category-C0002" src="https://assets.adobedtm.com/60287eadf1ee/c284da483c83/launch-e9ff3acac59f.min.js"></script>
+    <script class="optanon-category-C0001">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.setAttributeNode(d.createAttribute('data-ot-ignore'));j.setAttribute('class','optanon-category-C0001');j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl+'';f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MD73T9M');</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  
+  <script>
+    $(document).ready(function() {
+      const MASTHEAD_OFFSET = 65;
+      const SECTIONS = $("main h2, main h3");
+      // PAGE NAV - Init
+      if (SECTIONS.length == 0) {
+        // remove if there is no elements
+        /*
+        $("#ie-right-navbar").remove();
+        $("#ie-right-navbar-collapse").remove();
+        */
+      } else {
+        $(".page-nav-title").css('display', 'block');
+        for (var i = 0; i < SECTIONS.length; i++) {
+          var sectionId = $(SECTIONS[i]).attr('id');
+          var sectionName = $(SECTIONS[i]).text();
+          var subClass = $(SECTIONS[i]).is("h3") ? ' page-nav__sublink' : '';
+          $("#page-menu").append('<li class="page-nav-item"><a href="#' + sectionId + '" class="page-nav__link' + subClass + '">' + sectionName + '</a></li>');
+        }
+      }
+    });
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+  <!-- Used for Product Family Page Sidebar Visibility --><!-- Used to import Promise for IE. Required for SearchKit -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script><script src='/es-es/test/js/na-search.js'></script><script src='/es-es/test/js/ie-clouddocs.js'></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><script>
+    /*
+      $(document).ready(function() {
+          $("#tg-sb-link").click(function() {
+              $("#tg-sb-sidebar").toggle();
+              $("#tg-sb-content").toggleClass('col-md-9');
+              $("#tg-sb-content").toggleClass('col-md-12');
+              $("#tg-sb-icon").toggleClass('fa-toggle-on');
+              $("#tg-sb-icon").toggleClass('fa-toggle-off');
+          });
+      });
+      */
+  </script>
+  <script src='/es-es/test/js/custom-dropdown.js'></script>
+  <script src='/es-es/test/js/FileSaver.min.js'></script>
+  <script src='/es-es/test/js/jszip-utils.min.js'></script>
+  <script src='/es-es/test/js/jszip.min.js'></script><script src='/es-es/test/js/ie-pdf-ux.js'></script></head>
+
+
+  <body class role="document" data-flavor="">
+    <div class="skip-to-main">
+      <a href="#main" >Skip to main content</a>
+    </div><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MD73T9M"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><div id="page" class="">
+      <div id="ie-phone-menu" class=""></div>
+      <div id="ie-content-wrap" class="">
+        <nav id="ie-new-header">
+    <ul>
+        <li id="ie-phone-menu-button">
+            <a href="#">
+                <image id="" src="/es-es/test/images/hamburger.svg" alt="menu" />
+            </a>
+        </li>
+
+        <li>
+            <a href="https://www.netapp.com/es/">
+                <image id="ie-header-logo" src="/es-es/test/images/netapp_logo.svg" alt="netapp" />
+            </a>
+        </li>
+        <li id="ie-header-docs">
+            <a href="https://www.netapp.com/es/support-and-training/documentation/">Documentos</a>
+        </li>
+
+        <!-- Empty container to push header left with or without lang selector -->
+        <li id="empty-container" style="margin-left: auto">
+        </li>
+        <!-- Start Language Selector --><li id="ie-language-dropdown">
+            <div id="language-dropdown" class="custom-dropdown custom-dropdown-lang">
+                <div class="custom-dropdown-select custom-dropdown-select-lang">
+                    <img src="/es-es/test/images/language_white_24dp.svg" class="n-globe__icon" />
+                    <span class="lang-name">Español</span>
+                    <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu"><li>
+                        <a href="https://docs.netapp.com/es-es/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">Español</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/us-en/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">English</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ja-jp/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">日本語</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ko-kr/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">한국어</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-cn/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">简体中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-tw/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">繁體中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/de-de/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">Deutsch</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/fr-fr/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">Français</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/it-it/test/reference-networking-aws.html"
+                            target="_self"><span translate="no" class="notranslate">Italiano</span></a>
+                    </li></ul>
+            </div>
+            </li>
+        <!-- End Language Selector -->
+
+
+        <li id="ie-allnetapp">
+            <div id="allnetapp-dropdown" class="custom-dropdown custom-dropdown-allnetapp">
+                <div class="custom-dropdown-select custom-dropdown-select-allnetapp">
+                    <img src="/es-es/test/images/apps_white_24dp.svg" alt="" class="allnetapp-icon" />
+                    <span class="allnetapp-name">Todo NetApp</span>
+                    <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu allnetapp-dropdown">
+                    <li>
+                        <a href="https://bluexp.netapp.com/es/"
+                            target="_self"><span translate="no" class="notranslate">BlueXP</span></a>
+                    </li>
+                    <li>
+                        <a href="https://mysupport.netapp.com/site/"
+                            target="_self"><span translate="no" class="notranslate">Soporte</span></a>
+                    </li>
+                    <li>
+                        <a href="https://kb.netapp.com/"
+                            target="_self"><span translate="no" class="notranslate">Base de conocimientos</span></a>
+                    </li>
+                    <li>
+                        <a href="https://www.netapp.com/es/support-and-training/netapp-learning-services/"
+                            target="_self"><span translate="no" class="notranslate">Formación</span></a>
+                    </li>
+                </ul>
+            </div>
+
+        </li>
+
+    </ul>
+</nav>
+
+        <main id="n-main-content" class="n-main-content">
+          <!-- Start Documentation Content -->
+<div class="ie-main">
+
+<div id="ie-new-sidebar-collapse" style="display: none">
+    <img id="sidebar-expand" class="ie-searchbox-icon" src="/es-es/test/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-new-sidebar">
+    <div id="ie-product-identity-lockup">
+        <div id="sidebar-collapse" class="">
+            <img src="/es-es/test/images/double_arrow.svg" alt="" />
+        </div>
+        <div id="ie-breadcrumb" class="">
+  <ul class="ie-breadcrumb">
+    <li class="">
+      <a href="https://docs.netapp.com">Todos los documentos</a>
+    </li>
+    
+    
+    <li class="">
+      <a href="https://docs.netapp.com/us-en/cloud/">Documentos de nube</a>
+    </li>
+    
+
+    
+    <li class="">
+      <a href="https://docs.netapp.com/es-es/bluexp-family/">
+        BlueXP
+      </a>
+    </li>
+    
+  </ul>
+  
+  <div class="ie-product-name" >
+    <!--<a href="/es-es/test/">-->
+      Cloud Volumes ONTAP
+    <!--</a>-->
+  </div>
+</div>
+
+            
+<div id="ie-selectors"><div id="version-dropdown-new" class="custom-dropdown" >
+  <div class="custom-dropdown-select unselected" title=" 9.13.1">
+    <label>Versión</label>
+    <span translate="no" class="notranslate">9.13.1</span>
+    <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown version invisible" />
+    <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup version" />
+  </div>
+
+  <ul class="custom-dropdown-menu"><li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.13.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-9130-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.13.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-9121-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.12.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-9120-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.12.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-9111-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.11.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-9110-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.11.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-9101-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.10.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-9100-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.10.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-991-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.9.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-990-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.9.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-98-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.8</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-97-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.7</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-96-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.6</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-95-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.5</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-94-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.4</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/es-es/cloud-volumes-ontap-93-relnotes/reference-networking-aws.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.3</span></span>
+      </a>
+                     
+    </li>
+    
+  </ul>
+</div>
+<div id="flavor-dropdown" class="custom-dropdown" data-url="/es-es/test/reference-networking-aws.html">
+  
+  <div class="custom-dropdown-select unselected flavor" title="Todos los proveedores de cloud">
+    <label>Proveedor de cloud</label>
+    <span>Todos los proveedores de cloud</span>
+    <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown flavor invisible" />
+    <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup flavor" />
+  </div>
+  
+
+  <ul class="custom-dropdown-menu">
+    
+    
+    <li data-value="aws" data-url="/es-es/test/aws/reference-networking-aws.html">Amazon Web Services
+    </li>
+    
+    
+    
+    <li data-value="gcp" data-url="/es-es/test/gcp">Google Cloud</li>
+    
+    
+    
+    <li data-value="azure" data-url="/es-es/test/azure">Microsoft Azure</li>
+    
+    
+    <li data-url="/es-es/test/reference-networking-aws.html">Todos los proveedores de cloud</li>
+  </ul>
+</div>
+</div>
+        
+        
+
+<div id="ie-searchbox" class="ie-searchbox-sidebar ">
+    <img class="ie-searchbox-icon" src="/es-es/test/images/loupe.svg" alt=""/>
+    <div id="react-search" 
+        data-search-html="/es-es/test/search.html" 
+        data-type="widget"
+        data-placeholder="Buscar documentación"
+        data-no-results-found="No se han encontrado resultados para {query}"
+        data-did-you-mean="Busca {suggestion}."
+        data-no-results-found-did-you-mean="No se ha encontrado ningún resultado para {query}. ¿Querías decir {suggestion}?"
+        data-results-found="{hitCount} resultados encontrados"
+        data-error-message="Se ha producido un error. Por favor, inténtalo de nuevo."
+        data-error-reset="Restablecer búsqueda"
+        data-sk-es-pf-indexes="" 
+        data-flavor="">
+    </div>
+</div>
+        
+    </div>
+    <div id="ie-new-toc"><script>
+  let sidebarAccordion = true;
+
+  /* specific css rules for Mac */
+  if(navigator.platform.match('Mac') !== null) {
+    document.body.setAttribute('class', 'OSX');
+  }
+
+</script>
+
+<div id="ie-sidebar-container">
+  <ul id="ie-sidebar-list" ><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Documentos de Cloud Volumes ONTAP"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/index.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/es-es/test/index.html">
+        Documentos de Cloud Volumes ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Notas de la versión"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Notas de la versión</div>-->
+         Notas de la versión
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Novedades"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/whats-new.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/whats-new.html">
+        Novedades
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Limitaciones conocidas"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/reference-limitations.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/reference-limitations.html">
+        Limitaciones conocidas
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Notas de la versión de Cloud Volumes ONTAP"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/whats-new-ontap.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/whats-new-ontap.html">
+        Notas de la versión de Cloud Volumes ONTAP
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Manos a la obra"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Manos a la obra</div>-->
+         Manos a la obra
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Más información sobre Cloud Volumes ONTAP"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-overview-cvo.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/concept-overview-cvo.html">
+        Más información sobre Cloud Volumes ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Versiones compatibles para nuevas puestas en marcha"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/reference-versions.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/reference-versions.html">
+        Versiones compatibles para nuevas puestas en marcha
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Comience a usar Amazon Web Services"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Comience a usar Amazon Web Services</div>-->
+         Comience a usar Amazon Web Services
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inicio rápido"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-getting-started-aws.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-getting-started-aws.html">
+        Inicio rápido
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planificación de la configuración"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-planning-your-config.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-planning-your-config.html">
+        Planificación de la configuración
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure su red"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configure su red</div>-->
+         Configure su red
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Requisitos de red"
+      data-li-level="4#" 
+      class="  ie-sidebar-selected    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/reference-networking-aws.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/reference-networking-aws.html">
+        Requisitos de red
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure una puerta de enlace de tránsito de AWS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-setting-up-transit-gateway.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-setting-up-transit-gateway.html">
+        Configure una puerta de enlace de tránsito de AWS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Ponga en marcha un par de alta disponibilidad en una subred compartida"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-deploy-aws-shared-vpc.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-deploy-aws-shared-vpc.html">
+        Ponga en marcha un par de alta disponibilidad en una subred compartida
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Reglas de grupos de seguridad para AWS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/reference-security-groups.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/reference-security-groups.html">
+        Reglas de grupos de seguridad para AWS
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure el KMS de AWS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-setting-up-kms.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-setting-up-kms.html">
+        Configure el KMS de AWS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure los roles IAM"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-set-up-iam-roles.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-set-up-iam-roles.html">
+        Configure los roles IAM
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurar la licencia"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-set-up-licensing-aws.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-set-up-licensing-aws.html">
+        Configurar la licencia
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inicie Cloud Volumes ONTAP en AWS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-deploying-otc-aws.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-deploying-otc-aws.html">
+        Inicie Cloud Volumes ONTAP en AWS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Empiece a usar AWS C2S"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-getting-started-aws-c2s.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-getting-started-aws-c2s.html">
+        Empiece a usar AWS C2S
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Empiece a usar Microsoft Azure"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Empiece a usar Microsoft Azure</div>-->
+         Empiece a usar Microsoft Azure
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inicio rápido"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-getting-started-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-getting-started-azure.html">
+        Inicio rápido
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planificación de la configuración"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-planning-your-config-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-planning-your-config-azure.html">
+        Planificación de la configuración
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure su red"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/reference-networking-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/reference-networking-azure.html">
+        Configure su red
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure el cifrado con su clave"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-set-up-azure-encryption.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-set-up-azure-encryption.html">
+        Configure el cifrado con su clave
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurar la licencia"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-set-up-licensing-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-set-up-licensing-azure.html">
+        Configurar la licencia
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Activar el modo de alta disponibilidad"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-azure-high-availability-mode.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-azure-high-availability-mode.html">
+        Activar el modo de alta disponibilidad
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inicie Cloud Volumes ONTAP en Azure"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-deploying-otc-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-deploying-otc-azure.html">
+        Inicie Cloud Volumes ONTAP en Azure
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Comience a usar Google Cloud"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Comience a usar Google Cloud</div>-->
+         Comience a usar Google Cloud
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inicio rápido"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-getting-started-gcp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-getting-started-gcp.html">
+        Inicio rápido
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planificación de la configuración"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-planning-your-config-gcp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-planning-your-config-gcp.html">
+        Planificación de la configuración
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure su red"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/reference-networking-gcp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/reference-networking-gcp.html">
+        Configure su red
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planificación de controles de servicio VPC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/reference-vpc-service-controls-gcp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/reference-vpc-service-controls-gcp.html">
+        Planificación de controles de servicio VPC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cree una cuenta de servicio"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-creating-gcp-service-account.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-creating-gcp-service-account.html">
+        Cree una cuenta de servicio
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilice claves de cifrado gestionadas por el cliente"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-setting-up-gcp-encryption.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-setting-up-gcp-encryption.html">
+        Utilice claves de cifrado gestionadas por el cliente
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurar la licencia"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-set-up-licensing-google.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-set-up-licensing-google.html">
+        Configurar la licencia
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inicie Cloud Volumes ONTAP en Google Cloud"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-deploying-gcp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-deploying-gcp.html">
+        Inicie Cloud Volumes ONTAP en Google Cloud
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Verificación de imágenes de Google Cloud Platform"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Verificación de imágenes de Google Cloud Platform</div>-->
+         Verificación de imágenes de Google Cloud Platform
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Descripción general"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-gcp-image-verification.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/concept-gcp-image-verification.html">
+        Descripción general
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Convertir imagen a formato RAW en GCP"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-gcp-convert-image-raw.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-gcp-convert-image-raw.html">
+        Convertir imagen a formato RAW en GCP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Verificación de la firma de la imagen"
+      data-li-level="4" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-4  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Verificación de la firma de la imagen</div>-->
+         Verificación de la firma de la imagen
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Verifique las imágenes firmadas de GCP"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-gcp-verify-signed-image.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/es-es/test/concept-gcp-verify-signed-image.html">
+        Verifique las imágenes firmadas de GCP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Verifique el contenido con OpenSSL"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-verify-openssl-gcp.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/es-es/test/task-verify-openssl-gcp.html">
+        Verifique el contenido con OpenSSL
+      </a></li></ul></li></ul></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilice Cloud Volumes ONTAP"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Utilice Cloud Volumes ONTAP</div>-->
+         Utilice Cloud Volumes ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestión de licencias"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Gestión de licencias</div>-->
+         Gestión de licencias
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione licencias basadas en capacidad"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-manage-capacity-licenses.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-manage-capacity-licenses.html">
+        Gestione licencias basadas en capacidad
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione suscripciones de Keystone"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-manage-keystone.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-manage-keystone.html">
+        Gestione suscripciones de Keystone
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione licencias basadas en nodos"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-manage-node-licenses.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-manage-node-licenses.html">
+        Gestione licencias basadas en nodos
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración de volúmenes y LUN"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Administración de volúmenes y LUN</div>-->
+         Administración de volúmenes y LUN
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cree volúmenes"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-create-volumes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-create-volumes.html">
+        Cree volúmenes
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione los volúmenes existentes"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-manage-volumes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-manage-volumes.html">
+        Gestione los volúmenes existentes
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Organice en niveles los datos inactivos en el almacenamiento de objetos"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-tiering.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-tiering.html">
+        Organice en niveles los datos inactivos en el almacenamiento de objetos
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conectar una LUN a un host"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-connect-lun.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-connect-lun.html">
+        Conectar una LUN a un host
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Acelere el acceso a los datos con FlexCache"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-accelerate-data-access.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-accelerate-data-access.html">
+        Acelere el acceso a los datos con FlexCache
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración de agregados"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Administración de agregados</div>-->
+         Administración de agregados
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Crear agregados"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-create-aggregates.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-create-aggregates.html">
+        Crear agregados
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione los agregados existentes"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-manage-aggregates.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-manage-aggregates.html">
+        Gestione los agregados existentes
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione la configuración de capacidad"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-manage-capacity-settings.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-manage-capacity-settings.html">
+        Gestione la configuración de capacidad
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración de máquinas virtuales de almacenamiento"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Administración de máquinas virtuales de almacenamiento</div>-->
+         Administración de máquinas virtuales de almacenamiento
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Trabaje con equipos virtuales de almacenamiento en BlueXP"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-managing-svms.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-managing-svms.html">
+        Trabaje con equipos virtuales de almacenamiento en BlueXP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Crear máquinas virtuales de almacenamiento en AWS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-managing-svms-aws.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-managing-svms-aws.html">
+        Crear máquinas virtuales de almacenamiento en AWS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Creación de máquinas virtuales de almacenamiento en Azure"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-managing-svms-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-managing-svms-azure.html">
+        Creación de máquinas virtuales de almacenamiento en Azure
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Creación de máquinas virtuales de almacenamiento en Google Cloud"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-managing-svms-gcp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-managing-svms-gcp.html">
+        Creación de máquinas virtuales de almacenamiento en Google Cloud
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure la recuperación ante desastres de SVM"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-manage-svm-dr.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-manage-svm-dr.html">
+        Configure la recuperación ante desastres de SVM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Seguridad y cifrado de datos"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Seguridad y cifrado de datos</div>-->
+         Seguridad y cifrado de datos
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cifre los volúmenes con el cifrado de NetApp"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-encrypting-volumes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-encrypting-volumes.html">
+        Cifre los volúmenes con el cifrado de NetApp
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione claves con el servicio de gestión de claves de AWS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-aws-key-management.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-aws-key-management.html">
+        Gestione claves con el servicio de gestión de claves de AWS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione claves con Azure Key Vault"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-azure-key-vault.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-azure-key-vault.html">
+        Gestione claves con Azure Key Vault
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione claves con Google Cloud KMS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-google-key-manager.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-google-key-manager.html">
+        Gestione claves con Google Cloud KMS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mejore la protección contra ransomware"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-protecting-ransomware.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-protecting-ransomware.html">
+        Mejore la protección contra ransomware
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración del sistema"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Administración del sistema</div>-->
+         Administración del sistema
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Actualice Cloud Volumes ONTAP"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-updating-ontap-cloud.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-updating-ontap-cloud.html">
+        Actualice Cloud Volumes ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Registre sistemas de pago por uso"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-registering.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-registering.html">
+        Registre sistemas de pago por uso
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Detenga e inicie un sistema"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-managing-state.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-managing-state.html">
+        Detenga e inicie un sistema
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sincronizar la hora del sistema"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-sync-time.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-sync-time.html">
+        Sincronizar la hora del sistema
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Modifique la velocidad de escritura del sistema"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-modify-write-speed.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-modify-write-speed.html">
+        Modifique la velocidad de escritura del sistema
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cambie la contraseña del sistema"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-change-password.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-change-password.html">
+        Cambie la contraseña del sistema
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Agregar, quitar o eliminar sistemas"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Agregar, quitar o eliminar sistemas</div>-->
+         Agregar, quitar o eliminar sistemas
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Añadir un sistema existente"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-adding-systems.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-adding-systems.html">
+        Añadir un sistema existente
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Eliminar un entorno de trabajo"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-removing.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-removing.html">
+        Eliminar un entorno de trabajo
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Eliminar un sistema"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-deleting-working-env.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-deleting-working-env.html">
+        Eliminar un sistema
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración de AWS"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Administración de AWS</div>-->
+         Administración de AWS
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cambie el tipo de instancia de EC2"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-change-ec2-instance.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-change-ec2-instance.html">
+        Cambie el tipo de instancia de EC2
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cambiar las tablas de rutas para pares ha"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-change-route-tables.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-change-route-tables.html">
+        Cambiar las tablas de rutas para pares ha
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurar la creación de grupos de colocación"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="task-configure-placement-group-failure-aws.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-configure-placement-group-failure-aws.html">
+        Configurar la creación de grupos de colocación
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración de Azure"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Administración de Azure</div>-->
+         Administración de Azure
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cambie el tipo de máquina virtual de Azure"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-change-azure-vm.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-change-azure-vm.html">
+        Cambie el tipo de máquina virtual de Azure
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Anular bloqueos CIFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-overriding-cifs-locks.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-overriding-cifs-locks.html">
+        Anular bloqueos CIFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilice un vínculo privado de Azure o extremos de servicio"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-enabling-private-link.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-enabling-private-link.html">
+        Utilice un vínculo privado de Azure o extremos de servicio
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mover grupos de recursos"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-moving-resource-groups-azure.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-moving-resource-groups-azure.html">
+        Mover grupos de recursos
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración de Google Cloud"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Administración de Google Cloud</div>-->
+         Administración de Google Cloud
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cambie el tipo de máquina"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-change-gcp-machine.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/es-es/test/task-change-gcp-machine.html">
+        Cambie el tipo de máquina
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración desde System Manager"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-administer-advanced-view.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-administer-advanced-view.html">
+        Administración desde System Manager
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Administración desde la interfaz de línea de comandos"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-connecting-to-otc.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-connecting-to-otc.html">
+        Administración desde la interfaz de línea de comandos
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Estado y eventos del sistema"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Estado y eventos del sistema</div>-->
+         Estado y eventos del sistema
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Comprobar la configuración de AutoSupport"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-verify-autosupport.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-verify-autosupport.html">
+        Comprobar la configuración de AutoSupport
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configure EMS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-configure-ems.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/task-configure-ems.html">
+        Configure EMS
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conceptos"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Conceptos</div>-->
+         Conceptos
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Licencia"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-licensing.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/concept-licensing.html">
+        Licencia
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Reducida"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Reducida</div>-->
+         Reducida
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protocolos de cliente"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-client-protocols.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-client-protocols.html">
+        Protocolos de cliente
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Discos y agregados"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-storage.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-storage.html">
+        Discos y agregados
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Volúmenes elásticos en AWS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-aws-elastic-volumes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-aws-elastic-volumes.html">
+        Volúmenes elásticos en AWS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Organización en niveles de los datos"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-data-tiering.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-data-tiering.html">
+        Organización en niveles de los datos
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestión del almacenamiento"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-storage-management.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-storage-management.html">
+        Gestión del almacenamiento
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Velocidad de escritura"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-write-speed.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-write-speed.html">
+        Velocidad de escritura
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Flash Cache"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-flash-cache.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-flash-cache.html">
+        Flash Cache
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Almacenamiento WORM"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-worm.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-worm.html">
+        Almacenamiento WORM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Pares de alta disponibilidad"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Pares de alta disponibilidad</div>-->
+         Pares de alta disponibilidad
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Parejas de HA en AWS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-ha.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-ha.html">
+        Parejas de HA en AWS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Parejas de HA en Azure"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-ha-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-ha-azure.html">
+        Parejas de HA en Azure
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Pares de ALTA DISPONIBILIDAD en GCP"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-ha-google-cloud.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-ha-google-cloud.html">
+        Pares de ALTA DISPONIBILIDAD en GCP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Acciones durante la toma de control del almacenamiento"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-degraded-ha-pair.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/es-es/test/concept-degraded-ha-pair.html">
+        Acciones durante la toma de control del almacenamiento
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Seguridad"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-security.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/concept-security.html">
+        Seguridad
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Rendimiento"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-performance.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/concept-performance.html">
+        Rendimiento
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestión de BYOL basado en nodos"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-license-management.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/concept-license-management.html">
+        Gestión de BYOL basado en nodos
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Asesor digital AutoSupport y Active IQ"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/concept-active-iq.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/concept-active-iq.html">
+        Asesor digital AutoSupport y Active IQ
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuraciones predeterminadas"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/reference-default-configs.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/reference-default-configs.html">
+        Configuraciones predeterminadas
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conocimiento y apoyo"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/es-es/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/es-es/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Conocimiento y apoyo</div>-->
+         Conocimiento y apoyo
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Regístrese para recibir soporte"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-support-registration.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/task-support-registration.html">
+        Regístrese para recibir soporte
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Obtenga ayuda"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/task-get-help.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/es-es/test/task-get-help.html">
+        Obtenga ayuda
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Avisos legales"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/reference-networking-aws.html" 
+      dale-entry-url="/legal-notices.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/es-es/test/legal-notices.html">
+        Avisos legales
+      </a></li></ul>
+</div>
+<script>
+
+  $(".ie-sidebar-button").click(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    expandedLI = $('li.ie-sidebar-expand')
+
+    const li = $(this).closest("li");
+
+    const parentsLI = $(li).parents('li');
+
+    expandedLI.map(element => {
+      if (sidebarAccordion && !li.hasClass('ie-sidebar-expand') && jQuery.inArray(expandedLI[element], parentsLI) == -1) {
+        $(expandedLI[element]).toggleClass('ie-sidebar-expand');
+        $(expandedLI[element]).children("ul").animate({ height: 'toggle' }, 400, function () {
+          $(li).children("ul").toggleClass('ie-sidebar-open');
+
+        })
+      }
+
+    })
+
+    $(li).toggleClass('ie-sidebar-expand');
+    $(li).children("ul").animate({ height: 'toggle' }, 400, function () {
+      $(li).children("ul").toggleClass('ie-sidebar-open');
+    })
+  });
+
+
+  
+    $("li.ie-sidebar-selected").parents('ul').toggleClass("ie-sidebar-open");
+    $("li.ie-sidebar-selected").toggleClass("ie-sidebar-expand")
+    $("ul.ie-sidebar-open").parent().toggleClass("ie-sidebar-expand");
+    $("li.ie-sidebar-selected").children('ul').toggleClass("ie-sidebar-open")
+  
+  
+</script>
+    </div>
+</div>
+<script>
+
+    
+    let sidebarScrollTopPosition = 0;
+    $("#ie-new-toc").on("scroll", function () {
+        if (sidebarScrollTopPosition == 0) {
+            $.cookie("sidebarScroll", $("#ie-new-toc").scrollTop(), {
+                path: "/es-es/test"
+            });
+        }
+
+        if ($("#ie-new-toc").scrollTop() > 0) {
+            $('#ie-product-identity-lockup').addClass('ie-addShadow');
+        } else {
+            $('#ie-product-identity-lockup').removeClass('ie-addShadow');
+        }
+    });
+
+    $(function () {
+        if ($.cookie("sidebarScroll")) {
+            $("#ie-new-toc").scrollTop($.cookie("sidebarScroll"));
+        }
+    });
+
+    function setSidebarBottom() {
+        const footerGap = PXinViewport($(".n-footer"));
+        document.getElementById("ie-new-sidebar").style.bottom = Math.max(0, footerGap) + "px";
+    }
+
+    window.onscroll = () => {
+        setSidebarBottom();
+    };
+
+    $("#sidebar-collapse").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        if ($.cookie("sidebarScroll")) {
+            sidebarScrollTopPosition = $.cookie("sidebarScroll");
+        }
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 350, function () {
+            $("#ie-new-sidebar-collapse").show();
+            $("#ie-new-sidebar").removeClass("open")
+            $("#ie-new-sidebar").addClass("close")
+            $("#ie-new-sidebar").removeAttr("style")
+        });
+        $(".ie-content-pane").animate({ width: (width + sidebarWidth), marginLeft: (marginLeft - sidebarWidth) }, 350, function () {
+            resizeContent()
+        })
+
+    });
+    $("#sidebar-expand").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 250, function () {
+            $('#ie-new-sidebar').css('display', 'flex');
+            $("#ie-new-sidebar-collapse").hide();
+            $("#ie-new-sidebar").removeClass("close")
+            $("#ie-new-sidebar").addClass("open")
+            setSidebarBottom();
+
+            if (sidebarScrollTopPosition != 0) {
+                $.cookie("sidebarScroll", sidebarScrollTopPosition, {
+                    path: "/es-es/test"
+                })
+                $("#ie-new-toc").scrollTop(sidebarScrollTopPosition);
+                sidebarScrollTopPosition = 0;
+            }
+        });
+        $(".ie-content-pane").animate({ width: (width - sidebarWidth), 'marginLeft': (marginLeft + sidebarWidth) }, 250, function () {
+            resizeContent()
+        })
+    });
+    function resizeContent() {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        const rightNavbarVisible =  $("#ie-right-navbar").css('display') && $("#ie-right-navbar").css('display') != 'none';
+        const sidebarVisible = $("#ie-new-sidebar").css('display') != 'none';
+        const rightNavbarWidth = $("#ie-right-navbar").width();
+        const rightNavbarCollapseWidth = $("#ie-right-navbar-collapse").width();
+        const rightNavbarCollapseVisible = $("#ie-right-navbar-collapse").css('display') && $("#ie-right-navbar-collapse").css('display') != 'none';
+        
+        if (rightNavbarVisible && sidebarVisible) {
+            $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarWidth}px)`)
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+        } else if (sidebarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarCollapseWidth}px)`)
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar").width()}px)`)
+            }
+
+        } else if (rightNavbarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            $(".ie-content-pane").width(`calc(100% - ${rightNavbarWidth}px)`)
+        } else {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${rightNavbarCollapseWidth}px)`);
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar-collapse").width()}px) `);
+            }
+            
+        }
+    }
+    $(window).on("resize load", function () {
+        setSidebarBottom();
+        resizeContent()
+    });
+
+
+</script>
+
+<div class="ie-content-pane ie-component-detail-content ie-component-detail-content--show-code">
+    <!-- Begin of page container --><article class="page-content" id="main">
+      <!-- include utility.html -->
+      <div class="ie-info-disclaimer">
+    <span>
+      <div class="ie-info-disclaimer-container">
+        <div class="ie-info-disclaimer-icon">
+          <img src="/es-es/test/images/notification-icons.svg" class="luci-icon" alt="" />
+        </div>
+        <div class="ie-info-disclaimer-content">
+          <span> Se proporciona el idioma español mediante traducción automática para su comodidad. En caso de alguna inconsistencia, el inglés precede al español. </span>
+        </div>
+        <div style="clear:both;"></div>
+      </div>
+    </span>
+  </div><div class="ie-component-detail-heading-wrap">
+  <h1 class="ie-component-detail-heading">Requisitos de red para Cloud Volumes ONTAP en AWS</h1>
+</div>
+
+<div id="ie-byline">
+  
+<div class="page-details">
+    
+        
+            <time datetime="2023-09-13 15:07:32 +0000">09/13/2023</time>
+        
+    
+    
+        <span>Colaboradores
+        </span>
+    
+    
+</div>
+<div class="page-controls">
+    <div id="contribute-dropdown" class="custom-dropdown custom-dropdown-contrib" >
+        <div class="custom-dropdown-select custom-dropdown-select-contrib">
+        <span class="contrib-name"><img src="/es-es/test/images/discuss-sm.svg" alt="" class="github-icon" />Sugerir cambios</span>
+        <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown invisible" />
+        <img src="/es-es/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup" />
+        </div>
+        <ul class="custom-dropdown-menu suggested-changes-dropdown"><li>
+                <a target="_blank" href="https://github.com/NetAppDocs/test.es-es/issues/new?template=new-from-page.yml&page-url=https://docs.netapp.com/es-es/test/reference-networking-aws.html&page-title=Requisitos de red para Cloud Volumes ONTAP en AWS" class="page-nav-contribute-link" role="button">Solicitar cambios en el documento</a>
+            </li><li> 
+                <a target="_blank" href="https://github.com/NetAppDocs/test/blob/main/reference-networking-aws.adoc" class="page-nav-contribute-link" role="button">Editar esta página</a>
+            </li><li><a target="_blank" href="https://docs.netapp.com/us-en/contribute/" class="page-nav-contribute-link"  >Descubre cómo colaborar</a></li>
+        </ul>
+    </div>
+    <div id="pdf-control-container">
+        <div class="n-pdf-header">
+            <a id="toggleButtonPdf" class="n-pdf-button" type="button">
+                <img class="adobe-icon" src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>PDF<img src="/es-es/test/images/dropdown-arrow.svg" class="custom-icon" alt="" />
+            </a>
+        </div>
+        <div class="n-pdf-body-container">
+            <ul id="toggleContainerPdf" class="n-pdf-body" style="display:none;"><li class="pdf-ux-container">
+                    
+                    
+                    
+                    <a target="_blank" class="pdf-download-link" href="/es-es/test/pdfs/fullsite-sidebar/Documentación_de_Cloud_Volumes_ONTAP.pdf" >
+                    <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>PDF de este sitio de documentos</a>
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Notas_de_la_versión.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Notas de la versión
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Manos_a_la_obra.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Manos a la obra
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Comience_a_usar_Amazon_Web_Services.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Comience a usar Amazon Web Services
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Configure_su_red.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configure su red
+          </a>
+          
+    <ul class="subfolders" id="pdf-remove" style="display:none;"><li class="active"></li></ul>
+  
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Empiece_a_usar_Microsoft_Azure.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Empiece a usar Microsoft Azure
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Comience_a_usar_Google_Cloud.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Comience a usar Google Cloud
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Verificación_de_imágenes_de_Google_Cloud_Platform.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Verificación de imágenes de Google Cloud Platform
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Verificación_de_la_firma_de_la_imagen.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Verificación de la firma de la imagen
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Utilice_Cloud_Volumes_ONTAP.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Utilice Cloud Volumes ONTAP
+          </a>
+          
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Gestión_de_licencias.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Gestión de licencias
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Administración_de_volúmenes_y_LUN.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Administración de volúmenes y LUN
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Administración_de_agregados.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Administración de agregados
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Administración_de_máquinas_virtuales_de_almacenamiento.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Administración de máquinas virtuales de almacenamiento
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Seguridad_y_cifrado_de_datos.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Seguridad y cifrado de datos
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Administración_del_sistema.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Administración del sistema
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Agregar__quitar_o_eliminar_sistemas.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Agregar, quitar o eliminar sistemas
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Administración_de_AWS.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Administración de AWS
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Administración_de_Azure.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Administración de Azure
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Administración_de_Google_Cloud.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Administración de Google Cloud
+          </a>
+          
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Estado_y_eventos_del_sistema.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Estado y eventos del sistema
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Conceptos.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Conceptos
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Reducida.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Reducida
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Pares_de_alta_disponibilidad.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Pares de alta disponibilidad
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/es-es/test/pdfs/sidebar/Conocimiento_y_apoyo.pdf" 
+            
+          >
+            <img src="/es-es/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Conocimiento y apoyo
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+</li></ul>
+            <div class="zip-pdf-link-container" style="display: none;">   
+                <a href="#" id="zipPdf">
+                <img src="/es-es/test/images/pdf-zip.png" alt="" width="16" height="16"/>
+                <pre>Recopilación de documentos PDF independientes<span class="zip-size"></span></pre>
+                </a><div id="zip-link-popup" class="hide">
+    <div class="inner-modal">
+        <div class="downloading-progress">
+            <div class="spinner"></div>
+            <h1>Creating your file...</h1>
+            <div>This may take a few minutes. Thanks for your patience.</div>
+            <button class="cancel-download-btn" type="button">Cancel</button>
+        </div>
+        <div class="download-complete hide">
+            <div class="done-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+            </div>
+            <div>Your file is ready</div>
+            <button class="cancel-download-btn" type="button">OK</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(".cancel-download-btn").click(function(){
+        $("#zip-link-popup").addClass("hide");
+        $("#zip-link-popup .downloading-progress").removeClass("hide");
+        $("#zip-link-popup .download-complete").addClass("hide");
+    });
+</script></div>
+        </div>
+    </div>        
+<script>
+$("#toggleContainerPdf li.active:last-child").parents('ul.subfolders').toggle('display');
+$("#toggleButtonPdf").on('click', function(e){ 
+    e.stopPropagation();
+    $("#toggleContainerPdf").toggle('display');
+    $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+});
+
+//hide is by clicking outside pdfcontainer
+$(document).on('click', function (e) {
+    if ($('#toggleContainerPdf').is(':visible') && !$('.n-pdf-body-container').is(e.target) && !$('.n-pdf-body-container').has(e.target).length)  {
+        
+        $("#toggleContainerPdf").toggle('display');
+        $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+        $("#toggleButtonPdf").removeClass("active");
+    }
+});
+</script>
+<script>
+    function getPdfLocation() {
+        const pdfLocation = window.scrollX + document.querySelector('#pdf-control-container').getBoundingClientRect().left
+        if (pdfLocation < 450) {
+            $(".n-pdf-body-container").addClass("block")
+        } else {
+            $(".n-pdf-body-container").removeClass("block")
+        }
+    
+    }
+    $( window ).on( "resize", function() {
+        getPdfLocation()
+} );
+</script>
+<script>
+    const pdfButtonWidth =  $(".n-pdf-header").width();
+    const pdfMenuWidth = $(".n-pdf-body-container").width();
+    $(".n-pdf-body-container").css('margin-left', `calc(${pdfButtonWidth - pdfMenuWidth}px)`);
+</script>
+</div>
+
+    
+
+</div>
+
+
+
+
+<div class="content-to-index">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph lead">
+<p>BlueXP gestiona la configuración de componentes de red para Cloud Volumes ONTAP, como direcciones IP, máscaras de red y rutas. Debe asegurarse de que el acceso saliente a Internet está disponible, de que hay suficientes direcciones IP privadas disponibles, de que las conexiones correctas están en su lugar, y mucho más.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="requisitos-generales">Requisitos generales</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Los siguientes requisitos deben satisfacerse en AWS.</p>
+</div>
+<div class="sect2">
+<h3 id="acceso-a-internet-saliente-para-nodos-cloud-volumes-ontap">Acceso a Internet saliente para nodos Cloud Volumes ONTAP</h3>
+<div class="paragraph">
+<p>Los nodos Cloud Volumes ONTAP requieren acceso a Internet de salida para AutoSupport de NetApp, que supervisa de forma proactiva el estado del sistema y envía mensajes al soporte técnico de NetApp.</p>
+</div>
+<div class="paragraph">
+<p>Las políticas de enrutamiento y firewall deben permitir el tráfico HTTP/HTTPS a los siguientes extremos para que Cloud Volumes ONTAP pueda enviar mensajes de AutoSupport:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>https://support.netapp.com/aods/asupmessage</p>
+</li>
+<li>
+<p>https://support.netapp.com/asupprod/post/1.0/postAsup</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Si tiene una instancia NAT, debe definir una regla de grupo de seguridad entrante que permita el tráfico HTTPS desde la subred privada hasta Internet.</p>
+</div>
+<div class="paragraph">
+<p>Si una conexión a Internet saliente no está disponible para enviar mensajes AutoSupport, BlueXP configura automáticamente sus sistemas Cloud Volumes ONTAP para utilizar el conector como servidor proxy. El único requisito es asegurarse de que el grupo de seguridad del conector permita conexiones <em>entrante</em> a través del puerto 3128. Tendrá que abrir este puerto después de desplegar el conector.</p>
+</div>
+<div class="paragraph">
+<p>Si ha definido reglas de salida estrictas para Cloud Volumes ONTAP, también tendrá que asegurarse de que el grupo de seguridad Cloud Volumes ONTAP permita conexiones <em>saliente</em> a través del puerto 3128.</p>
+</div>
+<div class="paragraph">
+<p>Una vez que haya comprobado que el acceso saliente a Internet está disponible, puede probar AutoSupport para asegurarse de que puede enviar mensajes. Para obtener instrucciones, consulte <a href="https://docs.netapp.com/us-en/ontap/system-admin/setup-autosupport-task.html" target="_blank" rel="noopener">"Documentos de ONTAP: Configure AutoSupport"</a>.</p>
+</div>
+<div class="paragraph">
+<p>Si BlueXP notifica que los mensajes de AutoSupport no se pueden enviar, <a href="task-verify-autosupport.html#troubleshoot-your-autosupport-configuration">"Solucione problemas de configuración de AutoSupport"</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="acceso-saliente-a-internet-para-el-mediador-de-alta-disponibilidad">Acceso saliente a Internet para el mediador de alta disponibilidad</h3>
+<div class="paragraph">
+<p>La instancia del mediador de alta disponibilidad debe tener una conexión saliente al servicio EC2 de AWS para que pueda ayudar a recuperarse de la recuperación tras fallos del almacenamiento. Para proporcionar la conexión, puede agregar una dirección IP pública, especificar un servidor proxy o utilizar una opción manual.</p>
+</div>
+<div class="paragraph">
+<p>La opción manual puede ser una puerta de enlace NAT o un extremo de la interfaz VPC desde la subred de destino al servicio AWS EC2. Para obtener más detalles sobre los extremos VPC, consulte <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-interface.html" target="_blank" rel="noopener">"Documentación de AWS: Extremos de VPC de la interfaz (AWS PrivateLink)"</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="direcciones-ip-privadas">Direcciones IP privadas</h3>
+<div class="paragraph">
+<p>BlueXP asigna automáticamente el número requerido de direcciones IP privadas a Cloud Volumes ONTAP. Debe asegurarse de que las redes tengan suficientes direcciones IP privadas disponibles.</p>
+</div>
+<div class="paragraph">
+<p>El número de LIF que BlueXP asigna a Cloud Volumes ONTAP depende de si pone en marcha un sistema de nodo único o un par de alta disponibilidad. Una LIF es una dirección IP asociada con un puerto físico.</p>
+</div>
+<div class="sect3">
+<h4 id="direcciones-ip-para-un-sistema-de-nodo-único">Direcciones IP para un sistema de nodo único</h4>
+<div class="paragraph">
+<p>BlueXP asigna 6 direcciones IP a un sistema de un solo nodo.</p>
+</div>
+<div class="paragraph">
+<p>La tabla siguiente proporciona detalles acerca de las LIF asociadas con cada dirección IP privada.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">LUN</th>
+<th class="tableblock halign-left valign-top">Específico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestión de clústeres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestión administrativa de todo el clúster (pareja de alta disponibilidad).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestión de nodos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La gestión administrativa de un nodo.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interconexión de clústeres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comunicación entre clústeres, backup y replicación.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Datos de NAS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceso de clientes a través de protocolos NAS.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Datos de iSCSI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceso de cliente a través del protocolo iSCSI. También lo utiliza el sistema para otros flujos de trabajo de red importantes. Este LIF es necesario y no debe eliminarse.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestión de máquinas virtuales de almacenamiento</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Una LIF de gestión de máquinas virtuales de almacenamiento se utiliza con herramientas de gestión como SnapCenter.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="direcciones-ip-para-pares-de-alta-disponibilidad">Direcciones IP para pares de alta disponibilidad</h4>
+<div class="paragraph">
+<p>Los pares de ALTA DISPONIBILIDAD requieren más direcciones IP que un sistema de nodo único. Estas direcciones IP se distribuyen entre interfaces ethernet diferentes, como se muestra en la siguiente imagen:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./media/diagram_cvo_aws_networking_ha.png" alt="Un diagrama que muestra eth0, eth1, eth2 en una configuración de alta disponibilidad de Cloud Volumes ONTAP en AWS."></span></p>
+</div>
+<div class="paragraph">
+<p>El número de direcciones IP privadas necesarias para un par de alta disponibilidad depende del modelo de puesta en marcha que elija. Un par de alta disponibilidad implementado en una zona de disponibilidad de AWS (AZ) <em>single</em> requiere 15 direcciones IP privadas, mientras que un par de alta disponibilidad implementado en <em>Multiple</em> AZs requiere 13 direcciones IP privadas.</p>
+</div>
+<div class="paragraph">
+<p>En las tablas siguientes se ofrecen detalles acerca de las LIF asociadas con cada dirección IP privada.</p>
+</div>
+<div class="sect4">
+<h5 id="lif-para-pares-de-alta-disponibilidad-en-un-único-az">LIF para pares de alta disponibilidad en un único AZ</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">LUN</th>
+<th class="tableblock halign-left valign-top">Interfaz</th>
+<th class="tableblock halign-left valign-top">Nodo</th>
+<th class="tableblock halign-left valign-top">Específico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestión de clústeres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestión administrativa de todo el clúster (pareja de alta disponibilidad).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestión de nodos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La gestión administrativa de un nodo.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interconexión de clústeres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comunicación entre clústeres, backup y replicación.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Datos de NAS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceso de clientes a través de protocolos NAS.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Datos de iSCSI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceso de cliente a través del protocolo iSCSI. También lo utiliza el sistema para otros flujos de trabajo de red importantes. Estos LIF son necesarios y no deben eliminarse.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Conectividad del clúster</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permite que los nodos se comuniquen entre sí y que muevan datos dentro del clúster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Conectividad de alta DISPONIBILIDAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comunicación entre los dos nodos en caso de conmutación al nodo de respaldo.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tráfico iSCSI de RSM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tráfico iSCSI de RAID SyncMirror, así como comunicación entre los dos nodos de Cloud Volumes ONTAP y el mediador.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mediador</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mediador</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un canal de comunicación entre los nodos y el mediador para ayudarle a tomar la toma de control y los procesos de devolución del almacenamiento.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="lif-para-pares-de-alta-disponibilidad-en-múltiples-azs">LIF para pares de alta disponibilidad en múltiples AZs</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">LUN</th>
+<th class="tableblock halign-left valign-top">Interfaz</th>
+<th class="tableblock halign-left valign-top">Nodo</th>
+<th class="tableblock halign-left valign-top">Específico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestión de nodos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La gestión administrativa de un nodo.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interconexión de clústeres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comunicación entre clústeres, backup y replicación.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Datos de iSCSI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceso de cliente a través del protocolo iSCSI.<br>
+Estos LIF también gestionan la migración de direcciones IP flotantes entre nodos. Estos LIF son necesarios y no deben eliminarse.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Conectividad del clúster</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permite que los nodos se comuniquen entre sí y que muevan datos dentro del clúster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Conectividad de alta DISPONIBILIDAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comunicación entre los dos nodos en caso de conmutación al nodo de respaldo.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tráfico iSCSI de RSM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nodo 1 y nodo 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tráfico iSCSI de RAID SyncMirror, así como comunicación entre los dos nodos de Cloud Volumes ONTAP y el mediador.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mediador</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eth0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mediador</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un canal de comunicación entre los nodos y el mediador para ayudarle a tomar la toma de control y los procesos de devolución del almacenamiento.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/tip.svg" alt="Consejo">
+</td>
+<td class="content">
+Cuando se implementan en varias zonas de disponibilidad, hay varias LIF asociadas con <a href="reference-networking-aws.html#floatingips">"Direcciones IP flotantes"</a>, Que no cuentan con el límite de IP privada de AWS.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="grupos-de-seguridad">Grupos de seguridad</h3>
+<div class="paragraph">
+<p>No necesita crear grupos de seguridad porque BlueXP lo hace por usted. Si necesita utilizar el suyo propio, consulte <a href="reference-security-groups.html">"Reglas de grupo de seguridad"</a>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/tip.svg" alt="Consejo">
+</td>
+<td class="content">
+¿Busca información sobre el conector? <a href="https://docs.netapp.com/us-en/bluexp-setup-admin/reference-ports-aws.html" target="_blank" rel="noopener">"Ver reglas de grupo de seguridad para el conector"</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="conexión-para-la-organización-en-niveles-de-datos">Conexión para la organización en niveles de datos</h3>
+<div class="paragraph">
+<p>Si desea usar EBS como nivel de rendimiento y AWS S3 como nivel de capacidad, debe asegurarse de que Cloud Volumes ONTAP tenga una conexión con S3. La mejor forma de proporcionar esa conexión es crear un extremo de VPC con el servicio S3. Para ver instrucciones, consulte <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-gateway.html#create-gateway-endpoint" target="_blank" rel="noopener">"Documentación de AWS: Crear un extremo de puerta de enlace"</a>.</p>
+</div>
+<div class="paragraph">
+<p>Al crear el extremo VPC, asegúrese de seleccionar la región, VPC y tabla de rutas que correspondan a la instancia de Cloud Volumes ONTAP. También debe modificar el grupo de seguridad para añadir una regla de HTTPS de salida que habilite el tráfico hacia el extremo de S3. De lo contrario, Cloud Volumes ONTAP no puede conectarse con el servicio S3.</p>
+</div>
+<div class="paragraph">
+<p>Si experimenta algún problema, consulte <a href="https://aws.amazon.com/premiumsupport/knowledge-center/connect-s3-vpc-endpoint/" target="_blank" rel="noopener">"Centro de conocimientos de soporte de AWS: ¿por qué no puedo conectarme a un bloque de S3 mediante un extremo de VPC de puerta de enlace?"</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="conexiones-a-sistemas-ontap">Conexiones a sistemas ONTAP</h3>
+<div class="paragraph">
+<p>Para replicar datos entre un sistema Cloud Volumes ONTAP en AWS y sistemas ONTAP en otras redes, debe tener una conexión VPN entre el VPC de AWS y la otra red, por ejemplo, la red de la empresa. Para ver instrucciones, consulte <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/SetUpVPNConnections.html" target="_blank" rel="noopener">"Documentación de AWS: Configuración de una conexión VPN de AWS"</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="dns-y-active-directory-para-cifs">DNS y Active Directory para CIFS</h3>
+<div class="paragraph">
+<p>Si desea aprovisionar almacenamiento CIFS, debe configurar DNS y Active Directory en AWS o ampliar la configuración de sus instalaciones a AWS.</p>
+</div>
+<div class="paragraph">
+<p>El servidor DNS debe proporcionar servicios de resolución de nombres para el entorno de Active Directory. Puede configurar los conjuntos de opciones DHCP para que utilicen el servidor DNS EC2 predeterminado, que no debe ser el servidor DNS utilizado por el entorno de Active Directory.</p>
+</div>
+<div class="paragraph">
+<p>Para obtener instrucciones, consulte <a href="https://aws-quickstart.github.io/quickstart-microsoft-activedirectory/" target="_blank" rel="noopener">"Documentación de AWS: Active Directory Domain Services en AWS Cloud: Implementación de referencia de inicio rápido"</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="uso-compartido-de-vpc">Uso compartido de VPC</h3>
+<div class="paragraph">
+<p>A partir del lanzamiento de la versión 9.11.1, se admiten los pares de alta disponibilidad de Cloud Volumes ONTAP en AWS con el uso compartido de VPC. El uso compartido de VPC permite a la organización compartir subredes con otras cuentas de AWS. Para utilizar esta configuración, debe configurar su entorno AWS y después implementar el par de alta disponibilidad mediante la API.</p>
+</div>
+<div class="paragraph">
+<p><a href="task-deploy-aws-shared-vpc.html">"Descubra cómo implementar un par de alta disponibilidad en una subred compartida"</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="requisitos-para-pares-de-alta-disponibilidad-en-varios-azs">Requisitos para pares de alta disponibilidad en varios AZs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Los requisitos de red adicionales de AWS se aplican a configuraciones de alta disponibilidad de Cloud Volumes ONTAP que utilizan varias zonas de disponibilidad (AZs). Debe revisar estos requisitos antes de iniciar un par ha porque debe introducir los detalles de red en BlueXP al crear el entorno de trabajo.</p>
+</div>
+<div class="paragraph">
+<p>Para comprender cómo funcionan los pares de alta disponibilidad, consulte <a href="concept-ha.html">"Pares de alta disponibilidad"</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Zonas de disponibilidad</dt>
+<dd>
+<p>Este modelo de puesta en marcha de alta disponibilidad utiliza varios AZs para garantizar una alta disponibilidad de sus datos. Debería utilizar una zona de disponibilidad dedicada para cada instancia de Cloud Volumes ONTAP y la instancia de mediador, que proporciona un canal de comunicación entre el par de alta disponibilidad.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Debe haber una subred disponible en cada zona de disponibilidad.</p>
+</div>
+<div id="floatingips" class="dlist">
+<dl>
+<dt class="hdlist1">Direcciones IP flotantes para datos de NAS y gestión de clústeres/SVM</dt>
+<dd>
+<p>Las configuraciones de ALTA DISPONIBILIDAD de varios AZs utilizan direcciones IP flotantes que migran entre nodos en caso de que se produzcan fallos. No se puede acceder a ellos de forma nativa desde fuera del VPC, a menos que usted <a href="task-setting-up-transit-gateway.html">"Configure una puerta de enlace de tránsito de AWS"</a>.</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Una dirección IP flotante es para la gestión del clúster, otra para los datos NFS/CIFS del nodo 1 y otra para los datos NFS/CIFS del nodo 2. Una cuarta dirección IP flotante para la gestión de SVM es opcional.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+Se requiere una dirección IP flotante para el LIF de gestión de SVM si se usa SnapDrive para Windows o SnapCenter con el par de alta disponibilidad.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Debe introducir las direcciones IP flotantes en BlueXP cuando cree un entorno de trabajo de alta disponibilidad de Cloud Volumes ONTAP. BlueXP asigna las direcciones IP al par ha cuando ejecuta el sistema.</p>
+</div>
+<div class="paragraph">
+<p>Las direcciones IP flotantes deben estar fuera de los bloques CIDR para todas las VPC de la región AWS en la que se implemente la configuración de alta disponibilidad. Piense en las direcciones IP flotantes como una subred lógica que está fuera de las VPC en su región.</p>
+</div>
+<div class="paragraph">
+<p>En el siguiente ejemplo se muestra la relación entre las direcciones IP flotantes y las VPC en una región de AWS. Mientras las direcciones IP flotantes están fuera de los bloques CIDR para todos los VPC, se pueden enrutar a subredes a través de tablas de ruta.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./media/diagram_ha_floating_ips.png" alt="Imagen conceptual que muestra los bloques CIDR para cinco VPC en una región AWS y tres direcciones IP flotantes que están fuera de los bloques CIDR de las VPC."></span></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+BlueXP crea automáticamente direcciones IP estáticas para el acceso iSCSI y para el acceso NAS desde clientes fuera de VPC. No es necesario cumplir ningún requisito para estos tipos de direcciones IP.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Puerta de enlace de tránsito para habilitar el acceso de IP flotante desde fuera del VPC</dt>
+<dd>
+<p>Si es necesario, <a href="task-setting-up-transit-gateway.html">"Configure una puerta de enlace de tránsito de AWS"</a> Para habilitar el acceso a las direcciones IP flotantes de una pareja de alta disponibilidad desde fuera del VPC, donde reside el par de alta disponibilidad.</p>
+</dd>
+<dt class="hdlist1">Tablas de rutas</dt>
+<dd>
+<p>Después de especificar las direcciones IP flotantes en BlueXP, se le pedirá que seleccione las tablas de rutas que deben incluir rutas a las direcciones IP flotantes. Esto permite el acceso de los clientes al par de alta disponibilidad.</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Si sólo tiene una tabla de rutas para las subredes en su VPC (la tabla de rutas principal), BlueXP agrega automáticamente las direcciones IP flotantes a esa tabla de rutas. Si dispone de más de una tabla de rutas, es muy importante seleccionar las tablas de rutas correctas al iniciar el par ha. De lo contrario, es posible que algunos clientes no tengan acceso a Cloud Volumes ONTAP.</p>
+</div>
+<div class="paragraph">
+<p>Por ejemplo, puede tener dos subredes asociadas a diferentes tablas de rutas. Si selecciona la tabla DE rutas A, pero no la tabla de rutas B, los clientes de la subred asociada a la tabla DE rutas A pueden acceder al par de alta disponibilidad, pero los clientes de la subred asociada a la tabla de rutas B no pueden.</p>
+</div>
+<div class="paragraph">
+<p>Para obtener más información sobre las tablas de rutas, consulte <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html" target="_blank" rel="noopener">"Documentación de AWS: Tablas de rutas"</a>.</p>
+</div>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Conexión a herramientas de gestión de NetApp</dt>
+<dd>
+<p>Para utilizar las herramientas de gestión de NetApp con configuraciones de alta disponibilidad que se encuentran en múltiples AZs, tiene dos opciones de conexión:</p>
+<div class="openblock">
+<div class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Puesta en marcha de las herramientas de gestión de NetApp en otro VPC y otras <a href="task-setting-up-transit-gateway.html">"Configure una puerta de enlace de tránsito de AWS"</a>. La puerta de enlace permite el acceso a la dirección IP flotante para la interfaz de gestión del clúster desde fuera del VPC.</p>
+</li>
+<li>
+<p>Ponga en marcha las herramientas de gestión de NetApp en el mismo VPC con una configuración de enrutamiento similar a las de los clientes NAS.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="sect2">
+<h3 id="ejemplo-de-configuración-de-alta-disponibilidad">Ejemplo de configuración de alta disponibilidad</h3>
+<div class="paragraph">
+<p>La siguiente imagen muestra los componentes de red específicos de un par de alta disponibilidad en varios AZs: Tres zonas de disponibilidad, tres subredes, direcciones IP flotantes y una tabla de rutas.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./media/diagram_ha_networking.png" alt="«imagen conceptual que muestra los componentes en una arquitectura de alta disponibilidad de Cloud Volumes ONTAP: Dos nodos de Cloud Volumes ONTAP y un mediador instancia, cada uno en zonas de disponibilidad independientes»."></span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="requisitos-para-el-conector">Requisitos para el conector</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Si aún no ha creado un conector, debe revisar los requisitos de red para el conector también.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.netapp.com/us-en/bluexp-setup-admin/task-quick-start-connector-aws.html" target="_blank" rel="noopener">"Ver los requisitos de red del conector"</a></p>
+</li>
+<li>
+<p><a href="https://docs.netapp.com/us-en/bluexp-setup-admin/reference-ports-aws.html" target="_blank" rel="noopener">"Reglas del grupo de seguridad en AWS"</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+    </article>
+    <!-- Page Container -->
+  </div>
+
+  
+  <!-- Start Page Toolbar -->
+<div id="ie-right-navbar-collapse" class="close">
+  <img id="navbar-expand" class="ie-searchbox-icon" src="/es-es/test/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-right-navbar" class="open">
+  <div id="right-navbar-collapse">
+    <img src="/es-es/test/images/double_arrow.svg" alt="" />
+  </div>
+  <div class="page-nav-container">
+    <nav class="page-nav-fixed">
+      <div class="page-nav-title">En esta página</div>
+      <div class="page-nav-links">
+        <ul class="page-nav-inner" id="page-menu"></ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<script>
+  resizeContent();
+  function setRightBarHeight() {
+    var h = 0;
+
+    // header 1
+    h += PXinViewport($('.n-footer'));
+    h += PXinViewport($('#ie-new-header'));
+
+    if ($('#ie-right-navbar').length) {
+      $('#ie-right-navbar').css({ height: `calc(100vh - ${h}px)` });
+    }
+    if ($('.page-nav-links').length) {
+      h += 98;
+      $('.page-nav-links').css({ height: `calc(100vh - ${h}px)` });
+    }
+  }
+
+  $(document).ready(function () {
+    // PAGE NAV - Click
+    const MASTHEAD_OFFSET = 65;
+    const SECTIONS = $("main h2, main h3");
+    let calculateActiveSection = false;
+    setTimeout(() => {
+      calculateActiveSection = true;
+    }, 100)
+
+    $(".page-nav__link").click(function (event) {
+      calculateActiveSection = false;
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      var target = $(event.target);
+      target.addClass('page-nav__link--active');
+      location.hash = event.target.hash;
+      setTimeout(() => {
+        calculateActiveSection = true;
+      }, 100)
+
+    });
+
+    // PAGE NAV - Scroll
+    $(window).on('resize scroll', function () {
+      if (calculateActiveSection) {
+        var activeSection = getActiveSection(SECTIONS, MASTHEAD_OFFSET);
+        if (activeSection) {
+          var activeHref = $(activeSection).attr('id');
+          $(".page-nav__link").removeClass('page-nav__link--active');
+          $("#page-menu a[href=#" + activeHref + "]").addClass('page-nav__link--active');
+          if (location.hash != "#" + activeHref) {
+            if (history.replaceState) {
+              history.replaceState(null, null, "#" + activeHref);
+            }
+          }
+        }
+      }
+    });
+
+    $(".n-pdf-button").click(function () {
+      $(this).toggleClass("active");
+    });
+
+    $.fn.isVisibleAndInViewport = function () {
+      var elementTop = $(this).offset().top;
+      var elementBottom = elementTop + $(this).outerHeight();
+
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+
+      return elementBottom > viewportTop && elementTop < viewportBottom && $(this).is(":visible");
+    };
+
+
+    $(window).on('resize scroll', function () {
+      setRightBarHeight();
+    });
+
+    $(window).trigger('resize');
+
+
+  });
+
+  $("#right-navbar-collapse").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 350, function () {
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+    });
+    $(".ie-content-pane").animate({ width: (width + rightNavbarWidth) }, 350, function () {
+      resizeContent()
+      setSidebarBottom();
+    })
+
+  });
+  $("#navbar-expand").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 250, function () {
+      $("#ie-right-navbar-collapse").removeClass("open")
+      $("#ie-right-navbar-collapse").addClass("close")
+      $("#ie-right-navbar").removeClass("close")
+      $("#ie-right-navbar").addClass("open")
+      setRightBarHeight();
+      setSidebarBottom();
+    });
+    $(".ie-content-pane").animate({ width: (width - rightNavbarWidth) }, 250, function () {
+      resizeContent()
+    })
+  });
+
+  function navbarResize() {
+    const rightNavbarResized = $("#ie-right-navbar-collapse").hasClass('resized');
+    if (window.innerWidth < 1024) {
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+      $("#ie-right-navbar").removeAttr("style")
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar-collapse").addClass("resized")
+    } else {
+      if (rightNavbarResized) {
+        $('#ie-right-navbar').removeClass('close');
+        $('#ie-right-navbar').addClass('open');
+        $("#ie-right-navbar-collapse").removeClass("resized")
+        $("#ie-right-navbar-collapse").removeClass("open")
+        $("#ie-right-navbar-collapse").addClass("close")
+      }
+    }
+    resizeContent()
+  }
+  navbarResize();
+  $(window).on('resize load', function () {
+    navbarResize()
+  });
+
+  function getActiveSection(sections, offset) {
+    var scrollPosition = $(window).scrollTop() + offset + 5;
+    var activeSection;
+    for (var i = 0; i < sections.length; i++) {
+      var el = $(sections[i]);
+      var activePosition = el.offset().top;
+      if (activePosition > scrollPosition) {
+        break;
+      }
+
+      activeSection = sections[i];
+    }
+
+    return activeSection;
+  }
+
+  $("a[href*=#]:not([href=#])").click(function () {
+    setTimeout(() => {
+      $(window).trigger('scroll');
+    }, 105)
+  })
+
+  const hashOnLoad = location.href.split("#")[1];
+  setTimeout(function () {
+    if (hashOnLoad) {
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      $("#page-menu a[href=#" + hashOnLoad + "]").addClass('page-nav__link--active');
+    }
+  }, 100)
+
+</script>
+
+
+  <div style="clear: both"></div><!-- Main needs to have height --></div>
+
+        </main>
+
+        <footer class="n-footer">
+  <div class="n-footer__bottom">
+    <div class="n-container">
+        <div class="n-footer__left">
+          <li class="n-footer__copyright-link">
+                    <a href="https://www.netapp.com/company/legal/copyright/">© 2024 NetApp, Inc.</a>
+          </li>
+        </div>
+        <div class="n-footer__center">
+          <ul class="n-footer__copyright-list">
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/terms-of-use/">Condiciones de uso</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/privacy-policy/">Política de privacidad</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/cookie-policy/">Política de cookies</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a class="ot-sdk-show-settings">Configuración de cookies</a>
+            </li>
+          </ul>
+       </div>
+        <div class="n-footer__right">
+              <li class="n-footer__copyright-link">
+                <a target="_self" href="javascript:netapp_mailto()">Enviar comentarios sobre esta página</a>
+              </li>
+        </div>
+     </div>
+  </div>
+</footer>
+
+      </div><!-- Elasticsearch JS -->
+      <script type="text/javascript" src='/es-es/test/js/bundle.js'></script>
+
+      <!-- Syntax Highlighting -->
+      <script type="text/javascript" src='/es-es/test/js/prism.js'></script>
+      <script type="text/javascript" src='/es-es/test/js/prism-curl.js'></script>
+    </div>
+    <script>
+      document.body.offsetWidth=1903;
+      cookieLaw = {}
+      cookieLaw.euCountry = "US";
+      cookieLaw.invoke = function(){return false;}
+    </script>
+    <script src='/es-es/test/js/ie-tabbed-blocks.js'></script>
+    <script src='/es-es/test/js/ie-sidebar.js'></script>
+  </body>
+
+</html>
