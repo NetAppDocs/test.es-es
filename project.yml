@@ -1,4 +1,5 @@
 ---
+jekyll: remove-gh-automation
 settings:
   name: Cloud Volumes ONTAP
   harmony_integration: maestro
