@@ -1,5 +1,4 @@
 ---
-jekyll: remove-gh-automation
 settings:
   name: Cloud Volumes ONTAP
   harmony_integration: maestro
@@ -9,6 +8,7 @@ settings:
   prod:
     pdf_enabled: true
     harmony_enabled: false
+    termcheck_enabled: true
   rss_page: whats-new.html
   versions:
   - name: Cloud Volumes ONTAP
